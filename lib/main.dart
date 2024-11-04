@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'screens/welcome_screen.dart';
 import 'screens/login_screen.dart';
 import 'screens/signup_screen.dart';
+import 'screens/home_screen.dart';
 
 void main() => runApp(lanny_program());
 
@@ -14,7 +15,7 @@ class lanny_program extends StatelessWidget {
       ),
       themeMode: ThemeMode.light, // 강제 라이트 모드
       debugShowCheckedModeBanner: false,
-      home: welcome_screen(),
+      home: HomeScreen(),
       routes: {
         '/login': (context) => login_screen(),
         '/signup': (context) => signup_screen(),
