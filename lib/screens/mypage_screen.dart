@@ -105,6 +105,7 @@ class _MyPageScreenState extends State<MyPageScreen> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               _buildStatItem('총 방문 횟수', '6회'),
+              // #Firestore 인증 기능의 방문 횟수 확인해보기
               _buildStatItem('총 출석', '12일'),
               _buildStatItem('총 학습 시간', '110분'),
             ],
