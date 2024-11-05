@@ -38,7 +38,7 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.book),
-            label: '복습',
+            label: '검색',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.person),

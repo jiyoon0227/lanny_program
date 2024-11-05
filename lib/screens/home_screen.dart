@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lanny_program/widgets/daily_learning_goal_popup.dart'; // 팝업 파일을 임포트
 
 //txt for test
 class HomeScreen extends StatelessWidget {
@@ -34,7 +35,12 @@ class HomeScreen extends StatelessWidget {
             ),
             Row(
               children: [
-                Icon(Icons.access_time, color: Colors.black),
+                IconButton(
+                  icon: Icon(Icons.access_time, color: Colors.black),
+                  onPressed: () {
+                    dailyLearningGoalPopup(context); // 버튼 클릭 시 팝업 창 띄우기
+                  },
+                ),
                 const SizedBox(width: 8),
                 Text(
                   '0 / 15',

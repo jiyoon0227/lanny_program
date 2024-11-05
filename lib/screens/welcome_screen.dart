@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../daily_learning_goal_popup.dart'; // 추가
+import '../widgets/daily_learning_goal_popup.dart'; // 추가
 
 class welcome_screen extends StatelessWidget {
   @override
