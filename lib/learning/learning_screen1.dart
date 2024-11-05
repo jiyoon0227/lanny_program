@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../widgets/stop_popup.dart';
 
 void main() {
   runApp(const FigmaToCodeApp());
@@ -68,8 +69,10 @@ class LearnScreen1 extends StatelessWidget {
                     child: IconButton(
                       icon: Icon(Icons.pause, color: Colors.grey),
                       onPressed: () {
-                        // Functionality removed
-                        print('Pause button pressed');
+                        showDialog(
+                          context: context,
+                          builder: (context) => PausePopup(),
+                        );
                       },
                     ),
                   ),
