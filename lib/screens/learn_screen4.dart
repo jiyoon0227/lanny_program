@@ -29,6 +29,36 @@ class _LearnScreen4State extends State<LearnScreen4> {
   Color _button1Color = Colors.transparent;
   Color _button2Color = Colors.transparent;
 
+  void _showPauseDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text("일시정지"),
+          content: Text("어떤 작업을 하시겠습니까?"),
+          actions: <Widget>[
+            TextButton(
+              child: Text("중지하기"),
+              onPressed: () {
+                // 중지하기 동작
+                Navigator.of(context).pop();
+                print("중지하기 선택");
+              },
+            ),
+            TextButton(
+              child: Text("이어하기"),
+              onPressed: () {
+                // 이어하기 동작
+                Navigator.of(context).pop();
+                print("이어하기 선택");
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -68,10 +98,7 @@ class _LearnScreen4State extends State<LearnScreen4> {
                 alignment: Alignment.centerLeft,
                 child: IconButton(
                   icon: Icon(Icons.pause, color: Colors.grey),
-                  onPressed: () {
-                    // Pause action
-                    print('Pause button pressed');
-                  },
+                  onPressed: _showPauseDialog,
                 ),
               ),
               SizedBox(height: 50),

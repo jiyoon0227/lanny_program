@@ -1,33 +1,28 @@
 import 'package:flutter/material.dart';
-import 'package:lanny_program/screens/learn_screen2.dart';
-import 'package:lanny_program/screens/learn_screen3.dart';
-import 'package:lanny_program/screens/learn_screen4.dart';
+import 'package:lanny_program/screens/home_screen.dart';
+import 'package:lanny_program/screens/mypage_screen.dart';
 import 'screens/welcome_screen.dart';
 import 'screens/login_screen.dart';
 import 'screens/signup_screen.dart';
-import 'screens/learn_screen.dart'; // LearnScreen import
+import 'screens/main_navigation_screen.dart';
 
-void main() => runApp(lanny_program());
+void main() => runApp(LannyProgram());
 
-class lanny_program extends StatelessWidget {
+class LannyProgram extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: ThemeData.light().copyWith(
-        scaffoldBackgroundColor: const Color(0xFFFAF9F7), // 기본 배경색 설정
+        scaffoldBackgroundColor: const Color(0xFFFAF9F7),
       ),
-      themeMode: ThemeMode.light, // 강제 라이트 모드
+      themeMode: ThemeMode.light,
       debugShowCheckedModeBanner: false,
-      home: LearnScreen4(),
+      home: welcome_screen(), // 클래스명으로 수정
       routes: {
-        '/login': (context) => login_screen(),
-        '/signup': (context) => signup_screen(),
-        '/learn': (context) => learn_screen(), // LearnScreen 추가
-        '/learn2': (context) => LearnScreen2(), // LearnScreen2 추가
-        '/learn3': (context) =>  LearnScreen3(),// LearnScreen2 추가
-        '/learn4': (context) =>  LearnScreen4()// LearnScreen2 추가
+        '/login': (context) => login_screen(),   // 클래스명으로 수정
+        '/signup': (context) => signup_screen(), // 클래스명으로 수정
+        '/main': (context) => MainNavigationScreen(), // 클래스명으로 수정
       },
     );
   }
 }
-
