@@ -4,7 +4,6 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-
       appBar: AppBar(
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -49,29 +48,24 @@ class HomeScreen extends StatelessWidget {
           ],
         ),
       ),
-      body: Stack(
-        children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 24.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Expanded(
-                  child: SingleChildScrollView(
-                    child: Column(
-                      children: List.generate(7, (index) {
-                        return _buildChapterSection(index);
-                      }),
-                    ),
-                  ),
+      body: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 24.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Expanded(
+              child: SingleChildScrollView(
+                child: Column(
+                  children: List.generate(7, (index) {
+                    return _buildChapterSection(index);
+                  }),
                 ),
-                const SizedBox(height: 16),
-                _buildContinueTile(),
-              ],
+              ),
             ),
-          ),
-          _buildBottomNavigationBar(),
-        ],
+            const SizedBox(height: 16),
+            _buildContinueTile(),
+          ],
+        ),
       ),
     );
   }
@@ -80,7 +74,7 @@ class HomeScreen extends StatelessWidget {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const SizedBox(width: 10),// Vertical line with circle
+        const SizedBox(width: 10),
         Column(
           children: [
             Container(
@@ -122,10 +116,10 @@ class HomeScreen extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(16.0),
       margin: const EdgeInsets.only(bottom: 16.0),
-      width: 300, // 너비 조정
+      width: 300,
       decoration: BoxDecoration(
         color: Color(0xFF4FA55B),
-        borderRadius: BorderRadius.circular(40), // 곡률 통일
+        borderRadius: BorderRadius.circular(40),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -152,7 +146,7 @@ class HomeScreen extends StatelessWidget {
             children: [
               Expanded(
                 child: Container(
-                  height: 8, // 게이지 두께 조절
+                  height: 8,
                   decoration: BoxDecoration(
                     color: Colors.white.withOpacity(0.5),
                     borderRadius: BorderRadius.circular(4),
@@ -176,10 +170,10 @@ class HomeScreen extends StatelessWidget {
   Widget _buildContinueTile() {
     return Container(
       padding: const EdgeInsets.all(16.0),
-      margin: const EdgeInsets.only(bottom: 80.0), // 하단바 위에 위치
+      margin: const EdgeInsets.only(bottom: 16.0),
       decoration: BoxDecoration(
         color: Color(0xFF4FA55B),
-        borderRadius: BorderRadius.circular(50), // 곡률 통일
+        borderRadius: BorderRadius.circular(50),
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -192,7 +186,7 @@ class HomeScreen extends StatelessWidget {
                 height: 50,
                 decoration: BoxDecoration(
                   color: Colors.white,
-                  borderRadius: BorderRadius.circular(12), // 사각형 모양으로 변경
+                  borderRadius: BorderRadius.circular(12),
                 ),
               ),
               const SizedBox(width: 16),
@@ -219,7 +213,7 @@ class HomeScreen extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(width: 8),
-                      Icon(Icons.arrow_forward, color: Colors.white), // 게이지 오른쪽 아이콘 추가
+                      Icon(Icons.arrow_forward, color: Colors.white),
                     ],
                   ),
                 ],
@@ -227,47 +221,6 @@ class HomeScreen extends StatelessWidget {
             ],
           ),
         ],
-      ),
-    );
-  }
-
-  Widget _buildBottomNavigationBar() {
-    return Positioned(
-      left: 0,
-      right: 0,
-      bottom: 0,
-      child: Container(
-        height: 80,
-        color: Color(0xFFFAF9F7),
-        padding: const EdgeInsets.symmetric(horizontal: 10.0),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            const SizedBox(width: 1),
-            Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(Icons.home, color: Colors.green),
-                Text('홈', style: TextStyle(color: Colors.green)),
-              ],
-            ),
-            Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(Icons.repeat, color: Colors.grey),
-                Text('복습', style: TextStyle(color: Colors.grey)),
-              ],
-            ),
-            Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(Icons.person, color: Colors.grey),
-                Text('마이페이지', style: TextStyle(color: Colors.grey)),
-              ],
-            ),
-            const SizedBox(width: 5),
-          ],
-        ),
       ),
     );
   }

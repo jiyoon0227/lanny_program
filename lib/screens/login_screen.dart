@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../language_setting_popup.dart'; // 팝업 함수 임포트
+import '../widgets/language_setting_popup.dart'; // 팝업 함수 임포트
 
 class login_screen extends StatelessWidget {
   @override

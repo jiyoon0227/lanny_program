@@ -220,7 +220,8 @@ void showLanguageSettingPopup(BuildContext context) {
     if (selectedLanguage != null) {
       // 선택된 언어를 사용
       print("선택된 언어: $selectedLanguage");
-      // 필요한 경우 선택된 언어를 상태에 저장하거나 다른 기능에 전달
+      // 팝업이 닫힌 후 홈 화면으로 이동
+      Navigator.pushReplacementNamed(context, '/main'); // 홈 화면으로 이동
     }
   });
 }
