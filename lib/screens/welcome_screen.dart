@@ -1,8 +1,14 @@
 import 'package:flutter/material.dart';
+import '../daily_learning_goal_popup.dart'; // 추가
 
 class welcome_screen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    // -----일일 학습 목표량 임시 확인 ------
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      dailyLearningGoalPopup(context);
+    });
+    //-----------
     return Scaffold(
       body: Stack(
         children: [
