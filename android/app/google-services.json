@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1088288684771",
+    "project_id": "languagelearningapp-60c68",
+    "storage_bucket": "languagelearningapp-60c68.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1088288684771:android:c6ed9ec27690ce320363d6",
+        "android_client_info": {
+          "package_name": "com.languagelearning.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBAVuPNObtK8LfPVwMfDgZjE7v9Raz9bVw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
