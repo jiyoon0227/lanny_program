@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../widgets/stop_popup.dart';
 
 class LearnScreen3 extends StatefulWidget {
   @override
@@ -57,8 +58,11 @@ class _LearnScreen3State extends State<LearnScreen3> {
                     child: IconButton(
                       icon: Icon(Icons.pause, color: Colors.grey),
                       onPressed: () {
-                        // Functionality removed
-                        print('Pause button pressed');
+                        // PausePopup 표시
+                        showDialog(
+                          context: context,
+                          builder: (context) => PausePopup(),
+                        );
                       },
                     ),
                   ),

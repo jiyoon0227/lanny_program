@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../widgets/stop_popup.dart';
 
 void main() {
   runApp(
@@ -67,7 +68,11 @@ class _LearnScreen4State extends State<LearnScreen4> {
               child: IconButton(
                 icon: Icon(Icons.pause, color: Colors.grey),
                 onPressed: () {
-                  // Functionality removed
+                  // PausePopup 표시
+                  showDialog(
+                    context: context,
+                    builder: (context) => PausePopup(),
+                  );
                 },
               ),
             ),
