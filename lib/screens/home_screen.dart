@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:lanny_program/widgets/daily_learning_goal_popup.dart'; // 팝업 파일을 임포트
+import 'package:lanny_program/learning/learning_screen1.dart'; // learning_screen1 임포트
 
-//txt for test
 class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -64,7 +64,7 @@ class HomeScreen extends StatelessWidget {
               child: SingleChildScrollView(
                 child: Column(
                   children: List.generate(7, (index) {
-                    return _buildChapterSection(index);
+                    return _buildChapterSection(context, index);
                   }),
                 ),
               ),
@@ -77,7 +77,7 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildChapterSection(int index) {
+  Widget _buildChapterSection(BuildContext context, int index) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -110,9 +110,19 @@ class HomeScreen extends StatelessWidget {
         ),
         const SizedBox(width: 16),
         Expanded(
-          child: _buildChapterTile(
+          child: GestureDetector(
+            onTap: () {
+              // 챕터 클릭 시 learning_screen1.dart로 이동
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => LearnScreen1()),
+              );
+            },
+            child: _buildChapterTile(
               "챕터 ${index + 2} - ${_getChapterTitle(index)}",
-              "설명 텍스트를 여기에 추가하세요."),
+              "설명 텍스트를 여기에 추가하세요.",
+            ),
+          ),
         ),
         const SizedBox(width: 25),
       ],

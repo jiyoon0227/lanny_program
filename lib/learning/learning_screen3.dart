@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'learning_screen4.dart'; // LearnScreen4 페이지가 있는 파일을 import하세요.
 import '../widgets/stop_popup.dart';
 
 class LearnScreen3 extends StatefulWidget {
@@ -17,8 +18,8 @@ class _LearnScreen3State extends State<LearnScreen3> {
       padding: const EdgeInsets.all(16.0),
       child: DefaultTextStyle(
         style: TextStyle(
-          color: Colors.black, // 기본 텍스트 색상
-          fontSize: 16, // 기본 폰트 크기
+          color: Colors.black,
+          fontSize: 16,
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -29,21 +30,34 @@ class _LearnScreen3State extends State<LearnScreen3> {
                 Column(
                   children: [
                     Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Expanded(
                           child: LinearProgressIndicator(
-                            value: 1 / 15,
+                            value: 3 / 15, // 페이지 진행 상태 업데이트
                             backgroundColor: Colors.grey,
                             color: Colors.green,
                           ),
                         ),
-                        SizedBox(width: 8), // 여백 추가
+                        SizedBox(width: 8),
                         Text(
-                          '1/15',
+                          '3/15',
                           style: TextStyle(
                             color: Colors.green,
                             fontSize: 14,
                           ),
+                        ),
+                        IconButton(
+                          icon: Icon(Icons.arrow_forward, color: Colors.grey),
+                          onPressed: () {
+                            // LearnScreen4 페이지로 이동
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => LearnScreen4(),
+                              ),
+                            );
+                          },
                         ),
                       ],
                     ),
@@ -52,13 +66,12 @@ class _LearnScreen3State extends State<LearnScreen3> {
                 ),
                 Positioned(
                   left: 0,
-                  top: 16, // 이 값을 조정하여 원하는 위치에 배치
+                  top: 16,
                   child: Material(
-                    type: MaterialType.transparency, // 버튼이 눌리도록 투명한 Material 사용
+                    type: MaterialType.transparency,
                     child: IconButton(
                       icon: Icon(Icons.pause, color: Colors.grey),
                       onPressed: () {
-                        // PausePopup 표시
                         showDialog(
                           context: context,
                           builder: (context) => PausePopup(),
@@ -69,13 +82,12 @@ class _LearnScreen3State extends State<LearnScreen3> {
                 ),
               ],
             ),
-            SizedBox(height: 100), // 사진 위 간격 조정
+            SizedBox(height: 100),
             // Top text
             GestureDetector(
               onTap: () {
                 setState(() {
-                  _topTextBackgroundColor =
-                  _topTextBackgroundColor == Colors.transparent
+                  _topTextBackgroundColor = _topTextBackgroundColor == Colors.transparent
                       ? Colors.green.withOpacity(0.5)
                       : Colors.transparent;
                 });
@@ -106,7 +118,7 @@ class _LearnScreen3State extends State<LearnScreen3> {
                 ),
               ),
             ),
-            SizedBox(height: 50), // 텍스트와 티셔츠 사이의 간격 조정
+            SizedBox(height: 50),
             // Center image (T-shirt)
             Center(
               child: Image.asset(
@@ -115,13 +127,12 @@ class _LearnScreen3State extends State<LearnScreen3> {
                 height: 100,
               ),
             ),
-            SizedBox(height: 50), // 티셔츠와 텍스트 사이의 간격 조정
+            SizedBox(height: 50),
             // Bottom text
             GestureDetector(
               onTap: () {
                 setState(() {
-                  _bottomTextBackgroundColor =
-                  _bottomTextBackgroundColor == Colors.transparent
+                  _bottomTextBackgroundColor = _bottomTextBackgroundColor == Colors.transparent
                       ? Colors.green.withOpacity(0.5)
                       : Colors.transparent;
                 });
@@ -152,7 +163,7 @@ class _LearnScreen3State extends State<LearnScreen3> {
                 ),
               ),
             ),
-            SizedBox(height: 100), // 텍스트 아래 간격 추가
+            SizedBox(height: 100),
           ],
         ),
       ),
