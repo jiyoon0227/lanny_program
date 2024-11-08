@@ -1,25 +1,6 @@
 import 'package:flutter/material.dart';
+import 'learning_screen2.dart'; // LearnScreen2 페이지가 있는 파일을 import하세요.
 import '../widgets/stop_popup.dart';
-
-void main() {
-  runApp(const FigmaToCodeApp());
-}
-
-class FigmaToCodeApp extends StatelessWidget {
-  const FigmaToCodeApp({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      theme: ThemeData.dark().copyWith(
-        scaffoldBackgroundColor: const Color.fromARGB(255, 18, 32, 47),
-      ),
-      home: Scaffold(
-        body: LearnScreen1(),
-      ),
-    );
-  }
-}
 
 class LearnScreen1 extends StatelessWidget {
   @override
@@ -28,8 +9,8 @@ class LearnScreen1 extends StatelessWidget {
       padding: const EdgeInsets.all(16.0),
       child: DefaultTextStyle(
         style: TextStyle(
-          color: Colors.black, // 기본 텍스트 색상
-          fontSize: 16, // 기본 폰트 크기
+          color: Colors.black,
+          fontSize: 16,
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -40,6 +21,7 @@ class LearnScreen1 extends StatelessWidget {
                 Column(
                   children: [
                     Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Expanded(
                           child: LinearProgressIndicator(
@@ -56,6 +38,18 @@ class LearnScreen1 extends StatelessWidget {
                             fontSize: 14,
                           ),
                         ),
+                        IconButton(
+                          icon: Icon(Icons.arrow_forward, color: Colors.grey),
+                          onPressed: () {
+                            // 다음 화면(LearnScreen2)으로 이동
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => LearnScreen2(),
+                              ),
+                            );
+                          },
+                        ),
                       ],
                     ),
                     SizedBox(height: 16),
@@ -63,7 +57,7 @@ class LearnScreen1 extends StatelessWidget {
                 ),
                 Positioned(
                   left: 0,
-                  top: 16, // 위치 조정
+                  top: 16,
                   child: Material(
                     type: MaterialType.transparency,
                     child: IconButton(

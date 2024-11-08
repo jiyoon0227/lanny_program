@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:lanny_program/widgets/daily_learning_goal_popup.dart'; // 팝업 파일을 임포트
+import 'package:lanny_program/learning/learning_screen1.dart'; // learning_screen1 임포트
 
-//txt for test
 class HomeScreen extends StatelessWidget {
   final int selectedChapter = 1; // 사용자가 선택한 챕터 인덱스
   final List<String> chapterNames = ['음식', '옷', '날씨', '여행', '문화', '인사', '소속']; // 챕터명 리스트 임시 데이터
@@ -89,7 +89,7 @@ class HomeScreen extends StatelessWidget {
                   children: List.generate(7, (index) {
                     bool isSelected = index == selectedChapter; // 선택된 챕터 여부 설정
                     bool showGauge = index <= selectedChapter; // 선택된 챕터 및 이전 챕터에만 게이지 표시
-                    return _buildChapterSection(index, isSelected, showGauge);
+                    return _buildChapterSection(context, index, isSelected, showGauge);
                   }),
                 ),
               ),
@@ -102,7 +102,7 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildChapterSection(int index, bool isSelected, bool showGauge) {
+  Widget _buildChapterSection(BuildContext context, int index, bool isSelected, bool showGauge) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -135,11 +135,21 @@ class HomeScreen extends StatelessWidget {
         ),
         const SizedBox(width: 16),
         Expanded(
-          child: _buildChapterTile(
+          child: GestureDetector(
+            onTap: () {
+              // 챕터 클릭 시 learning_screen1.dart로 이동
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => LearnScreen1()),
+              );
+            },
+            child: _buildChapterTile(
               "챕터 ${index + 1} - ${chapterNames[index]}",
               "설명 텍스트를 여기에 추가하세요.",
               isSelected,
-              showGauge),
+              showGauge,
+            ),
+          ),
         ),
         const SizedBox(width: 25),
       ],
@@ -189,7 +199,7 @@ class HomeScreen extends StatelessWidget {
                     child: LinearProgressIndicator(
                       value: 0.5,
                       backgroundColor: Colors.transparent,
-                      valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                      valueColor: AlwaysStoppedAnimation<Color>(showGauge && !isSelected ? Color(0xFFB3BA9F) : Colors.white),
                     ),
                   ),
                 ),
@@ -208,7 +218,7 @@ class HomeScreen extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
       margin: const EdgeInsets.only(bottom: 16.0),
       decoration: BoxDecoration(
-        color: Color(0xFF4FA55B),
+        color: Colors.transparent,
         borderRadius: BorderRadius.circular(50),
       ),
       child: Row(

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'learning_screen3.dart'; // LearnScreen3 페이지가 있는 파일을 import하세요.
 import '../widgets/stop_popup.dart';
 
 class LearnScreen2 extends StatefulWidget {
@@ -19,8 +20,8 @@ class _LearnScreen2State extends State<LearnScreen2> {
       padding: const EdgeInsets.all(16.0),
       child: DefaultTextStyle(
         style: TextStyle(
-          color: Colors.black, // 기본 텍스트 색상
-          fontSize: 16, // 기본 폰트 크기
+          color: Colors.black,
+          fontSize: 16,
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -31,21 +32,34 @@ class _LearnScreen2State extends State<LearnScreen2> {
                 Column(
                   children: [
                     Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Expanded(
                           child: LinearProgressIndicator(
-                            value: 1 / 15,
+                            value: 2 / 15, // 페이지 진행 상태 업데이트
                             backgroundColor: Colors.grey,
                             color: Colors.green,
                           ),
                         ),
                         SizedBox(width: 8),
                         Text(
-                          '1/15',
+                          '2/15',
                           style: TextStyle(
                             color: Colors.green,
                             fontSize: 14,
                           ),
+                        ),
+                        IconButton(
+                          icon: Icon(Icons.arrow_forward, color: Colors.grey),
+                          onPressed: () {
+                            // LearnScreen3 페이지로 이동
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => LearnScreen3(),
+                              ),
+                            );
+                          },
                         ),
                       ],
                     ),
@@ -54,13 +68,12 @@ class _LearnScreen2State extends State<LearnScreen2> {
                 ),
                 Positioned(
                   left: 0,
-                  top: 16, // 위치 조정
+                  top: 16,
                   child: Material(
                     type: MaterialType.transparency,
                     child: IconButton(
                       icon: Icon(Icons.pause, color: Colors.grey),
                       onPressed: () {
-                        // PausePopup 표시
                         showDialog(
                           context: context,
                           builder: (context) => PausePopup(),
@@ -71,10 +84,9 @@ class _LearnScreen2State extends State<LearnScreen2> {
                 ),
               ],
             ),
-            SizedBox(height: 100), // 사진 위 간격 조정
-            // Top images
+            SizedBox(height: 100),
             Row(
-              mainAxisAlignment: MainAxisAlignment.center, // 가운데 정렬
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 GestureDetector(
                   onTap: () {
@@ -94,7 +106,7 @@ class _LearnScreen2State extends State<LearnScreen2> {
                     ),
                   ),
                 ),
-                SizedBox(width: 100), // 사진 간 간격 조정
+                SizedBox(width: 100),
                 GestureDetector(
                   onTap: () {
                     setState(() {
@@ -115,8 +127,7 @@ class _LearnScreen2State extends State<LearnScreen2> {
                 ),
               ],
             ),
-            SizedBox(height: 100), // 텍스트와 사진 사이의 간격 조정
-            // Center text
+            SizedBox(height: 100),
             Center(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -140,10 +151,9 @@ class _LearnScreen2State extends State<LearnScreen2> {
                 ],
               ),
             ),
-            SizedBox(height: 100), // 텍스트와 사진 사이의 간격 조정
-            // Bottom images
+            SizedBox(height: 100),
             Row(
-              mainAxisAlignment: MainAxisAlignment.center, // 가운데 정렬
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 GestureDetector(
                   onTap: () {
@@ -163,7 +173,7 @@ class _LearnScreen2State extends State<LearnScreen2> {
                     ),
                   ),
                 ),
-                SizedBox(width: 100), // 사진 간 간격 조정
+                SizedBox(width: 100),
                 GestureDetector(
                   onTap: () {
                     setState(() {
@@ -184,7 +194,7 @@ class _LearnScreen2State extends State<LearnScreen2> {
                 ),
               ],
             ),
-            SizedBox(height: 100), // 사진 아래 간격 추가
+            SizedBox(height: 100),
           ],
         ),
       ),
