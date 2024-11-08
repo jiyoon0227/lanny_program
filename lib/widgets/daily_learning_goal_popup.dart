@@ -7,7 +7,7 @@ void dailyLearningGoalPopup(BuildContext context) {
   showDialog(
     context: context,
     builder: (BuildContext context) {
-      return StatefulBuilder( // ******** AlertDialog 내에서 상태를 관리하기 위해 StatefulBuilder로 감쌌습니다.
+      return StatefulBuilder(
         builder: (BuildContext context, StateSetter setState) {
           return AlertDialog(
             contentPadding: EdgeInsets.symmetric(horizontal: 45, vertical: 16),
@@ -75,7 +75,7 @@ void dailyLearningGoalPopup(BuildContext context) {
                     inactiveColor: Color(0xFFE8E9F1),
                     label: '$dailyGoal 개',
                     onChanged: (double value) {
-                      setState(() { // ******** StatefulBuilder 내에서 setState 사용
+                      setState(() {
                         dailyGoal = value.toInt();
                       });
                     },
@@ -105,19 +105,19 @@ void dailyLearningGoalPopup(BuildContext context) {
                       SizedBox(width: 10),
                       GestureDetector(
                         onTap: () {
-                          setState(() { // ******** StatefulBuilder 내에서 알림 상태 업데이트
+                          setState(() {
                             isAlartOn = !isAlartOn; // 알림 상태 토글
                           });
                         },
                         child: Container(
-                          width: 40,
-                          height: 40,
+                          width: 30,
+                          height: 30,
                           decoration: BoxDecoration(
                             image: DecorationImage(
                               image: AssetImage(isAlartOn
                                   ? 'assets/images/home_popup_alart_on.png'
                                   : 'assets/images/home_popup_alart_off.png'),
-                              fit: BoxFit.cover, // 이미지를 채우는 방법 (필요에 따라 수정 가능)
+                              fit: BoxFit.cover,
                             ),
                           ),
                         ),
