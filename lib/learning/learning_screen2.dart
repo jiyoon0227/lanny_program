@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'learning_screen3.dart'; // LearnScreen3 페이지가 있는 파일을 import하세요.
 import '../widgets/stop_popup.dart';
+import 'package:lanny_program/widgets/correct_answer_popup.dart'; // CorrectAnswerPopup 파일을 import하세요.
 
 class LearnScreen2 extends StatefulWidget {
   @override
@@ -195,6 +196,28 @@ class _LearnScreen2State extends State<LearnScreen2> {
               ],
             ),
             SizedBox(height: 100),
+            Align(
+              alignment: Alignment.center,
+              child: SizedBox(
+                width: 200, // 버튼 너비를 줄임
+                child: ElevatedButton(
+                  onPressed: () {
+                    showDialog(
+                      context: context,
+                      builder: (context) => CorrectAnswerPopup(),
+                    );
+                  },
+                  style: ElevatedButton.styleFrom(
+                    padding: EdgeInsets.symmetric(vertical: 12.0),
+                    backgroundColor: Colors.green, // 버튼 배경색 설정
+                  ),
+                  child: Text(
+                    '답안 제출',
+                    style: TextStyle(fontSize: 18.0, color: Colors.white),
+                  ),
+                ),
+              ),
+            ),
           ],
         ),
       ),

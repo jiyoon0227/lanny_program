@@ -175,6 +175,27 @@ class _LearnScreen4State extends State<LearnScreen4> {
                 ),
               ),
             ),
+            SizedBox(height: 50),
+            // 답안 제출 버튼
+            Align(
+              alignment: Alignment.center,
+              child: SizedBox(
+                width: 200, // 버튼 너비를 줄임
+                child: ElevatedButton(
+                  onPressed: () {
+                    // 답안 제출 시 실행할 로직 추가
+                    print('답안 제출');
+                  },
+                  style: ElevatedButton.styleFrom(
+                    padding: EdgeInsets.symmetric(vertical: 12.0), backgroundColor: Colors.green, // 버튼 배경색 설정
+                  ),
+                  child: Text(
+                    '답안 제출',
+                    style: TextStyle(fontSize: 18.0, color: Colors.white),
+                  ),
+                ),
+              ),
+            ),
           ],
         ),
       ),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'learning_screen4.dart'; // LearnScreen4 페이지가 있는 파일을 import하세요.
 import '../widgets/stop_popup.dart';
+import 'package:lanny_program/widgets/fail_answer_popup.dart'; // FailAnswerPopup 파일을 import하세요.
 
 class LearnScreen3 extends StatefulWidget {
   @override
@@ -164,6 +165,29 @@ class _LearnScreen3State extends State<LearnScreen3> {
               ),
             ),
             SizedBox(height: 100),
+            Align(
+              alignment: Alignment.center,
+              child: SizedBox(
+                width: 200, // 버튼 너비를 줄임
+                child: ElevatedButton(
+                  onPressed: () {
+                    // 답안 제출 시 FailAnswerPopup을 호출
+                    showDialog(
+                      context: context,
+                      builder: (context) => FailAnswerPopup(),
+                    );
+                  },
+                  style: ElevatedButton.styleFrom(
+                    padding: EdgeInsets.symmetric(vertical: 12.0),
+                    backgroundColor: Colors.green, // 버튼 배경색 설정
+                  ),
+                  child: Text(
+                    '답안 제출',
+                    style: TextStyle(fontSize: 18.0, color: Colors.white),
+                  ),
+                ),
+              ),
+            ),
           ],
         ),
       ),
