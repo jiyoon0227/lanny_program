@@ -1,78 +1,82 @@
 import 'package:flutter/material.dart';
+import 'learning_screen2.dart'; // LearnScreen2 페이지가 있는 파일을 import하세요.
+import '../widgets/stop_popup.dart';
 
-void main() {
-  runApp(const FigmaToCodeApp());
-}
-
-class FigmaToCodeApp extends StatelessWidget {
-  const FigmaToCodeApp({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      theme: ThemeData.dark().copyWith(
-        scaffoldBackgroundColor: const Color.fromARGB(255, 18, 32, 47),
-      ),
-      home: Scaffold(
-        body: learn_screen1(),
-      ),
-    );
-  }
-}
-
-class learn_screen1 extends StatelessWidget {
+class LearnScreen1 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(16.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Stack(
-            clipBehavior: Clip.none,
-            children: [
-              Row(
-                children: [
-                  Expanded(
-                    child: LinearProgressIndicator(
-                      value: 1 / 15,
-                      backgroundColor: Colors.grey,
-                      color: Colors.green,
+      child: DefaultTextStyle(
+        style: TextStyle(
+          color: Colors.black,
+          fontSize: 16,
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Stack(
+              clipBehavior: Clip.none,
+              children: [
+                Column(
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Expanded(
+                          child: LinearProgressIndicator(
+                            value: 1 / 15,
+                            backgroundColor: Colors.grey,
+                            color: Colors.green,
+                          ),
+                        ),
+                        SizedBox(width: 8),
+                        Text(
+                          '1/15',
+                          style: TextStyle(
+                            color: Colors.green,
+                            fontSize: 14,
+                          ),
+                        ),
+                        IconButton(
+                          icon: Icon(Icons.arrow_forward, color: Colors.grey),
+                          onPressed: () {
+                            // 다음 화면(LearnScreen2)으로 이동
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => LearnScreen2(),
+                              ),
+                            );
+                          },
+                        ),
+                      ],
                     ),
-                  ),
-                  SizedBox(width: 8),
-                  Text(
-                    '1/15',
-                    style: TextStyle(
-                      color: Colors.green,
-                      fontSize: 14,
+                    SizedBox(height: 16),
+                  ],
+                ),
+                Positioned(
+                  left: 0,
+                  top: 16,
+                  child: Material(
+                    type: MaterialType.transparency,
+                    child: IconButton(
+                      icon: Icon(Icons.pause, color: Colors.grey),
+                      onPressed: () {
+                        showDialog(
+                          context: context,
+                          builder: (context) => PausePopup(),
+                        );
+                      },
                     ),
-                  ),
-                  Spacer(),
-                ],
-              ),
-              // IconButton이 Stack의 마지막에 배치되어 가장 위로 그려지게 함
-              Positioned(
-                left: 0,
-                bottom: -40,
-                child: Material(
-                  color: Colors.transparent,
-                  child: IconButton(
-                    icon: Icon(Icons.pause, color: Colors.grey),
-                    onPressed: () {
-                      print('Pause button pressed');
-                    },
                   ),
                 ),
-              ),
-            ],
-          ),
-          SizedBox(height: 40),
-          Expanded(
-            child: Row(
-              children: [
-                Spacer(flex: 1),
-                Column(
+              ],
+            ),
+            SizedBox(height: 40),
+            Expanded(
+              child: Center(
+                child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Image.asset(
@@ -83,7 +87,6 @@ class learn_screen1 extends StatelessWidget {
                     Text(
                       'はんそで',
                       style: TextStyle(
-                        color: Colors.black,
                         fontSize: 36,
                         fontWeight: FontWeight.bold,
                       ),
@@ -100,18 +103,16 @@ class learn_screen1 extends StatelessWidget {
                     Text(
                       '티셔츠',
                       style: TextStyle(
-                        color: Colors.black,
                         fontSize: 24,
                       ),
                     ),
                   ],
                 ),
-                Spacer(flex: 9),
-              ],
+              ),
             ),
-          ),
-          SizedBox(height: 50),
-        ],
+            SizedBox(height: 50),
+          ],
+        ),
       ),
     );
   }

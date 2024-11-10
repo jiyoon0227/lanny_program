@@ -107,6 +107,44 @@ flutter:
     - assets/images/sun.png
     - assets/images/socks.png
     - assets/images/bread.png
+    - assets/images/arrow_left_darkgray.png
+    - assets/images/arrow_left_greenish_gray.png
+    - assets/images/arrow_right_greenish_gray.png
+    - assets/images/arrow_right_ivory.png
+    - assets/images/cha3 1.png
+    - assets/images/cha4 1.png
+    - assets/images/chap1_bread.png
+    - assets/images/chap2_bag.png
+    - assets/images/chap2_socks.png
+    - assets/images/chap2_tshirt.png
+    - assets/images/chap_sun.png
+    - assets/images/chapcover_book.png
+    - assets/images/chapcover_time.png
+    - assets/images/dummy_circle.png
+    - assets/images/group 1.png
+    - assets/images/home_complete_point.png
+    - assets/images/home_fire.png
+    - assets/images/home_incomplete_point.png
+    - assets/images/home_popup_alart_off.png
+    - assets/images/home_popup_alart_on.png
+    - assets/images/home_timer.png
+    - assets/images/icon.png
+    - assets/images/indicator_stick.png
+    - assets/images/lang_chinese_circle.png
+    - assets/images/lang_english_circle.png
+    - assets/images/lang_french_circle.png
+    - assets/images/lang_japanese_circle.png
+    - assets/images/learn_pause.png
+    - assets/images/learn_popup_continue.png
+    - assets/images/learn_popup_stop.png
+    - assets/images/mypage_change.png
+    - assets/images/mypage_pencil.png
+    - assets/images/navigation_bookmark.png
+    - assets/images/navigation_bookmark_selected.png
+    - assets/images/navigation_home.png
+    - assets/images/navigation_home_selected.png
+    - assets/images/navigation_person.png
+    - assets/images/navigation_person_selected.png
 
 
 

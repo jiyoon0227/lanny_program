@@ -1,43 +1,36 @@
-import 'package:flutter/material.dart';
-import '../widgets/daily_learning_goal_popup.dart'; // 추가
+import 'package:flutter/material.dart'; // 추가
 
 class welcome_screen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    // -----일일 학습 목표량 임시 확인 ------
-    /*
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      dailyLearningGoalPopup(context);
-    });
-    */
-    //-----------
+
     return Scaffold(
       body: Stack(
         children: [
           // 핑크 아이콘: 알파벳 e 위쪽에 위치
           Positioned(
-            left: 120,
-            top: 270,
+            left: 200,
+            top: 100,
             child: Image.asset(
               'assets/images/Icon1.png', // 핑크 아이콘 파일 경로
-              width: 50, // 크기 조정
-              height: 50,
+              width: 100, // 크기 조정
+              height: 100,
             ),
           ),
           // 연두색 아이콘: "언어 학습앱" 글자 옆에 위치
           Positioned(
-            left: 280,
-            top: 430,
+            right: 0,
+            top: 300,
             child: Image.asset(
               'assets/images/Icon2.png', // 연두색 아이콘 파일 경로
-              width: 150, // 크기 조정
-              height: 150,
+              width: 100, // 크기 조정
+              height: 300,
             ),
           ),
           // 텍스트와 버튼
           Positioned(
             left: 39,
-            top: 298,
+            top: 208,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -71,7 +64,6 @@ class welcome_screen extends StatelessWidget {
                     ],
                   ),
                 ),
-                const SizedBox(height: 7),
                 Text.rich(
                   TextSpan(
                     children: [
@@ -108,8 +100,8 @@ class welcome_screen extends StatelessWidget {
             ),
           ),
           Positioned(
-            left: 33,
-            top: 688,
+            left: (MediaQuery.of(context).size.width / 2) - 140,
+            top: 568,
             child: Column(
               children: [
                 ElevatedButton(
@@ -132,7 +124,6 @@ class welcome_screen extends StatelessWidget {
                     ),
                   ),
                 ),
-                const SizedBox(height: 16),
                 TextButton(
                   onPressed: () {
                     Navigator.pushNamed(context, '/login');
