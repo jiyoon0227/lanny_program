@@ -4,11 +4,11 @@ class ChapterCoverPage extends StatelessWidget {
   final List<String> foreignWords = ['はんそで', 'ズボン', 'コート', 'くつ', 'くつした'];
   final List<String> koreanWords = ['티셔츠', '바지', '코트', '신발', '양말'];
   final List<String> wordImagePaths = [
-    'assets/images/chap2_tshirt.png',
-    'assets/images/chap2_tshirt.png',
-    'assets/images/chap2_tshirt.png',
-    'assets/images/chap2_tshirt.png',
-    'assets/images/chap2_tshirt.png'
+    'assets/images/chapter_imgs/chap2_tshirt.png',
+    'assets/images/chapter_imgs/chap2_pants.png',
+    'assets/images/chapter_imgs/chap2_coat.png',
+    'assets/images/chapter_imgs/chap2_shoes.png',
+    'assets/images/chapter_imgs/chap2_socks.png'
   ];
 
   @override
