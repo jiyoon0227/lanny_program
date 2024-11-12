@@ -1,63 +1,61 @@
 import 'package:flutter/material.dart';
-import 'package:lanny_program/Firebase/FirebaseAuth.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import '../widgets/language_setting_popup.dart'; // 팝업 함수 임포트
 
-
-class LoginScreen extends StatefulWidget {
-  @override
-  _LoginScreenState createState() => _LoginScreenState();
-}
-
-class _LoginScreenState extends State<LoginScreen> {
-  final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
-  final FirebaseAuthService _authService = FirebaseAuthService();
-
+class login_screen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Login'),
-      ),
+      appBar: AppBar(title: Text('로그인')),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             TextField(
-              controller: _emailController,
-              decoration: InputDecoration(labelText: 'Email'),
+              decoration: InputDecoration(
+                labelText: '아이디',
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(50),
+                ),
+              ),
             ),
+            const SizedBox(height: 16),
             TextField(
-              controller: _passwordController,
-              decoration: InputDecoration(labelText: 'Password'),
               obscureText: true,
+              decoration: InputDecoration(
+                labelText: '비밀번호',
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(50),
+                ),
+              ),
             ),
-            SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () async {
-                User? user = await _authService.signIn(
-                  _emailController.text,
-                  _passwordController.text,
-                );
-                if (user != null) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text('Login successful')),
-                  );
-                  Navigator.pushReplacementNamed(context, '/main');
-                } else {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text('Login failed')),
-                  );
-                }
-              },
-              child: Text('Login'),
-            ),
-            SizedBox(height: 20),
+            const SizedBox(height: 16),
             ElevatedButton(
               onPressed: () {
-                Navigator.pushNamed(context, '/signup');
+                showLanguageSettingPopup(context); // 팝업 호출
               },
-              child: Text('Sign Up'),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: const Color(0xFF4FA55B),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(50),
+                ),
+              ),
+              child: const Text(
+                '로그인',
+                style: TextStyle(color: Colors.white),
+              ),
+            ),
+            const SizedBox(height: 8),
+            Center(
+              child: TextButton(
+                onPressed: () {
+                  Navigator.pushNamed(context, '/signup'); // 회원가입 화면으로 이동
+                },
+                child: const Text(
+                  '회원가입',
+                  style: TextStyle(color: Color(0xFF4FA55B)),
+                ),
+              ),
             ),
           ],
         ),
