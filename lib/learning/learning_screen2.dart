@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
-import 'learning_screen3.dart'; // LearnScreen3 페이지가 있는 파일을 import하세요.
+import 'learning_screen3.dart'; // LearnScreen3 페이지를 import합니다.
 import '../widgets/stop_popup.dart';
-import 'package:lanny_program/widgets/correct_answer_popup.dart'; // CorrectAnswerPopup 파일을 import하세요.
+import 'package:lanny_program/widgets/correct_answer_popup.dart'; // CorrectAnswerPopup 파일을 import합니다.
 
 class LearnScreen2 extends StatefulWidget {
+  final List<Map<String, String>> chapterWords; // chapterWords를 생성자에서 받아옴
+
+  // 생성자에서 chapterWords를 받아서 초기화
+  LearnScreen2({required this.chapterWords});
+
   @override
   _LearnScreen2State createState() => _LearnScreen2State();
 }
@@ -17,6 +22,9 @@ class _LearnScreen2State extends State<LearnScreen2> {
 
   @override
   Widget build(BuildContext context) {
+    // 첫 번째 단어를 가져오기
+    final currentWord = widget.chapterWords[1]; // 예시로 두 번째 단어 사용 (사과)
+
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: DefaultTextStyle(
@@ -57,7 +65,7 @@ class _LearnScreen2State extends State<LearnScreen2> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => LearnScreen3(),
+                                builder: (context) => LearnScreen3(chapterWords: widget.chapterWords),
                               ),
                             );
                           },
@@ -101,7 +109,7 @@ class _LearnScreen2State extends State<LearnScreen2> {
                     color: _sunColor,
                     padding: EdgeInsets.all(8.0),
                     child: Image.asset(
-                      'assets/images/sun.png',
+                      widget.chapterWords[1]['image']!, // 현재 단어의 이미지로 설정
                       width: 100,
                       height: 100,
                     ),
@@ -120,7 +128,7 @@ class _LearnScreen2State extends State<LearnScreen2> {
                     color: _breadColor,
                     padding: EdgeInsets.all(8.0),
                     child: Image.asset(
-                      'assets/images/bread.png',
+                      'assets/images/bread.png', // 고정된 이미지로 유지
                       width: 100,
                       height: 100,
                     ),
@@ -134,7 +142,7 @@ class _LearnScreen2State extends State<LearnScreen2> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Text(
-                    'はんそで',
+                    currentWord['word_jp']!, // 현재 단어의 일본어 텍스트
                     style: TextStyle(
                       color: Colors.black,
                       fontSize: 36,
@@ -143,7 +151,7 @@ class _LearnScreen2State extends State<LearnScreen2> {
                   ),
                   SizedBox(height: 8),
                   Text(
-                    '(hansode)',
+                    '(${currentWord['pronunciation']})', // 발음 표시
                     style: TextStyle(
                       color: Colors.grey[400],
                       fontSize: 16,
@@ -168,7 +176,7 @@ class _LearnScreen2State extends State<LearnScreen2> {
                     color: _tshirtColor,
                     padding: EdgeInsets.all(8.0),
                     child: Image.asset(
-                      'assets/images/tshirt.png',
+                      'assets/images/tshirt.png', // 고정된 이미지로 유지
                       width: 100,
                       height: 100,
                     ),
@@ -187,7 +195,7 @@ class _LearnScreen2State extends State<LearnScreen2> {
                     color: _socksColor,
                     padding: EdgeInsets.all(8.0),
                     child: Image.asset(
-                      'assets/images/socks.png',
+                      'assets/images/socks.png', // 고정된 이미지로 유지
                       width: 100,
                       height: 100,
                     ),
