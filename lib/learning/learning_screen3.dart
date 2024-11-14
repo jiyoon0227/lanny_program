@@ -4,6 +4,12 @@ import '../widgets/stop_popup.dart';
 import 'package:lanny_program/widgets/fail_answer_popup.dart'; // FailAnswerPopup 파일을 import하세요.
 
 class LearnScreen3 extends StatefulWidget {
+  // chapterWords를 생성자에서 받도록 변경
+  final List<Map<String, String>> chapterWords;
+
+  // 생성자에서 chapterWords를 받는 방식
+  LearnScreen3({required this.chapterWords});
+
   @override
   _LearnScreen3State createState() => _LearnScreen3State();
 }
@@ -15,6 +21,9 @@ class _LearnScreen3State extends State<LearnScreen3> {
 
   @override
   Widget build(BuildContext context) {
+    // 첫 번째 단어를 가져오기
+    final currentWord = widget.chapterWords[0]; // 생성자에서 받은 chapterWords 사용
+
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: DefaultTextStyle(
@@ -55,7 +64,7 @@ class _LearnScreen3State extends State<LearnScreen3> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => LearnScreen4(),
+                                builder: (context) => LearnScreen4(chapterWords: widget.chapterWords),
                               ),
                             );
                           },
@@ -99,7 +108,7 @@ class _LearnScreen3State extends State<LearnScreen3> {
                   child: Column(
                     children: [
                       Text(
-                        'はんそで',
+                        currentWord['word_jp']!, // 현재 단어의 일본어 텍스트
                         style: TextStyle(
                           color: Colors.black,
                           fontSize: 36,
@@ -108,7 +117,7 @@ class _LearnScreen3State extends State<LearnScreen3> {
                       ),
                       SizedBox(height: 8),
                       Text(
-                        '(hansode)',
+                        '(${currentWord['pronunciation']})', // 발음 표시
                         style: TextStyle(
                           color: Colors.grey[400],
                           fontSize: 16,
@@ -123,7 +132,7 @@ class _LearnScreen3State extends State<LearnScreen3> {
             // Center image (T-shirt)
             Center(
               child: Image.asset(
-                'assets/images/tshirt.png',
+                currentWord['image']!, // 현재 단어에 맞는 이미지
                 width: 100,
                 height: 100,
               ),
@@ -144,7 +153,7 @@ class _LearnScreen3State extends State<LearnScreen3> {
                   child: Column(
                     children: [
                       Text(
-                        'くつした',
+                        widget.chapterWords[1]['word_jp']!, // 두 번째 단어의 일본어 텍스트 (양말)
                         style: TextStyle(
                           color: Colors.black,
                           fontSize: 36,
@@ -153,7 +162,7 @@ class _LearnScreen3State extends State<LearnScreen3> {
                       ),
                       SizedBox(height: 8),
                       Text(
-                        '(kutsushita)',
+                        '(${widget.chapterWords[1]['pronunciation']})', // 발음 표시
                         style: TextStyle(
                           color: Colors.grey[400],
                           fontSize: 16,
