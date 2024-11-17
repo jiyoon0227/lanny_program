@@ -1,22 +1,46 @@
-class UserTable {
-  static const createTable = '''
-    CREATE TABLE tb_user (
-      user_id TEXT PRIMARY KEY,
-      user_email TEXT,
-      user_name TEXT,
-      user_birthday TEXT,
-      user_password TEXT,
-      user_profile_image TEXT,
-      user_streak_count INTEGER,
-      user_longest_streak_count INTEGER,
-      user_total_attendance_count INTEGER,
-      user_mastered_words_count INTEGER,
-      user_daily_time_goal INTEGER,
-      user_daily_time_state INTEGER,
-      user_notification_time TEXT
-    );
-  ''';
+//사용자 정보
+import 'package:sqflite/sqflite.dart';
+import 'package:path/path.dart';
+import 'database.dart';
 
-// CRUD 메서드 정의
-// 예: insertUser, getUser, updateUser, deleteUser
+class UserTable {
+  final dbHelper = DatabaseHelper();
+
+  Future<void> insertUser(Map<String, dynamic> userData) async {
+    final db = await dbHelper.database;
+    await db.insert('user_table', userData, conflictAlgorithm: ConflictAlgorithm.replace);
+  }
+
+  Future<Map<String, dynamic>?> getUserById(String userId) async {
+    final db = await dbHelper.database;
+    final result = await db.query(
+      'user_table',
+      where: 'user_id = ?',
+      whereArgs: [userId],
+    );
+    if (result.isNotEmpty) {
+      return result.first;
+    }
+    return null;
+  }
+
+  Future<void> updateUser(String userId, Map<String, dynamic> updatedData) async {
+    final db = await dbHelper.database;
+    await db.update(
+      'user_table',
+      updatedData,
+      where: 'user_id = ?',
+      whereArgs: [userId],
+    );
+  }
+
+  Future<void> deleteUser(String userId) async {
+    final db = await dbHelper.database;
+    await db.delete(
+      'user_table',
+      where: 'user_id = ?',
+      whereArgs: [userId],
+    );
+  }
 }
+
