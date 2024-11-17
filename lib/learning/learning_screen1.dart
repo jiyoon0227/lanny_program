@@ -1,10 +1,17 @@
 import 'package:flutter/material.dart';
-import 'learning_screen2.dart'; // LearnScreen2 페이지가 있는 파일을 import하세요.
+import 'learning_screen2.dart';
 import '../widgets/stop_popup.dart';
 
 class LearnScreen1 extends StatelessWidget {
+  final List<Map<String, String>> chapterWords; // 단어 리스트를 외부에서 전달받음
+
+  LearnScreen1({required this.chapterWords}); // 생성자에서 단어 리스트를 받아옴
+
   @override
   Widget build(BuildContext context) {
+    // 첫 번째 단어를 가져오기
+    final currentWord = chapterWords[0];
+
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: DefaultTextStyle(
@@ -41,11 +48,10 @@ class LearnScreen1 extends StatelessWidget {
                         IconButton(
                           icon: Icon(Icons.arrow_forward, color: Colors.grey),
                           onPressed: () {
-                            // 다음 화면(LearnScreen2)으로 이동
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => LearnScreen2(),
+                                builder: (context) => LearnScreen2(chapterWords: chapterWords),
                               ),
                             );
                           },
@@ -80,12 +86,12 @@ class LearnScreen1 extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Image.asset(
-                      'assets/images/tshirt.png',
+                      currentWord['image']!,
                       height: 300,
                     ),
                     SizedBox(height: 16),
                     Text(
-                      'はんそで',
+                      currentWord['word_kr']!,
                       style: TextStyle(
                         fontSize: 36,
                         fontWeight: FontWeight.bold,
@@ -93,7 +99,7 @@ class LearnScreen1 extends StatelessWidget {
                     ),
                     SizedBox(height: 8),
                     Text(
-                      '(hansode)',
+                      '(${currentWord['pronunciation']})',
                       style: TextStyle(
                         color: Colors.grey[400],
                         fontSize: 16,
@@ -101,9 +107,10 @@ class LearnScreen1 extends StatelessWidget {
                     ),
                     SizedBox(height: 16),
                     Text(
-                      '티셔츠',
+                      currentWord['word_jp']!,
                       style: TextStyle(
                         fontSize: 24,
+                        color: Colors.blue,
                       ),
                     ),
                   ],

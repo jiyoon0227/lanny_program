@@ -1,27 +1,11 @@
 import 'package:flutter/material.dart';
 import '../widgets/stop_popup.dart';
 
-void main() {
-  runApp(
-    MaterialApp(
-      theme: ThemeData.dark().copyWith(
-        scaffoldBackgroundColor: const Color.fromARGB(255, 18, 32, 47),
-      ),
-      home: Scaffold(
-        body: ListView(
-          children: [
-            LearnScreen4(),
-          ],
-        ),
-      ),
-      routes: {
-        '/learn4': (context) => LearnScreen4(),
-      },
-    ),
-  );
-}
-
 class LearnScreen4 extends StatefulWidget {
+  final List<Map<String, String>> chapterWords;
+
+  LearnScreen4({required this.chapterWords}); // Accept chapterWords via constructor
+
   @override
   _LearnScreen4State createState() => _LearnScreen4State();
 }
@@ -32,12 +16,15 @@ class _LearnScreen4State extends State<LearnScreen4> {
 
   @override
   Widget build(BuildContext context) {
+    // Accessing chapterWords to get the current word data
+    final currentWord = widget.chapterWords[0]; // Accessing the first word for this screen
+
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: DefaultTextStyle(
         style: TextStyle(
-          color: Colors.black, // 기본 텍스트 색상
-          fontSize: 16, // 기본 폰트 크기
+          color: Colors.black, // Default text color
+          fontSize: 16, // Default font size
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -68,7 +55,7 @@ class _LearnScreen4State extends State<LearnScreen4> {
               child: IconButton(
                 icon: Icon(Icons.pause, color: Colors.grey),
                 onPressed: () {
-                  // PausePopup 표시
+                  // PausePopup display
                   showDialog(
                     context: context,
                     builder: (context) => PausePopup(),
@@ -81,15 +68,15 @@ class _LearnScreen4State extends State<LearnScreen4> {
             Align(
               alignment: Alignment.center,
               child: Image.asset(
-                'assets/images/tshirt.png',
+                currentWord['image']!, // Dynamically use the image from chapterWords
                 width: 150,
                 height: 150,
               ),
             ),
             SizedBox(height: 16),
-            // Korean text
+            // Korean text (using dynamic data from chapterWords)
             Text(
-              '나는 바지를 입습니다.',
+              currentWord['word_kr']!, // Dynamically use the Korean translation
               style: TextStyle(
                 color: Colors.black,
                 fontSize: 14,
@@ -97,7 +84,7 @@ class _LearnScreen4State extends State<LearnScreen4> {
               ),
             ),
             SizedBox(height: 50),
-            // Button 1
+            // Button 1 (dynamically generated text)
             GestureDetector(
               onTap: () {
                 setState(() {
@@ -118,7 +105,7 @@ class _LearnScreen4State extends State<LearnScreen4> {
                 child: Column(
                   children: [
                     Text(
-                      '私ははんそでを着ました。',
+                      currentWord['word_jp']!, // Dynamically use Japanese word
                       style: TextStyle(
                         color: _button1Color == Colors.transparent ? Colors.black : Colors.white,
                         fontSize: 18,
@@ -126,7 +113,7 @@ class _LearnScreen4State extends State<LearnScreen4> {
                     ),
                     SizedBox(height: 8),
                     Text(
-                      '(Watashi wa hansode o kimashita. )',
+                      '(${currentWord['pronunciation']})', // Dynamically use pronunciation
                       style: TextStyle(
                         color: _button1Color == Colors.transparent ? Colors.grey : Colors.white,
                         fontSize: 14,
@@ -136,7 +123,7 @@ class _LearnScreen4State extends State<LearnScreen4> {
                 ),
               ),
             ),
-            // Button 2
+            // Button 2 (dynamically generated text)
             GestureDetector(
               onTap: () {
                 setState(() {
@@ -157,7 +144,7 @@ class _LearnScreen4State extends State<LearnScreen4> {
                 child: Column(
                   children: [
                     Text(
-                      '私はくつしたを履きました。',
+                      widget.chapterWords[1]['word_jp']!, // Accessing the second word dynamically
                       style: TextStyle(
                         color: _button2Color == Colors.transparent ? Colors.black : Colors.white,
                         fontSize: 18,
@@ -165,7 +152,7 @@ class _LearnScreen4State extends State<LearnScreen4> {
                     ),
                     SizedBox(height: 8),
                     Text(
-                      '(Watashi wa kutsushita o hakimashita.)',
+                      '(${widget.chapterWords[1]['pronunciation']})', // Using dynamic pronunciation
                       style: TextStyle(
                         color: _button2Color == Colors.transparent ? Colors.grey : Colors.white,
                         fontSize: 14,
@@ -176,18 +163,19 @@ class _LearnScreen4State extends State<LearnScreen4> {
               ),
             ),
             SizedBox(height: 50),
-            // 답안 제출 버튼
+            // Answer submission button
             Align(
               alignment: Alignment.center,
               child: SizedBox(
-                width: 200, // 버튼 너비를 줄임
+                width: 200, // Button width
                 child: ElevatedButton(
                   onPressed: () {
-                    // 답안 제출 시 실행할 로직 추가
-                    print('답안 제출');
+                    // Logic when answer is submitted
+                    print('Answer submitted');
                   },
                   style: ElevatedButton.styleFrom(
-                    padding: EdgeInsets.symmetric(vertical: 12.0), backgroundColor: Colors.green, // 버튼 배경색 설정
+                    padding: EdgeInsets.symmetric(vertical: 12.0),
+                    backgroundColor: Colors.green, // Button background color
                   ),
                   child: Text(
                     '답안 제출',
