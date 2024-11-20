@@ -50,12 +50,13 @@ class DatabaseHelper {
 
     await db.execute('''
       CREATE TABLE chapter_table (
-        chapter_id INTEGER PRIMARY KEY AUTOINCREMENT,
+        chapter_id INTEGER PRIMARY KEY,
         chapter_name TEXT NOT NULL,
+        chapter_intro TEXT NOT NULL,
         chapter_level TEXT NOT NULL,
-        chapter_intro TEXT,
-        chapter_icon_src TEXT
-      )
+        chapter_icon_src TEXT NOT NULL,
+        progress REAL NOT NULL
+      );
     ''');
 
     await db.execute('''

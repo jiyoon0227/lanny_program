@@ -1,36 +1,42 @@
 //챕터 및 단어 콘텐츠 표현 데이터 모델
-class Chapter {
+class ChapterModel {
   final int chapterId;
-  final String name;
-  final String level;
-  final String? intro;
-  final String? iconSrc;
+  final String chapterName;
+  final String chapterIntro;
+  final String chapterLevel; // 추가
+  final String chapterIconSrc; // 추가
+  final double progress;
 
-  Chapter({
+  ChapterModel({
     required this.chapterId,
-    required this.name,
-    required this.level,
-    this.intro,
-    this.iconSrc,
+    required this.chapterName,
+    required this.chapterIntro,
+    required this.chapterLevel, // 추가
+    required this.chapterIconSrc, // 추가
+    required this.progress,
   });
 
-  factory Chapter.fromMap(Map<String, dynamic> map) {
-    return Chapter(
+  // 데이터베이스에서 객체 생성
+  factory ChapterModel.fromMap(Map<String, dynamic> map) {
+    return ChapterModel(
       chapterId: map['chapter_id'],
-      name: map['chapter_name'],
-      level: map['chapter_level'],
-      intro: map['chapter_intro'],
-      iconSrc: map['chapter_icon_src'],
+      chapterName: map['chapter_name'],
+      chapterIntro: map['chapter_intro'],
+      chapterLevel: map['chapter_level'], // 추가
+      chapterIconSrc: map['chapter_icon_src'], // 추가
+      progress: map['progress'],
     );
   }
 
+  // 객체를 데이터베이스 형식으로 변환
   Map<String, dynamic> toMap() {
     return {
       'chapter_id': chapterId,
-      'chapter_name': name,
-      'chapter_level': level,
-      'chapter_intro': intro,
-      'chapter_icon_src': iconSrc,
+      'chapter_name': chapterName,
+      'chapter_intro': chapterIntro,
+      'chapter_level': chapterLevel, // 추가
+      'chapter_icon_src': chapterIconSrc, // 추가
+      'progress': progress,
     };
   }
 }
