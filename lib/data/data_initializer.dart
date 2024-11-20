@@ -9,13 +9,13 @@ class DataInitializer {
   Future<void> initializeData() async {
     // 1. 챕터 데이터 삽입
     await chapterTable.insertChapters([
-      {'id': 1, 'name': '음식', 'intro': '가장 기본적인 음식을 배워봅시다.', 'progress': 0.0},
-      {'id': 2, 'name': '옷', 'intro': '우리가 입고 있는 옷에 대해 배워봅시다.', 'progress': 0.0},
-      {'id': 3, 'name': '날씨', 'intro': '지금 하늘은 어떤 날씨인가요?', 'progress': 0.0},
-      {'id': 4, 'name': '여행', 'intro': '여행에서 꼭 필요한 단어에 대해 알아봅시다.', 'progress': 0.0},
-      {'id': 5, 'name': '문화', 'intro': '사회를 나타내는 문화 요소에는 어떤 것들이 있을까요?', 'progress': 0.0},
-      {'id': 6, 'name': '인사', 'intro': '인사법을 배우며 글로벌 매너를 익혀봅시다.', 'progress': 0.0},
-      {'id': 7, 'name': '소속', 'intro': '당신의 소속과 정보를 설명해보세요.', 'progress': 0.0},
+      {'id': 1, 'name': '음식', 'description': '가장 기본적인 음식을 배워봅시다.', 'progress': 0.0,'icon': 'assets/images/chapter_imgs/chap1_icon_darkgray.png' },
+      {'id': 2, 'name': '옷', 'description': '우리가 입고 있는 옷에 대해 배워봅시다.', 'progress': 0.0,'icon': 'assets/images/chapter_imgs/chap2_icon_darkgray.png'},
+      {'id': 3, 'name': '날씨', 'description': '지금 하늘은 어떤 날씨인가요?', 'progress': 0.0,'icon': 'assets/images/chapter_imgs/chap3_icon_darkgray.png'},
+      {'id': 4, 'name': '여행', 'description': '여행에서 꼭 필요한 단어에 대해 알아봅시다.', 'progress': 0.0,'icon': 'assets/images/chapter_imgs/chap4_icon_darkgray.png'},
+      {'id': 5, 'name': '문화', 'description': '사회를 나타내는 문화 요소에는 어떤 것들이 있을까요?', 'progress': 0.0,'icon': 'assets/images/chapter_imgs/chap5_icon_darkgray.png'},
+      {'id': 6, 'name': '인사', 'description': '인사법을 배우며 글로벌 매너를 익혀봅시다.', 'progress': 0.0,'icon': 'assets/images/chapter_imgs/chap6_icon_darkgray.png'},
+      {'id': 7, 'name': '소속', 'description': '당신의 소속과 정보를 설명해보세요.', 'progress': 0.0,'icon': 'assets/images/chapter_imgs/chap7_icon_darkgray.png'},
     ]);
 
     // 2. 단어 데이터 삽입

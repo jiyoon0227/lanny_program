@@ -24,7 +24,7 @@ class DatabaseHelper {
 
     return await openDatabase(
       path,
-      version: 1,
+      version: 2,
       onCreate: _onCreate,
     );
   }
@@ -50,12 +50,11 @@ class DatabaseHelper {
 
     await db.execute('''
       CREATE TABLE chapter_table (
-        chapter_id INTEGER PRIMARY KEY,
-        chapter_name TEXT NOT NULL,
-        chapter_intro TEXT NOT NULL,
-        chapter_level TEXT NOT NULL,
-        chapter_icon_src TEXT NOT NULL,
-        progress REAL NOT NULL
+        chapter_id INTEGER PRIMARY KEY, 
+        chapter_name TEXT NOT NULL, 
+        chapter_description TEXT NOT NULL, 
+        progress REAL NOT NULL, 
+        chapter_icon TEXT NOT NULL
       );
     ''');
 

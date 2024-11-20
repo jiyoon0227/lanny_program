@@ -6,7 +6,7 @@ class ChapterTable {
 
   // 챕터 정보 삽입
   Future<void> insertChapter(
-      int chapterId, String name, String intro, double progress) async {
+      int chapterId, String name, String description, double progress, String chapterIcon) async {
     final db = await dbHelper.database;
 
     await db.insert(
@@ -14,8 +14,9 @@ class ChapterTable {
       {
         'chapter_id': chapterId,
         'chapter_name': name,
-        'chapter_intro': intro,
+        'chapter_description': description,
         'progress': progress,
+        'chapter_icon': chapterIcon,
       },
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
@@ -32,8 +33,9 @@ class ChapterTable {
           {
             'chapter_id': chapter['id'],
             'chapter_name': chapter['name'],
-            'chapter_intro': chapter['intro'],
+            'chapter_description': chapter['description'],
             'progress': chapter['progress'],
+            'chapter_icon': chapter['icon'],
           },
           conflictAlgorithm: ConflictAlgorithm.replace,
         );
