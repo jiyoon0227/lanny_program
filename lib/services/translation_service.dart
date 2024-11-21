@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 class TranslationService {
-  final String apiKey = 'sk-your-api-key'; // OpenAI API Key
+  final String apiKey = 'OpenAI API Key'; //
 
   // 단어를 번역하는 메서드
   Future<List<Map<String, String>>> translateAndRomanize(

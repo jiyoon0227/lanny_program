@@ -7,6 +7,7 @@ import 'screens/signup_screen.dart';
 import 'screens/main_navigation_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
+import '../data/data_initializer.dart'; // 데이터베이스 초기화 파일 임포트
 
 ///void main() => runApp(LannyProgram());
 void main() async {
@@ -14,6 +15,8 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  final dataInitializer = DataInitializer();
+  await dataInitializer.initializeData(); // 데이터베이스 초기화 수행
   runApp(LannyProgram());
 }
 

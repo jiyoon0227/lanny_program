@@ -50,14 +50,25 @@ class DatabaseHelper {
 
     await db.execute('''
       CREATE TABLE chapter_table (
-        chapter_id INTEGER PRIMARY KEY AUTOINCREMENT,
-        chapter_name TEXT NOT NULL,
-        chapter_level TEXT NOT NULL,
-        chapter_intro TEXT,
-        chapter_icon_src TEXT
-      )
+        chapter_id INTEGER PRIMARY KEY, 
+        chapter_name TEXT NOT NULL, 
+        chapter_description TEXT NOT NULL, 
+        progress REAL NOT NULL, 
+        chapter_icon TEXT NOT NULL
+      );
     ''');
-
+    await db.execute('''
+    CREATE TABLE word_table (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      chapter_id INTEGER NOT NULL,
+      korean_word TEXT NOT NULL,
+      translated_word TEXT NOT NULL,
+      romanized_word TEXT NOT NULL,
+      "order" INTEGER NOT NULL,
+      is_learned INTEGER NOT NULL,
+      FOREIGN KEY(chapter_id) REFERENCES chapter_table(chapter_id)
+    )
+  ''');
     await db.execute('''
       CREATE TABLE chapter_words_table (
         chapter_id INTEGER,

@@ -1,36 +1,37 @@
 //챕터 및 단어 콘텐츠 표현 데이터 모델
-class Chapter {
+class ChapterModel {
   final int chapterId;
-  final String name;
-  final String level;
-  final String? intro;
-  final String? iconSrc;
+  final String chapterName;
+  final String chapterDescription;
+  final double progress;
+  final String chapterIcon;
 
-  Chapter({
+  ChapterModel({
     required this.chapterId,
-    required this.name,
-    required this.level,
-    this.intro,
-    this.iconSrc,
+    required this.chapterName,
+    required this.chapterDescription,
+    required this.progress,
+    required this.chapterIcon,
   });
-
-  factory Chapter.fromMap(Map<String, dynamic> map) {
-    return Chapter(
-      chapterId: map['chapter_id'],
-      name: map['chapter_name'],
-      level: map['chapter_level'],
-      intro: map['chapter_intro'],
-      iconSrc: map['chapter_icon_src'],
-    );
-  }
 
   Map<String, dynamic> toMap() {
     return {
       'chapter_id': chapterId,
-      'chapter_name': name,
-      'chapter_level': level,
-      'chapter_intro': intro,
-      'chapter_icon_src': iconSrc,
+      'chapter_name': chapterName,
+      'chapter_description': chapterDescription,
+      'progress': progress,
+      'chapter_icon': chapterIcon,
     };
   }
+
+  factory ChapterModel.fromMap(Map<String, dynamic> map) {
+    return ChapterModel(
+      chapterId: map['chapter_id'],
+      chapterName: map['chapter_name'],
+      chapterDescription: map['chapter_description'],
+      progress: map['progress'],
+      chapterIcon: map['chapter_icon'],
+    );
+  }
 }
+
