@@ -24,7 +24,7 @@ class DatabaseHelper {
 
     return await openDatabase(
       path,
-      version: 2,
+      version: 1,
       onCreate: _onCreate,
     );
   }
@@ -57,7 +57,18 @@ class DatabaseHelper {
         chapter_icon TEXT NOT NULL
       );
     ''');
-
+    await db.execute('''
+    CREATE TABLE word_table (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      chapter_id INTEGER NOT NULL,
+      korean_word TEXT NOT NULL,
+      translated_word TEXT NOT NULL,
+      romanized_word TEXT NOT NULL,
+      "order" INTEGER NOT NULL,
+      is_learned INTEGER NOT NULL,
+      FOREIGN KEY(chapter_id) REFERENCES chapter_table(chapter_id)
+    )
+  ''');
     await db.execute('''
       CREATE TABLE chapter_words_table (
         chapter_id INTEGER,
