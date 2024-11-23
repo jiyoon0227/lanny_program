@@ -2,13 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:lanny_program/widgets/daily_learning_goal_popup.dart'; // 팝업 파일을 임포트
 import '../data/chapter_table.dart';
 import '../data/chapter_model.dart';
-import 'package:lanny_program/learning/chapter_screen1.dart'; // 챕터 화면들 임포트
-import 'package:lanny_program/learning/chapter_screen2.dart';
-import 'package:lanny_program/learning/chapter_screen3.dart';
-import 'package:lanny_program/learning/chapter_screen4.dart';
-import 'package:lanny_program/learning/chapter_screen5.dart';
-import 'package:lanny_program/learning/chapter_screen6.dart';
-import 'package:lanny_program/learning/chapter_screen7.dart';
+import 'chapter_cover.dart'; // chapter_cover.dart 임포트
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -31,28 +25,6 @@ class _HomeScreenState extends State<HomeScreen> {
     setState(() {
       chapters = chapterData.map((data) => ChapterModel.fromMap(data)).toList();
     });
-  }
-
-  // 각 챕터에 해당하는 화면을 반환하는 함수
-  Widget _getChapterScreen(int index) {
-    switch (index) {
-      case 0:
-        return ChapterScreen1(); // 음식
-      case 1:
-        return ChapterScreen2(); // 옷
-      case 2:
-        return ChapterScreen3(); // 날씨
-      case 3:
-        return ChapterScreen4(); // 여행
-      case 4:
-        return ChapterScreen5(); // 문화
-      case 5:
-        return ChapterScreen6(); // 인사
-      case 6:
-        return ChapterScreen7(); // 소속
-      default:
-        return ChapterScreen1(); // 기본 화면 (음식)
-    }
   }
 
   @override
@@ -180,10 +152,15 @@ class _HomeScreenState extends State<HomeScreen> {
         Expanded(
           child: GestureDetector(
             onTap: () {
-              // 각 챕터 클릭 시 해당 챕터 화면으로 이동
+              // 각 챕터 클릭 시 chapter_cover.dart로 데이터 전달
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => _getChapterScreen(index)),
+                MaterialPageRoute(
+                  builder: (context) => ChapterCoverPage(
+                    chapterIndex: index,
+                    chapter: chapter,
+                  ),
+                ),
               );
             },
             child: _buildChapterTile(
