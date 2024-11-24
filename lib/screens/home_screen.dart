@@ -20,8 +20,15 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    _loadChapters();
     _loadUserLanguage(); // 사용자 언어 설정 불러오기
+    _loadChapters();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // 화면이 표시될 때마다 언어 설정 확인
+    _loadUserLanguage();
   }
 
   void _loadUserLanguage() async {

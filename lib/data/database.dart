@@ -61,7 +61,7 @@ class DatabaseHelper {
       korean_word TEXT NOT NULL,
       translated_word TEXT NOT NULL,
       romanized_word TEXT NOT NULL,
-      "order" INTEGER NOT NULL,
+      word_order INTEGER NOT NULL,
       is_learned INTEGER NOT NULL,
       FOREIGN KEY(chapter_id) REFERENCES chapter_table(chapter_id)
     )
