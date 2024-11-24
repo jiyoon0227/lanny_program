@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 
+import '../data/database.dart';
+import '../data/user_table.dart';
+
 void showLanguageSettingPopup(BuildContext context) {
   String? selectedLanguage; // 선택된 언어를 저장하는 변수
 
@@ -220,8 +223,18 @@ void showLanguageSettingPopup(BuildContext context) {
     if (selectedLanguage != null) {
       // 선택된 언어를 사용
       print("선택된 언어: $selectedLanguage");
+
+      // 선택된 언어를 데이터베이스에 저장
+      _saveLanguageToDatabase(selectedLanguage);
+
       // 팝업이 닫힌 후 홈 화면으로 이동
       Navigator.pushReplacementNamed(context, '/main'); // 홈 화면으로 이동
     }
   });
+}
+// 선택된 언어를 데이터베이스에 저장하는 함수
+void _saveLanguageToDatabase(String language) async {
+  UserTable userTable = UserTable();
+  // 현재 userId 없이 단일 사용자로 처리
+  await userTable.updateUserLanguage("default_user", language);
 }

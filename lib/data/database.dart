@@ -35,16 +35,13 @@ class DatabaseHelper {
         user_id TEXT PRIMARY KEY,
         user_email TEXT NOT NULL,
         user_name TEXT NOT NULL,
-        user_birthday TEXT,
         user_password TEXT NOT NULL,
         user_profile_image TEXT,
+        user_selected_language TEXT,
         user_streak_count INTEGER,
         user_longest_streak_count INTEGER,
         user_total_attendance_count INTEGER,
-        user_mastered_words_count INTEGER,
-        user_daily_time_goal INTEGER,
-        user_daily_time_state INTEGER,
-        user_notification_time TEXT
+        user_mastered_words_count INTEGER
       )
     ''');
 
