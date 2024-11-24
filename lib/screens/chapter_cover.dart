@@ -1,187 +1,144 @@
 import 'package:flutter/material.dart';
+import '../data/chapter_model.dart';
+import '../data/chapter_table.dart';
+import 'package:lanny_program/data/word_table.dart';
+import 'package:lanny_program/learning/chapter_screen1.dart';
+import 'package:lanny_program/learning/chapter_screen2.dart';
+import 'package:lanny_program/learning/chapter_screen3.dart';
+import 'package:lanny_program/learning/chapter_screen4.dart';
+import 'package:lanny_program/learning/chapter_screen5.dart';
+import 'package:lanny_program/learning/chapter_screen6.dart';
+import 'package:lanny_program/learning/chapter_screen7.dart';
 
-class ChapterCoverPage extends StatelessWidget {
-  final List<String> foreignWords = ['はんそで', 'ズボン', 'コート', 'くつ', 'くつした'];
-  final List<String> koreanWords = ['티셔츠', '바지', '코트', '신발', '양말'];
-  final List<String> wordImagePaths = [
-    'assets/images/chap2_tshirt.png',
-    'assets/images/chap2_tshirt.png',
-    'assets/images/chap2_tshirt.png',
-    'assets/images/chap2_tshirt.png',
-    'assets/images/chap2_tshirt.png'
-  ];
+class ChapterCoverPage extends StatefulWidget {
+  final int chapterIndex;
+  final ChapterModel chapter;
+
+  ChapterCoverPage({required this.chapterIndex, required this.chapter});
+
+  @override
+  _ChapterCoverPageState createState() => _ChapterCoverPageState();
+}
+
+class _ChapterCoverPageState extends State<ChapterCoverPage> {
+  List<Map<String, String>> wordList = [];
+  final ChapterTable chapterTable = ChapterTable();
+  bool isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadWords();
+  }
+
+  // 단어 데이터를 로드하는 함수 (최대 5개)
+  Future<void> _loadWords() async {
+    List<Map<String, String>> words = await chapterTable.getWordsForChapter(widget.chapter.chapterId);
+    setState(() {
+      wordList = words.take(5).toList(); // 최대 5개 단어만 가져오기
+      isLoading = false;
+    });
+  }
+
+  // 각 챕터에 맞는 학습 화면 반환
+  Widget _getChapterScreen() {
+    switch (widget.chapterIndex) {
+      case 0:
+        return ChapterScreen1();
+      case 1:
+        return ChapterScreen2();
+      case 2:
+        return ChapterScreen3();
+      case 3:
+        return ChapterScreen4();
+      case 4:
+        return ChapterScreen5();
+      case 5:
+        return ChapterScreen6();
+      case 6:
+        return ChapterScreen7();
+      default:
+        return ChapterScreen1();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color(0xFFFAF9F7),
-        elevation: 0,
+        title: Text(widget.chapter.chapterName),
         leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: Colors.black),
+          icon: Icon(Icons.arrow_back),
           onPressed: () {
             Navigator.of(context).pop();
           },
         ),
       ),
-      body: NestedScrollView(
-        headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
-          return <Widget>[
-            SliverAppBar(
-              backgroundColor: Color(0xFFEAEED1),
-              expandedHeight: 150.0,
-              floating: false,
-              pinned: true,
-              flexibleSpace: FlexibleSpaceBar(
-                background: Container(
-                  color: Color(0xFFEAEED1),
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: EdgeInsets.all(16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  widget.chapter.chapterName,
+                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                 ),
-              ),
+                SizedBox(height: 10),
+                Text(widget.chapter.chapterDescription),
+              ],
             ),
-          ];
-        },
-        body: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    '챕터 2 - 옷',
-                    style: TextStyle(
-                      color: Color(0xFF232323),
-                      fontSize: 28,
-                      fontWeight: FontWeight.w700,
-                    ),
-                  ),
-                  SizedBox(height: 5),
-                  Text(
-                    '옷과 관련된 기본적인 어휘를 학습합니다.',
-                    style: TextStyle(
-                      color: Color(0xFFB2B99E),
-                      fontSize: 13,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                  SizedBox(height: 10),
-                  Row(
-                    children: [
-                      Chip(
-                        avatar: Image.asset(
-                          'assets/images/chapcover_time.png',
-                          width: 15,
-                          height: 15,
-                        ),
-                        label: Text('5-8분'),
-                        backgroundColor: Color(0xFFF1F3E8),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                        labelPadding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 1.0),
-                      ),
-                      SizedBox(width: 10),
-                      Chip(
-                        avatar: Image.asset(
-                          'assets/images/chapcover_book.png',
-                          width: 15,
-                          height: 15,
-                        ),
-                        label: Text('5개'),
-                        backgroundColor: Color(0xFFF1F3E8),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                        labelPadding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 1.0),
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 10),
-                  LinearProgressIndicator(
-                    value: 0.2,
-                    backgroundColor: Color(0xFFEAEED1),
-                    color: Color(0xFF4FA55B),
-                  ),
-                  SizedBox(height: 5),
-                  Text(
-                    '3/15',
-                    style: TextStyle(
-                      color: Color(0xFF4FA55B),
-                      fontSize: 12,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Expanded(
-              child: ListView.builder(
-                padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                itemCount: foreignWords.length,
-                itemBuilder: (context, index) {
-                  return _buildWordItem(
-                    foreignWords[index],
-                    koreanWords[index],
-                    wordImagePaths[index % wordImagePaths.length],
-                    context,
-                  );
-                },
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 20.0),
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Color(0xFF4FA55B),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(50),
-                  ),
-                  minimumSize: Size(double.infinity, 48),
-                ),
-                onPressed: () {},
-                child: Text(
-                  '학습시작',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildWordItem(String title, String subtitle, String imagePath, BuildContext context) {
-    return Card(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-      child: ListTile(
-        leading: Image.asset(
-          imagePath,
-          width: 40,
-          height: 40,
-          fit: BoxFit.cover,
-        ),
-        title: Text(
-          title,
-          style: TextStyle(
-            color: Color(0xFF232323),
-            fontSize: 20,
-            fontWeight: FontWeight.w500,
           ),
-        ),
-        subtitle: Text(
-          subtitle,
-          style: TextStyle(
-            color: Color(0xFFBDBDBD),
-            fontSize: 13,
-            fontWeight: FontWeight.w600,
+          Expanded(
+            child: isLoading
+                ? Center(child: CircularProgressIndicator()) // 로딩 중 표시
+                : wordList.isEmpty
+                ? Center(child: Text("단어 데이터가 없습니다.")) // 데이터가 없을 경우
+                : ListView.builder(
+              itemCount: wordList.length,
+              itemBuilder: (context, index) {
+                final word = wordList[index];
+                return Card(
+                  margin: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  child: ListTile(
+                    leading: word['image'] != null
+                        ? Image.asset(word['image']!, width: 40, height: 40, fit: BoxFit.cover)
+                        : Icon(Icons.image, size: 40),
+                    title: Text(
+                      word['word'] ?? '',
+                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    ),
+                    subtitle: Text(
+                      word['translation'] ?? '',
+                      style: TextStyle(fontSize: 14),
+                    ),
+                  ),
+                );
+              },
+            ),
           ),
-        ),
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.green,
+                minimumSize: Size(double.infinity, 50),
+              ),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => _getChapterScreen()),
+                );
+              },
+              child: Text(
+                "학습 시작",
+                style: TextStyle(fontSize: 18, color: Colors.white),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

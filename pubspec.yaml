@@ -30,15 +30,19 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-
-
+  sqflite: ^2.0.0+4
+  path: ^1.8.2
+  http: ^1.2.2
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.8
-  firebase_auth: ^4.2.9
-  firebase_core: ^2.7.0
-  cloud_firestore: ^4.5.0
-
+  firebase_auth: ^5.3.1
+  cloud_firestore: ^5.4.4
+  hive: ^2.2.3
+  hive_flutter: ^1.1.0
+  path_provider: ^2.1.5
+  sqflite_common_ffi: ^2.3.4
+  sembast: ^3.1.1
 
 dev_dependencies:
   flutter_test:
@@ -94,6 +98,7 @@ flutter:
   # see https://flutter.dev/to/font-from-package
 
   assets:
+    #기존에셋
     - assets/images/korea.png
     - assets/images/USA.png
     - assets/images/china.png
@@ -107,38 +112,49 @@ flutter:
     - assets/images/sun.png
     - assets/images/socks.png
     - assets/images/bread.png
+
     - assets/images/arrow_left_darkgray.png
     - assets/images/arrow_left_greenish_gray.png
     - assets/images/arrow_right_greenish_gray.png
     - assets/images/arrow_right_ivory.png
     - assets/images/cha3 1.png
     - assets/images/cha4 1.png
-    - assets/images/chap1_bread.png
-    - assets/images/chap2_bag.png
-    - assets/images/chap2_socks.png
-    - assets/images/chap2_tshirt.png
-    - assets/images/chap_sun.png
+
     - assets/images/chapcover_book.png
     - assets/images/chapcover_time.png
+
     - assets/images/dummy_circle.png
     - assets/images/group 1.png
+
     - assets/images/home_complete_point.png
     - assets/images/home_fire.png
     - assets/images/home_incomplete_point.png
     - assets/images/home_popup_alart_off.png
     - assets/images/home_popup_alart_on.png
     - assets/images/home_timer.png
+
+    #비밀번호 표시버튼(임시로 넣었습니다)
     - assets/images/icon.png
     - assets/images/indicator_stick.png
+
+    #언어 국기
     - assets/images/lang_chinese_circle.png
     - assets/images/lang_english_circle.png
     - assets/images/lang_french_circle.png
     - assets/images/lang_japanese_circle.png
+    - assets/images/lang_germany_circle.png
+    - assets/images/lang_spain_circle.png
+
+    #학습화면 아이콘
     - assets/images/learn_pause.png
     - assets/images/learn_popup_continue.png
     - assets/images/learn_popup_stop.png
+
+    #마이페이지 아이콘
     - assets/images/mypage_change.png
     - assets/images/mypage_pencil.png
+
+    #하단 바 아이콘
     - assets/images/navigation_bookmark.png
     - assets/images/navigation_bookmark_selected.png
     - assets/images/navigation_home.png
@@ -146,6 +162,60 @@ flutter:
     - assets/images/navigation_person.png
     - assets/images/navigation_person_selected.png
 
-
-
-
+    # 챕터 아이콘
+    - assets/images/chapter_imgs/chap1_bread.png
+    - assets/images/chapter_imgs/chap1_icon_darkgray.png
+    - assets/images/chapter_imgs/chap1_icon_greenish_gray.png
+    - assets/images/chapter_imgs/chap1_icon_ivory.png
+    - assets/images/chapter_imgs/chap1_meat.png
+    - assets/images/chapter_imgs/chap1_rice.png
+    - assets/images/chapter_imgs/chap1_vegetable.png
+    - assets/images/chapter_imgs/chap1_water.png
+    - assets/images/chapter_imgs/chap2_coat.png
+    - assets/images/chapter_imgs/chap2_icon_darkgray.png
+    - assets/images/chapter_imgs/chap2_icon_greenish_gray.png
+    - assets/images/chapter_imgs/chap2_icon_ivory.png
+    - assets/images/chapter_imgs/chap2_pants.png
+    - assets/images/chapter_imgs/chap2_shoes.png
+    - assets/images/chapter_imgs/chap2_socks.png
+    - assets/images/chapter_imgs/chap2_tshirt.png
+    - assets/images/chapter_imgs/chap3_cloud.png
+    - assets/images/chapter_imgs/chap3_icon_darkgray.png
+    - assets/images/chapter_imgs/chap3_icon_greenish_gray.png
+    - assets/images/chapter_imgs/chap3_icon_ivory.png
+    - assets/images/chapter_imgs/chap3_rain.png
+    - assets/images/chapter_imgs/chap3_snow.png
+    - assets/images/chapter_imgs/chap3_windi.png
+    - assets/images/chapter_imgs/chap4_gift.png
+    - assets/images/chapter_imgs/chap4_hotel.png
+    - assets/images/chapter_imgs/chap4_icon_darkgray.png
+    - assets/images/chapter_imgs/chap4_icon_greenish_gray.png
+    - assets/images/chapter_imgs/chap4_icon_ivory.png
+    - assets/images/chapter_imgs/chap4_luggage.png
+    - assets/images/chapter_imgs/chap4_passport.png
+    - assets/images/chapter_imgs/chap4_pill.png
+    - assets/images/chapter_imgs/chap5_art.png
+    - assets/images/chapter_imgs/chap5_etiquette.png
+    - assets/images/chapter_imgs/chap5_festival.png
+    - assets/images/chapter_imgs/chap5_holiday.png
+    - assets/images/chapter_imgs/chap5_icon_darkgray.png
+    - assets/images/chapter_imgs/chap5_icon_greenish_gray.png
+    - assets/images/chapter_imgs/chap5_icon_ivory.png
+    - assets/images/chapter_imgs/chap5_religion.png
+    - assets/images/chapter_imgs/chap6_bye.png
+    - assets/images/chapter_imgs/chap6_hi.png
+    - assets/images/chapter_imgs/chap6_icon_darkgray.png
+    - assets/images/chapter_imgs/chap6_icon_greenish_gray.png
+    - assets/images/chapter_imgs/chap6_icon_ivory.png
+    - assets/images/chapter_imgs/chap6_no.png
+    - assets/images/chapter_imgs/chap6_thanks.png
+    - assets/images/chapter_imgs/chap6_yes.png
+    - assets/images/chapter_imgs/chap7_address.png
+    - assets/images/chapter_imgs/chap7_birthday.png
+    - assets/images/chapter_imgs/chap7_icon_darkgray.png
+    - assets/images/chapter_imgs/chap7_icon_greenish_gray.png
+    - assets/images/chapter_imgs/chap7_icon_ivory.png
+    - assets/images/chapter_imgs/chap7_name.png
+    - assets/images/chapter_imgs/chap7_nationality.png
+    - assets/images/chapter_imgs/chap7_phone_number.png
+    - assets/images/chapter_imgs/chap_sun.png

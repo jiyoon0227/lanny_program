@@ -1,26 +1,35 @@
-// signup_screen.dart
+import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
-import 'package:lanny_program/Firebase/FirebaseAuth.dart';
-import 'package:flutter/material.dart';
 
 
-class SignUpScreen extends StatefulWidget {
+class signup_screen extends StatefulWidget {
   @override
-  _SignUpScreenState createState() => _SignUpScreenState();
+  _signup_screenState createState() => _signup_screenState();
 }
 
-class _SignUpScreenState extends State<SignUpScreen> {
+class _signup_screenState extends State<signup_screen> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  final FirebaseAuthService _authService = FirebaseAuthService();
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+
+  void _signup() async {
+    try {
+      UserCredential userCredential = await _auth.createUserWithEmailAndPassword(
+        email: _emailController.text.trim(),
+        password: _passwordController.text.trim(),
+      );
+      Navigator.pushReplacementNamed(context, '/login');
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Signup failed: ${e.toString()}')),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Sign Up'),
-      ),
+      appBar: AppBar(title: Text('Signup')),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -36,20 +45,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
             ),
             SizedBox(height: 20),
             ElevatedButton(
-              onPressed: () async {
-                User? user = await _authService.signUp(
-                  _emailController.text,
-                  _passwordController.text,
-                );
-                if (user != null) {
-                  Navigator.pushReplacementNamed(context, '/login');
-                } else {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text('Sign up failed')),
-                  );
-                }
-              },
-              child: Text('Sign Up'),
+              onPressed: _signup,
+              child: Text('Signup'),
             ),
           ],
         ),
