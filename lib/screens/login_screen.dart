@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../widgets/language_setting_popup.dart'; // 팝업 함수 임포트
-import 'package:lanny_program/FireStore/FirebaseAuth.dart';
+import 'package:lanny_program/firebase_options.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 

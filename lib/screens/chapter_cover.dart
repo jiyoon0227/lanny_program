@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import '../data/chapter_model.dart';
-import '../data/chapter_table.dart';
-import 'package:lanny_program/data/word_table.dart';
+import 'package:lanny_program/data/data_initializer.dart'; // DataInitializer 임포트
 import 'package:lanny_program/learning/chapter_screen1.dart';
 import 'package:lanny_program/learning/chapter_screen2.dart';
 import 'package:lanny_program/learning/chapter_screen3.dart';
@@ -22,7 +21,6 @@ class ChapterCoverPage extends StatefulWidget {
 
 class _ChapterCoverPageState extends State<ChapterCoverPage> {
   List<Map<String, String>> wordList = [];
-  final ChapterTable chapterTable = ChapterTable();
   bool isLoading = true;
 
   @override
@@ -31,11 +29,10 @@ class _ChapterCoverPageState extends State<ChapterCoverPage> {
     _loadWords();
   }
 
-  // 단어 데이터를 로드하는 함수 (최대 5개)
+  // 단어 데이터를 메모리에서 가져오기
   Future<void> _loadWords() async {
-    List<Map<String, String>> words = await chapterTable.getWordsForChapter(widget.chapter.chapterId);
     setState(() {
-      wordList = words.take(5).toList(); // 최대 5개 단어만 가져오기
+      wordList = DataInitializer.getWordsForChapter(widget.chapter.chapterId).take(5).toList();
       isLoading = false;
     });
   }
@@ -58,7 +55,7 @@ class _ChapterCoverPageState extends State<ChapterCoverPage> {
       case 6:
         return ChapterScreen7();
       default:
-        return ChapterScreen1();
+        return ChapterScreen1(); // 기본 값
     }
   }
 
@@ -69,9 +66,7 @@ class _ChapterCoverPageState extends State<ChapterCoverPage> {
         title: Text(widget.chapter.chapterName),
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
+          onPressed: () => Navigator.of(context).pop(),
         ),
       ),
       body: Column(
@@ -93,7 +88,7 @@ class _ChapterCoverPageState extends State<ChapterCoverPage> {
           ),
           Expanded(
             child: isLoading
-                ? Center(child: CircularProgressIndicator()) // 로딩 중 표시
+                ? Center(child: CircularProgressIndicator()) // 로딩 중
                 : wordList.isEmpty
                 ? Center(child: Text("단어 데이터가 없습니다.")) // 데이터가 없을 경우
                 : ListView.builder(
@@ -104,14 +99,19 @@ class _ChapterCoverPageState extends State<ChapterCoverPage> {
                   margin: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                   child: ListTile(
                     leading: word['image'] != null
-                        ? Image.asset(word['image']!, width: 40, height: 40, fit: BoxFit.cover)
-                        : Icon(Icons.image, size: 40),
+                        ? Image.asset(
+                      word['image']!,
+                      width: 50,
+                      height: 50,
+                      fit: BoxFit.cover,
+                    )
+                        : Icon(Icons.image, size: 50),
                     title: Text(
-                      word['word'] ?? '',
+                      word['original'] ?? '',
                       style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                     ),
                     subtitle: Text(
-                      word['translation'] ?? '',
+                      word['translated'] ?? '',
                       style: TextStyle(fontSize: 14),
                     ),
                   ),
