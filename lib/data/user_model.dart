@@ -1,56 +1,70 @@
-// 사용자 콘텐츠 표현 데이터 모델
-class UserModel {
+//사용자 데이터 모델
+class User {
   final String userId;
-  final String userEmail;
-  final String userName;
-  final String userPassword;
-  final String? userProfileImage;
-  final String? userSelectedLanguage;
-  final int userStreakCount;
-  final int userLongestStreakCount;
-  final int userTotalAttendanceCount;
-  final int userMasteredWordsCount;
+  final String email;
+  final String name;
+  final String? birthday;
+  final String password;
+  final String? profileImage;
+  final int streakCount;
+  final int longestStreak;
+  final int totalAttendance;
+  final int masteredWords;
+  final int dailyTimeGoal;
+  final int dailyTimeState;
+  final String? notificationTime;
 
-  UserModel({
+  User({
     required this.userId,
-    required this.userEmail,
-    required this.userName,
-    required this.userPassword,
-    this.userProfileImage,
-    this.userSelectedLanguage,
-    this.userStreakCount = 0,
-    this.userLongestStreakCount = 0,
-    this.userTotalAttendanceCount = 0,
-    this.userMasteredWordsCount = 0,
+    required this.email,
+    required this.name,
+    this.birthday,
+    required this.password,
+    this.profileImage,
+    required this.streakCount,
+    required this.longestStreak,
+    required this.totalAttendance,
+    required this.masteredWords,
+    required this.dailyTimeGoal,
+    required this.dailyTimeState,
+    this.notificationTime,
   });
 
+  // 데이터베이스에서 가져온 데이터를 User 객체로 변환
+  factory User.fromMap(Map<String, dynamic> map) {
+    return User(
+      userId: map['user_id'],
+      email: map['user_email'],
+      name: map['user_name'],
+      birthday: map['user_birthday'],
+      password: map['user_password'],
+      profileImage: map['user_profile_image'],
+      streakCount: map['user_streak_count'],
+      longestStreak: map['user_longest_streak_count'],
+      totalAttendance: map['user_total_attendance_count'],
+      masteredWords: map['user_mastered_words_count'],
+      dailyTimeGoal: map['user_daily_time_goal'],
+      dailyTimeState: map['user_daily_time_state'],
+      notificationTime: map['user_notification_time'],
+    );
+  }
+
+  // User 객체를 데이터베이스에 저장하기 위해 Map으로 변환
   Map<String, dynamic> toMap() {
     return {
       'user_id': userId,
-      'user_email': userEmail,
-      'user_name': userName,
-      'user_password': userPassword,
-      'user_profile_image': userProfileImage,
-      'user_selected_language': userSelectedLanguage,
-      'user_streak_count': userStreakCount,
-      'user_longest_streak_count': userLongestStreakCount,
-      'user_total_attendance_count': userTotalAttendanceCount,
-      'user_mastered_words_count': userMasteredWordsCount,
+      'user_email': email,
+      'user_name': name,
+      'user_birthday': birthday,
+      'user_password': password,
+      'user_profile_image': profileImage,
+      'user_streak_count': streakCount,
+      'user_longest_streak_count': longestStreak,
+      'user_total_attendance_count': totalAttendance,
+      'user_mastered_words_count': masteredWords,
+      'user_daily_time_goal': dailyTimeGoal,
+      'user_daily_time_state': dailyTimeState,
+      'user_notification_time': notificationTime,
     };
-  }
-
-  factory UserModel.fromMap(Map<String, dynamic> map) {
-    return UserModel(
-      userId: map['user_id'],
-      userEmail: map['user_email'],
-      userName: map['user_name'],
-      userPassword: map['user_password'],
-      userProfileImage: map['user_profile_image'],
-      userSelectedLanguage: map['user_selected_language'],
-      userStreakCount: map['user_streak_count'] ?? 0,
-      userLongestStreakCount: map['user_longest_streak_count'] ?? 0,
-      userTotalAttendanceCount: map['user_total_attendance_count'] ?? 0,
-      userMasteredWordsCount: map['user_mastered_words_count'] ?? 0,
-    );
   }
 }
