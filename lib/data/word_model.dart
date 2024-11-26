@@ -5,7 +5,7 @@ class WordModel {
   final String koreanWord;
   final String translatedWord;
   final String romanizedWord;
-  final int order;
+  final int wordOrder;
   final bool isLearned;
 
   WordModel({
@@ -14,7 +14,7 @@ class WordModel {
     required this.koreanWord,
     required this.translatedWord,
     required this.romanizedWord,
-    required this.order,
+    required this.wordOrder,
     required this.isLearned,
   });
 
@@ -25,7 +25,7 @@ class WordModel {
       'korean_word': koreanWord,
       'translated_word': translatedWord,
       'romanized_word': romanizedWord,
-      'order': order,
+      'word_order': wordOrder,
       'is_learned': isLearned ? 1 : 0,
     };
   }
@@ -37,7 +37,7 @@ class WordModel {
       koreanWord: map['korean_word'],
       translatedWord: map['translated_word'],
       romanizedWord: map['romanized_word'],
-      order: map['order'],
+      wordOrder: map['order'],
       isLearned: map['is_learned'] == 1,
     );
   }

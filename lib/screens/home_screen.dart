@@ -5,7 +5,9 @@ import '../data/chapter_model.dart';
 import '../data/user_table.dart';
 import '../data/user_model.dart';
 import 'chapter_cover.dart'; // chapter_cover.dart 임포트
-
+//*****
+import '../data/word_table.dart'; // 단어 테이블 임포트
+//*****
 class HomeScreen extends StatefulWidget {
   @override
   _HomeScreenState createState() => _HomeScreenState();
@@ -13,6 +15,9 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final ChapterTable chapterTable = ChapterTable();
+  //*****
+  final WordTable wordTable = WordTable(); // WordTable 인스턴스 추가
+  //*****
   List<ChapterModel> chapters = [];
 
   String selectedLanguage = "한국어"; // 기본값으로 설정
@@ -22,8 +27,18 @@ class _HomeScreenState extends State<HomeScreen> {
     super.initState();
     _loadUserLanguage(); // 사용자 언어 설정 불러오기
     _loadChapters();
+    //*****
+    _printWordTableContents(); // 단어 테이블 내용을 프린트로 확인하기 위한 함수 호출
   }
-
+  //*****
+  void _printWordTableContents() async {
+    // 단어 테이블의 모든 데이터를 가져와 콘솔에 출력하는 함수
+    List<Map<String, dynamic>> wordData = await wordTable.getAllWords();
+    for (var word in wordData) {
+      print('Word: ${word['korean_word']}, Translated: ${word['translated_word']}, Romanized: ${word['romanized_word']}');
+    }
+  }
+  //*****
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();

@@ -39,7 +39,7 @@ class WordTable {
               'korean_word': word['original'],
               'translated_word': word['translated'],
               'romanized_word': word['romanized'],
-              'order': i + 1,
+              'word_order': i + 1,
               'is_learned': 0,
             },
             conflictAlgorithm: ConflictAlgorithm.replace,
@@ -59,6 +59,12 @@ class WordTable {
       whereArgs: [chapterId],
       orderBy: 'word_order ASC', // 수정된 필드명 사용
     );
+  }
+// 모든 단어 조회
+  Future<List<Map<String, dynamic>>> getAllWords() async {
+    final db = await dbHelper.database;
+
+    return await db.query('word_table');
   }
 
   // 단어 학습 상태 업데이트
