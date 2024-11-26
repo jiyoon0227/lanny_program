@@ -39,24 +39,7 @@ class _ChapterCoverPageState extends State<ChapterCoverPage> {
 
   // 각 챕터에 맞는 학습 화면 반환
   Widget _getChapterScreen() {
-    switch (widget.chapterIndex) {
-      case 0:
-        return ChapterScreen1();
-      case 1:
-        return ChapterScreen2();
-      case 2:
-        return ChapterScreen3();
-      case 3:
-        return ChapterScreen4();
-      case 4:
-        return ChapterScreen5();
-      case 5:
-        return ChapterScreen6();
-      case 6:
-        return ChapterScreen7();
-      default:
-        return ChapterScreen1(); // 기본 값
-    }
+        return ChapterScreen1(chapterId: widget.chapter.chapterId); // chapterId 전달
   }
 
   @override
