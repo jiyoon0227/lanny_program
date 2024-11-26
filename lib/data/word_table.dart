@@ -6,7 +6,7 @@ class WordTable {
 
   // 단어 삽입
   Future<void> insertWord(
-      int chapterId, String koreanWord, String translatedWord, String romanizedWord, int wordOrder) async {
+      int chapterId, String koreanWord, String translatedWord, String romanizedWord, int order) async {
     final db = await dbHelper.database;
 
     await db.insert(
@@ -16,7 +16,7 @@ class WordTable {
         'korean_word': koreanWord,
         'translated_word': translatedWord,
         'romanized_word': romanizedWord,
-        'word_order': wordOrder,
+        'order': order,
         'is_learned': 0, // 기본값: 학습되지 않음
       },
       conflictAlgorithm: ConflictAlgorithm.replace,
@@ -39,7 +39,7 @@ class WordTable {
               'korean_word': word['original'],
               'translated_word': word['translated'],
               'romanized_word': word['romanized'],
-              'word_order': i + 1,
+              'order': i + 1,
               'is_learned': 0,
             },
             conflictAlgorithm: ConflictAlgorithm.replace,
@@ -57,14 +57,8 @@ class WordTable {
       'word_table',
       where: 'chapter_id = ?',
       whereArgs: [chapterId],
-      orderBy: 'word_order ASC', // 수정된 필드명 사용
+      orderBy: 'order ASC', // 순서 기준 정렬
     );
-  }
-// 모든 단어 조회
-  Future<List<Map<String, dynamic>>> getAllWords() async {
-    final db = await dbHelper.database;
-
-    return await db.query('word_table');
   }
 
   // 단어 학습 상태 업데이트
@@ -76,24 +70,6 @@ class WordTable {
       {'is_learned': isLearned ? 1 : 0},
       where: 'id = ?',
       whereArgs: [wordId],
-    );
-  }
-
-  Future<void> updateWordTranslationByKorean({
-    required String original,
-    required String translated,
-    required String romanized,
-  }) async {
-    final db = await dbHelper.database;
-
-    await db.update(
-      'word_table',
-      {
-        'translated_word': translated,
-        'romanized_word': romanized,
-      },
-      where: 'korean_word = ?',
-      whereArgs: [original],
     );
   }
 
