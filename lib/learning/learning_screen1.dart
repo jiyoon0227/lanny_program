@@ -17,7 +17,7 @@ class LearnScreen1 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final currentWord = chapterWords[currentWordIndex];
-    final progressValue = (currentWordIndex + 1) / 15; // 학습 진행도 계산
+    final progressValue = (progressCount + 1) / 15; // 학습 진행도 계산
 
     return Scaffold(
       body: Stack(

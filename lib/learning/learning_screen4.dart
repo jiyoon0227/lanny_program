@@ -48,7 +48,7 @@ class _LearnScreen4State extends State<LearnScreen4> {
   @override
   Widget build(BuildContext context) {
     final currentWord = widget.chapterWords[widget.currentWordIndex];
-    final progressValue = (widget.currentWordIndex + 1) / 15;
+    final progressValue = (widget.progressCount + 1) / 15;
 
     final randomWord1 = widget.chapterWords[_randomIndex1];
     final randomWord2 = widget.chapterWords[_randomIndex2];
