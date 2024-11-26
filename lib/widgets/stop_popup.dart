@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../screens/home_screen.dart';
 
 class PausePopup extends StatelessWidget {
   @override
@@ -58,8 +59,9 @@ class PausePopup extends StatelessWidget {
                             iconSize: 30,
                             icon: Icon(Icons.stop, color: Colors.grey), // 회색 아이콘
                             onPressed: () {
-                              // 중지 기능
-                              Navigator.of(context).pop();
+                              // 중지 기능 - 홈 화면으로 이동
+                              Navigator.of(context).pop();  // 팝업 닫기
+                              Navigator.pushReplacementNamed(context, '/main'); // 홈 화면으로 이동
                             },
                           ),
                         ),
@@ -80,7 +82,7 @@ class PausePopup extends StatelessWidget {
                             icon: Icon(Icons.play_arrow, color: Colors.white), // 하얀색 아이콘
                             onPressed: () {
                               // 이어하기 기능
-                              Navigator.of(context).pop();
+                              Navigator.of(context).pop(); // 팝업 닫기
                             },
                           ),
                         ),
