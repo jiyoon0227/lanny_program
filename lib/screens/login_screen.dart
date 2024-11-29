@@ -3,13 +3,12 @@ import '../widgets/language_setting_popup.dart'; // 팝업 함수 임포트
 import 'package:lanny_program/firebase_options.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-
 class login_screen extends StatefulWidget {
   @override
-  _login_screenState createState() => _login_screenState();
+  _LoginScreenState createState() => _LoginScreenState();
 }
 
-class _login_screenState extends State<login_screen> {
+class _LoginScreenState extends State<login_screen> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -20,10 +19,12 @@ class _login_screenState extends State<login_screen> {
         email: _emailController.text.trim(),
         password: _passwordController.text.trim(),
       );
-      Navigator.pushReplacementNamed(context, '/main');
+
+      // 로그인 성공 시 언어 설정 팝업 호출
+      showLanguageSettingPopup(context);
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Login failed: ${e.toString()}')),
+        SnackBar(content: Text('로그인 실패: ${e.toString()}')),
       );
     }
   }
@@ -31,30 +32,57 @@ class _login_screenState extends State<login_screen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Login')),
+      appBar: AppBar(title: const Text('로그인')),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             TextField(
               controller: _emailController,
-              decoration: InputDecoration(labelText: 'Email'),
+              decoration: InputDecoration(
+                labelText: '아이디',
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(50),
+                ),
+              ),
             ),
+            const SizedBox(height: 16),
             TextField(
               controller: _passwordController,
-              decoration: InputDecoration(labelText: 'Password'),
               obscureText: true,
+              decoration: InputDecoration(
+                labelText: '비밀번호',
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(50),
+                ),
+              ),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 16),
             ElevatedButton(
               onPressed: _login,
-              child: Text('Login'),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: const Color(0xFF4FA55B),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(50),
+                ),
+              ),
+              child: const Text(
+                '로그인',
+                style: TextStyle(color: Colors.white),
+              ),
             ),
-            TextButton(
-              onPressed: () {
-                Navigator.pushNamed(context, '/signup');
-              },
-              child: Text('Go to Signup'),
+            const SizedBox(height: 8),
+            Center(
+              child: TextButton(
+                onPressed: () {
+                  Navigator.pushNamed(context, '/signup'); // 회원가입 화면으로 이동
+                },
+                child: const Text(
+                  '회원가입',
+                  style: TextStyle(color: Color(0xFF4FA55B)),
+                ),
+              ),
             ),
           ],
         ),
