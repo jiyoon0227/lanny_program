@@ -4,7 +4,7 @@ import '../data/database.dart';
 import '../data/user_table.dart';
 import '../services/translation_service.dart';
 
-void showLanguageSettingPopup(BuildContext context) {
+void showLanguageSettingPopup(BuildContext context,String userId) {
   String? selectedLanguage; // 선택된 언어를 저장하는 변수
 
   showDialog(
@@ -226,23 +226,32 @@ void showLanguageSettingPopup(BuildContext context) {
       print("선택된 언어: $selectedLanguage");
 
       // 선택된 언어를 데이터베이스에 저장
-      _saveLanguageToDatabase(selectedLanguage);
+      _saveLanguageToDatabase(userId, selectedLanguage);
       // 선택된 언어를 기준으로 번역 작업 실행
-      _translateWordsForSelectedLanguage(selectedLanguage);
-      // 팝업이 닫힌 후 홈 화면으로 이동
-      Navigator.pushReplacementNamed(context, '/main'); // 홈 화면으로 이동
+      _translateWordsForSelectedLanguage(selectedLanguage).then((_) {
+        print("Translation completed. Navigating to HomeScreen.");
+        Navigator.pushReplacementNamed(context, '/main');
+      }).catchError((error) {
+        print("Translation failed: $error");
+      });
     }
   });
 }
 // 선택된 언어를 데이터베이스에 저장하는 함수
-void _saveLanguageToDatabase(String language) async {
+Future<void> _saveLanguageToDatabase(String userId, String language) async {
   UserTable userTable = UserTable();
-  // 현재 userId 없이 단일 사용자로 처리
-  await userTable.updateUserLanguage("default_user", language);
+
+  try {
+    // 현재 로그인한 사용자 ID를 기반으로 언어 업데이트
+    await userTable.updateUserLanguage(userId, language);
+    print("Language updated for user: $userId");
+  } catch (e) {
+    print("Error updating language: $e");
+  }
 }
 
 // 선택된 언어로 번역 작업을 수행하는 함수
-void _translateWordsForSelectedLanguage(String language) async {
+Future<void> _translateWordsForSelectedLanguage(String language) async {
   TranslationService translationService = TranslationService();
   // 여기서는 예시로 모든 챕터에 대해 번역을 수행한다고 가정
   List<int> chapterIds = [1, 2, 3, 4, 5 ,6 ,7]; // 각 챕터의 ID 목록

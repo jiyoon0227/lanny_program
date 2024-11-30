@@ -35,6 +35,7 @@ class TranslationService {
 
   // 단어를 번역하고 로마자로 표기하는 메서드
   Future<List<Map<String, String>>> translateAndRomanize(List<String> words, String targetLanguage) async {
+    print("Translating words to $targetLanguage");
     // 1. 번역을 위한 Prompt 생성
     final translationPrompt =
         "Translate the following Korean words into $targetLanguage and provide them as a comma-separated list:\n${words.join(', ')}";

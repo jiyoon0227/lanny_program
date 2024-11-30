@@ -1,8 +1,19 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:sqflite/sqflite.dart';
 import 'database.dart';
 
 class UserTable {
   final dbHelper = DatabaseHelper();
+
+  // 현재 로그인한 사용자의 userId 가져오기
+  Future<String?> _getCurrentUserId() async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user == null) {
+      print("No user is currently logged in.");
+      return null;
+    }
+    return user.uid;
+  }
 
   // 사용자 삽입
   Future<void> insertUser({

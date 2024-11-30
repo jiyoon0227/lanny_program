@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:lanny_program/widgets/daily_learning_goal_popup.dart'; // 팝업 파일을 임포트
 import '../data/chapter_table.dart';
@@ -48,24 +49,39 @@ class _HomeScreenState extends State<HomeScreen> {
 
   void _loadUserLanguage() async {
     UserTable userTable = UserTable();
-    Map<String, dynamic>? userMap = await userTable.getUser("default_user");
+    String? userId = FirebaseAuth.instance.currentUser?.uid;
+    if (userId == null) {
+      print("No user is currently logged in.");
+      return;
+    }
+    Map<String, dynamic>? userMap = await userTable.getUser(userId);
 
     if (userMap != null) {
       UserModel user = UserModel.fromMap(userMap);
+      print("Loaded user language in HomeScreen: ${user.userSelectedLanguage}");
       if (user.userSelectedLanguage != null) {
         setState(() {
-          selectedLanguage = user.userSelectedLanguage!; // 사용자 언어 정보 반영
+          selectedLanguage = user.userSelectedLanguage!;
         });
       }
+    } else {
+      print("User data not found in HomeScreen.");
     }
   }
 
+
   // 데이터베이스에서 챕터 데이터 가져오기
   Future<void> _loadChapters() async {
-    List<Map<String, dynamic>> chapterData = await chapterTable.getAllChapters();
-    setState(() {
-      chapters = chapterData.map((data) => ChapterModel.fromMap(data)).toList();
-    });
+    try {
+      print("Loading chapters...");
+      List<Map<String, dynamic>> chapterData = await chapterTable.getAllChapters();
+      print("Chapter data loaded: $chapterData");
+      setState(() {
+        chapters = chapterData.map((data) => ChapterModel.fromMap(data)).toList();
+      });
+    } catch (e) {
+      print("Error loading chapters: $e");
+    }
   }
   String _getLanguageIconPath(String language) {
     switch (language) {

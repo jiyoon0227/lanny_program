@@ -19,9 +19,10 @@ class _LoginScreenState extends State<login_screen> {
         email: _emailController.text.trim(),
         password: _passwordController.text.trim(),
       );
-
+      String userId = userCredential.user!.uid;
+      String email = userCredential.user!.email ?? "unknown@example.com";
       // 로그인 성공 시 언어 설정 팝업 호출
-      showLanguageSettingPopup(context);
+      showLanguageSettingPopup(context, userId);
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('로그인 실패: ${e.toString()}')),
