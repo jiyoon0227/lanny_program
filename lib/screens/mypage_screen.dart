@@ -3,6 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import '../widgets/logout_popup.dart';
+import 'package:lanny_program/data/user_model.dart';
+import 'package:lanny_program/FireStore/AuthService.dart';
+
+
 
 class MyPageScreen extends StatefulWidget {
   @override
@@ -13,6 +17,8 @@ class _MyPageScreenState extends State<MyPageScreen> {
   String userName = '';
   String userEmail = '';
   String learningLanguage = '';
+  final AuthService _authService = AuthService();
+
 
   @override
   void initState() {
@@ -20,12 +26,24 @@ class _MyPageScreenState extends State<MyPageScreen> {
     _loadUserInfo();
   }
 
+  void fetchUserData(String email) async {
+    UserData? userData = await _authService.getUserDataByEmail(email);
+
+    if (userData != null) {
+      print("User ID: ${userData.id}");
+      print("Email: ${userData.email}");
+      print("Continuous: ${userData.continuous}");
+    } else {
+      print("No user found for the given email.");
+    }
+  }
+
   Future<void> _loadUserInfo() async {
     try {
       User? currentUser = FirebaseAuth.instance.currentUser;
       if (currentUser != null) {
         final userDoc = await FirebaseFirestore.instance
-            .collection('users')
+            .collection('user')
             .doc(currentUser.uid)
             .get();
 
