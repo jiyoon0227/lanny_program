@@ -1,13 +1,7 @@
 import 'package:flutter/material.dart';
 import '../data/chapter_model.dart';
-import 'package:lanny_program/data/data_initializer.dart'; // DataInitializer 임포트
+import '../data/chapter_table.dart';
 import 'package:lanny_program/learning/chapter_screen1.dart';
-import 'package:lanny_program/learning/chapter_screen2.dart';
-import 'package:lanny_program/learning/chapter_screen3.dart';
-import 'package:lanny_program/learning/chapter_screen4.dart';
-import 'package:lanny_program/learning/chapter_screen5.dart';
-import 'package:lanny_program/learning/chapter_screen6.dart';
-import 'package:lanny_program/learning/chapter_screen7.dart';
 
 class ChapterCoverPage extends StatefulWidget {
   final int chapterIndex;
@@ -20,6 +14,7 @@ class ChapterCoverPage extends StatefulWidget {
 }
 
 class _ChapterCoverPageState extends State<ChapterCoverPage> {
+  final ChapterTable chapterTable = ChapterTable(); // ChapterTable 인스턴스 생성
   List<Map<String, String>> wordList = [];
   bool isLoading = true;
 
@@ -31,10 +26,18 @@ class _ChapterCoverPageState extends State<ChapterCoverPage> {
 
   // 단어 데이터를 메모리에서 가져오기
   Future<void> _loadWords() async {
-    setState(() {
-      wordList = DataInitializer.getWordsForChapter(widget.chapter.chapterId).take(5).toList();
-      isLoading = false;
-    });
+    try {
+      final words = await chapterTable.getWordsForChapter(widget.chapter.chapterId);
+      setState(() {
+        wordList = words.take(5).toList(); // 상위 5개 단어 가져오기
+        isLoading = false;
+      });
+    } catch (e) {
+      print('단어 데이터를 불러오는 중 오류 발생: $e');
+      setState(() {
+        isLoading = false;
+      });
+    }
   }
 
   // 각 챕터에 맞는 학습 화면 반환
