@@ -1,9 +1,11 @@
 import 'chapter_table.dart';
 import 'word_table.dart';
+import 'user_table.dart';
 
 class DataInitializer {
   final ChapterTable chapterTable = ChapterTable();
   final WordTable wordTable = WordTable();
+  final UserTable userTable = UserTable();
 
   // 챕터별 단어 데이터
   static final Map<int, List<Map<String, String>>> chapterWords = {
@@ -66,4 +68,5 @@ class DataInitializer {
   Future<void> initializeData() async {
     print('데이터 초기화가 완료되었습니다!');
   }
-}
+  }
+

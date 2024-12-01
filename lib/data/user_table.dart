@@ -14,6 +14,10 @@ class UserTable {
     }
     return user.uid;
   }
+  // 기본 사용자 확인 로직
+  Future<Map<String, dynamic>?> getDefaultUser() async {
+    return await getUser("default_user");
+  }
 
   // 사용자 삽입
   Future<void> insertUser({

@@ -227,7 +227,6 @@ void showLanguageSettingPopup(BuildContext context,String userId) {
 
       // 선택된 언어를 데이터베이스에 저장
       _saveLanguageToDatabase(userId, selectedLanguage);
-      // 선택된 언어를 기준으로 번역 작업 실행
       _translateWordsForSelectedLanguage(selectedLanguage).then((_) {
         print("Translation completed. Navigating to HomeScreen.");
         Navigator.pushReplacementNamed(context, '/main');
@@ -240,9 +239,7 @@ void showLanguageSettingPopup(BuildContext context,String userId) {
 // 선택된 언어를 데이터베이스에 저장하는 함수
 Future<void> _saveLanguageToDatabase(String userId, String language) async {
   UserTable userTable = UserTable();
-
   try {
-    // 현재 로그인한 사용자 ID를 기반으로 언어 업데이트
     await userTable.updateUserLanguage(userId, language);
     print("Language updated for user: $userId");
   } catch (e) {
