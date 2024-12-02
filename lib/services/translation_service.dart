@@ -3,7 +3,7 @@ import 'package:http/http.dart' as http;
 import '../data/word_table.dart';
 
 class TranslationService {
-  final String apiKey = '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';
+  final String apiKey = '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';
   final WordTable wordTable = WordTable();
 
   Future<void> translateWordsForSingleChapter(int chapterId, String targetLanguage) async {

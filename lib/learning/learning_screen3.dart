@@ -111,7 +111,7 @@ class _LearnScreen3State extends State<LearnScreen3> {
                         child: Column(
                           children: [
                             Text(
-                              currentWord['translated']!,
+                              currentWord['translated_word']!,
                               style: TextStyle(
                                 color: Colors.black,
                                 fontSize: 36,
@@ -136,7 +136,7 @@ class _LearnScreen3State extends State<LearnScreen3> {
                   // 이미지
                   Center(
                     child: Image.asset(
-                      currentWord['image']!,
+                      currentWord['word_img']!,
                       width: 100,
                       height: 100,
                     ),

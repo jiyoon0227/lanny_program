@@ -97,7 +97,7 @@ class _LearnScreen4State extends State<LearnScreen4> {
                   // 이미지 표시
                   Center(
                     child: Image.asset(
-                      currentWord['image']!,
+                      currentWord['word_img']!,
                       width: 150,
                       height: 150,
                     ),
@@ -105,7 +105,7 @@ class _LearnScreen4State extends State<LearnScreen4> {
                   SizedBox(height: 16),
                   // 단어 원본 텍스트
                   Text(
-                    currentWord['original']!,
+                    currentWord['korean_word']!,
                     style: TextStyle(
                       color: Colors.black,
                       fontSize: 18,
@@ -135,7 +135,7 @@ class _LearnScreen4State extends State<LearnScreen4> {
                       child: Column(
                         children: [
                           Text(
-                            randomWord1['translated']!,
+                            randomWord1['translated_word']!,
                             style: TextStyle(
                               color: _button1Color == Colors.transparent ? Colors.black : Colors.white,
                               fontSize: 18,

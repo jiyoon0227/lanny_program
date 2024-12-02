@@ -48,9 +48,9 @@ class _ChapterCoverPageState extends State<ChapterCoverPage> {
     return Card(
       margin: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       child: ListTile(
-        leading: word['image'] != null
+        leading: word['word_img'] != null
             ? Image.asset(
-          word['image'],
+          word['word_img'],
           width: 50,
           height: 50,
           fit: BoxFit.cover,

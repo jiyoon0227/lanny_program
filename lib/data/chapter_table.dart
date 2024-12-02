@@ -31,11 +31,11 @@ class ChapterTable {
         await txn.insert(
           'chapter_table',
           {
-            'chapter_id': chapter['id'],
-            'chapter_name': chapter['name'],
-            'chapter_description': chapter['description'],
+            'chapter_id': chapter['chapter_id'],
+            'chapter_name': chapter['chapter_name'],
+            'chapter_description': chapter['chapter_description'],
             'progress': chapter['progress'],
-            'chapter_icon': chapter['icon'],
+            'chapter_icon': chapter['chapter_icon'],
           },
           conflictAlgorithm: ConflictAlgorithm.replace,
         );
@@ -106,24 +106,5 @@ class ChapterTable {
     );
 
     return result.map((e) => e.map((key, value) => MapEntry(key, value.toString()))).toList();
-  }
-
-  // 단어 테이블 초기화 (예제용)
-  Future<void> initializeWordTable() async {
-    final db = await dbHelper.database;
-
-    // 단어 데이터 초기화
-    await db.execute('DELETE FROM word_table');
-    await insertChapterWords(1, [
-      {'word': 'はんそで', 'translation': '티셔츠', 'image': 'assets/images/chap1_tshirt.png'},
-      {'word': 'ズボン', 'translation': '바지', 'image': 'assets/images/chap1_pants.png'},
-      {'word': 'コート', 'translation': '코트', 'image': 'assets/images/chap1_coat.png'},
-    ]);
-
-    await insertChapterWords(2, [
-      {'word': 'あめ', 'translation': '비', 'image': 'assets/images/chap2_rain.png'},
-      {'word': 'はれ', 'translation': '맑음', 'image': 'assets/images/chap2_sunny.png'},
-      {'word': 'ゆき', 'translation': '눈', 'image': 'assets/images/chap2_snow.png'},
-    ]);
   }
 }

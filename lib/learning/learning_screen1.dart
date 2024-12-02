@@ -73,7 +73,7 @@ class LearnScreen1 extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Image.asset(
-                            currentWord['image']!,
+                            currentWord['word_img']!,
                             height: 300,
                           ),
                           SizedBox(height: 16),

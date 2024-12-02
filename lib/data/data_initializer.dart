@@ -46,59 +46,55 @@ class DataInitializer {
       print('단어 데이터 삽입 시작...');
       await wordTable.bulkInsertWords({
         1: [
-          {'korean_word': '빵', 'translated_word': 'bread', 'romanized_word': 'ppang'},
-          {'korean_word': '물', 'translated_word': 'water', 'romanized_word': 'mul'},
-          {'korean_word': '밥', 'translated_word': 'rice', 'romanized_word': 'bap'},
-          {'korean_word': '고기', 'translated_word': 'meat', 'romanized_word': 'gogi'},
-          {'korean_word': '채소', 'translated_word': 'vegetables', 'romanized_word': 'chaeso'},
+          {'korean_word': '빵', 'translated_word': 'bread', 'romanized_word': 'ppang', 'word_img': 'assets/images/chapter_imgs/chap1_bread.png'},
+          {'korean_word': '물', 'translated_word': 'water', 'romanized_word': 'mul', 'word_img': 'assets/images/chapter_imgs/chap1_water.png'},
+          {'korean_word': '밥', 'translated_word': 'rice', 'romanized_word': 'bap', 'word_img': 'assets/images/chapter_imgs/chap1_rice.png'},
+          {'korean_word': '고기', 'translated_word': 'meat', 'romanized_word': 'gogi', 'word_img': 'assets/images/chapter_imgs/chap1_meat.png'},
+          {'korean_word': '채소', 'translated_word': 'vegetables', 'romanized_word': 'chaeso', 'word_img': 'assets/images/chapter_imgs/chap1_vegetable.png'},
         ],
         2: [
-          {'korean_word': '티셔츠', 'translated_word': 't-shirt', 'romanized_word': 'tisyeocheu'},
-          {'korean_word': '바지', 'translated_word': 'pants', 'romanized_word': 'baji'},
-          {'korean_word': '코트', 'translated_word': 'coat', 'romanized_word': 'koteu'},
-          {'korean_word': '신발', 'translated_word': 'shoes', 'romanized_word': 'sinbal'},
-          {'korean_word': '양말', 'translated_word': 'socks', 'romanized_word': 'yangmal'},
+          {'korean_word': '티셔츠', 'translated_word': 't-shirt', 'romanized_word': 'tisyeocheu', 'word_img': 'assets/images/chapter_imgs/chap2_tshirt.png'},
+          {'korean_word': '바지', 'translated_word': 'pants', 'romanized_word': 'baji', 'word_img': 'assets/images/chapter_imgs/chap2_pants.png'},
+          {'korean_word': '코트', 'translated_word': 'coat', 'romanized_word': 'koteu', 'word_img': 'assets/images/chapter_imgs/chap2_coat.png'},
+          {'korean_word': '신발', 'translated_word': 'shoes', 'romanized_word': 'sinbal', 'word_img': 'assets/images/chapter_imgs/chap2_shoes.png'},
+          {'korean_word': '양말', 'translated_word': 'socks', 'romanized_word': 'yangmal', 'word_img': 'assets/images/chapter_imgs/chap2_socks.png'},
         ],
         3: [
-          // chap3: 날씨
-          {'korean_word': '맑음', 'translated_word': 'clear', 'romanized_word': 'malgeum'},
-          {'korean_word': '구름', 'translated_word': 'cloud', 'romanized_word': 'gureum'},
-          {'korean_word': '바람', 'translated_word': 'wind', 'romanized_word': 'baram'},
-          {'korean_word': '비', 'translated_word': 'rain', 'romanized_word': 'bi'},
-          {'korean_word': '눈', 'translated_word': 'snow', 'romanized_word': 'nun'},
+          {'korean_word': '맑음', 'translated_word': 'clear', 'romanized_word': 'malgeum', 'word_img': 'assets/images/chapter_imgs/chap3_cloud.png'},
+          {'korean_word': '구름', 'translated_word': 'cloud', 'romanized_word': 'gureum', 'word_img': 'assets/images/chapter_imgs/chap3_rain.png'},
+          {'korean_word': '바람', 'translated_word': 'wind', 'romanized_word': 'baram', 'word_img': 'assets/images/chapter_imgs/chap3_snow.png'},
+          {'korean_word': '비', 'translated_word': 'rain', 'romanized_word': 'bi', 'word_img': 'assets/images/chapter_imgs/chap3_windi.png'},
+          {'korean_word': '눈', 'translated_word': 'snow', 'romanized_word': 'nun', 'word_img': 'assets/images/chapter_imgs/chap_sun.png'},
         ],
         4: [
-          // chap4: 여행
-          {'korean_word': '호텔', 'translated_word': 'hotel', 'romanized_word': 'hotel'},
-          {'korean_word': '관광', 'translated_word': 'tourism', 'romanized_word': 'gwangwang'},
-          {'korean_word': '여권', 'translated_word': 'passport', 'romanized_word': 'yeogwon'},
-          {'korean_word': '기념품', 'translated_word': 'souvenir', 'romanized_word': 'ginyeompum'},
-          {'korean_word': '약국', 'translated_word': 'pharmacy', 'romanized_word': 'yakguk'},
+          {'korean_word': '호텔', 'translated_word': 'hotel', 'romanized_word': 'hotel', 'word_img': 'assets/images/chapter_imgs/chap4_hotel.png'},
+          {'korean_word': '관광', 'translated_word': 'tourism', 'romanized_word': 'gwangwang', 'word_img': 'assets/images/chapter_imgs/chap4_passport.png'},
+          {'korean_word': '여권', 'translated_word': 'passport', 'romanized_word': 'yeogwon', 'word_img': 'assets/images/chapter_imgs/chap4_gift.png'},
+          {'korean_word': '기념품', 'translated_word': 'souvenir', 'romanized_word': 'ginyeompum', 'word_img': 'assets/images/chapter_imgs/chap4_pill.png'},
+          {'korean_word': '약국', 'translated_word': 'pharmacy', 'romanized_word': 'yakguk', 'word_img': 'assets/images/chapter_imgs/chap4_luggage.png'},
         ],
         5: [
-          // chap5: 문화
-          {'korean_word': '축제', 'translated_word': 'festival', 'romanized_word': 'chukje'},
-          {'korean_word': '종교', 'translated_word': 'religion', 'romanized_word': 'jonggyo'},
-          {'korean_word': '명절', 'translated_word': 'holiday', 'romanized_word': 'myeongjeol'},
-          {'korean_word': '미술', 'translated_word': 'art', 'romanized_word': 'misul'},
-          {'korean_word': '예절', 'translated_word': 'manners', 'romanized_word': 'yejeol'},
+          {'korean_word': '축제', 'translated_word': 'festival', 'romanized_word': 'chukje', 'word_img': 'assets/images/chapter_imgs/chap5_festival.png'},
+          {'korean_word': '종교', 'translated_word': 'religion', 'romanized_word': 'jonggyo', 'word_img': 'assets/images/chapter_imgs/chap5_religion.png'},
+          {'korean_word': '명절', 'translated_word': 'holiday', 'romanized_word': 'myeongjeol', 'word_img': 'assets/images/chapter_imgs/chap5_holiday.png'},
+          {'korean_word': '미술', 'translated_word': 'art', 'romanized_word': 'misul', 'word_img': 'assets/images/chapter_imgs/chap5_art.png'},
+          {'korean_word': '예절', 'translated_word': 'manners', 'romanized_word': 'yejeol', 'word_img': 'assets/images/chapter_imgs/chap5_etiquette.png'},
         ],
         6: [
-          // chap6: 인사
-          {'korean_word': '안녕하세요', 'translated_word': 'hello', 'romanized_word': 'annyeonghaseyo'},
-          {'korean_word': '안녕히 가세요', 'translated_word': 'goodbye', 'romanized_word': 'annyeonghi gaseyo'},
-          {'korean_word': '감사합니다', 'translated_word': 'thank you', 'romanized_word': 'gamsahamnida'},
-          {'korean_word': '네', 'translated_word': 'yes', 'romanized_word': 'ne'},
-          {'korean_word': '아니요', 'translated_word': 'no', 'romanized_word': 'aniyo'},
+          {'korean_word': '안녕하세요', 'translated_word': 'hello', 'romanized_word': 'annyeonghaseyo', 'word_img': 'assets/images/chapter_imgs/chap6_hi.png'},
+          {'korean_word': '안녕히 가세요', 'translated_word': 'goodbye', 'romanized_word': 'annyeonghi gaseyo', 'word_img': 'assets/images/chapter_imgs/chap6_bye.png'},
+          {'korean_word': '감사합니다', 'translated_word': 'thank you', 'romanized_word': 'gamsahamnida', 'word_img': 'assets/images/chapter_imgs/chap6_thanks.png'},
+          {'korean_word': '네', 'translated_word': 'yes', 'romanized_word': 'ne', 'word_img': 'assets/images/chapter_imgs/chap6_yes.png'},
+          {'korean_word': '아니요', 'translated_word': 'no', 'romanized_word': 'aniyo', 'word_img': 'assets/images/chapter_imgs/chap6_no.png'},
         ],
         7: [
-          // chap7: 소속
-          {'korean_word': '이름', 'translated_word': 'name', 'romanized_word': 'ireum'},
-          {'korean_word': '생일', 'translated_word': 'birthday', 'romanized_word': 'saengil'},
-          {'korean_word': '국적', 'translated_word': 'nationality', 'romanized_word': 'gukjeok'},
-          {'korean_word': '주소', 'translated_word': 'address', 'romanized_word': 'juso'},
-          {'korean_word': '휴대폰 번호', 'translated_word': 'phone number', 'romanized_word': 'hyudaepon beonho'}
+          {'korean_word': '이름', 'translated_word': 'name', 'romanized_word': 'ireum', 'word_img': 'assets/images/chapter_imgs/chap7_name.png'},
+          {'korean_word': '생일', 'translated_word': 'birthday', 'romanized_word': 'saengil', 'word_img': 'assets/images/chapter_imgs/chap7_birthday.png'},
+          {'korean_word': '국적', 'translated_word': 'nationality', 'romanized_word': 'gukjeok', 'word_img': 'assets/images/chapter_imgs/chap7_nationality.png'},
+          {'korean_word': '주소', 'translated_word': 'address', 'romanized_word': 'juso', 'word_img': 'assets/images/chapter_imgs/chap7_address.png'},
+          {'korean_word': '휴대폰 번호', 'translated_word': 'phone number', 'romanized_word': 'hyudaepon beonho', 'word_img': 'assets/images/chapter_imgs/chap7_phone_number.png'},
         ],
+
       }); // 기존 단어 데이터 유지
       print('단어 데이터 삽입 완료.');
     } catch (e) {
