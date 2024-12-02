@@ -3,7 +3,7 @@ import 'package:http/http.dart' as http;
 import '../data/word_table.dart';
 
 class TranslationService {
-  final String apiKey = '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';
+  final String apiKey = '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';
   final WordTable wordTable = WordTable();
 
   // 단어를 번역하는 메서드 (챕터별로 수행)

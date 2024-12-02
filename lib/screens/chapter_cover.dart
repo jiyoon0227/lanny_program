@@ -93,11 +93,11 @@ class _ChapterCoverPageState extends State<ChapterCoverPage> {
                     )
                         : Icon(Icons.image, size: 50),
                     title: Text(
-                      word['original'] ?? '',
+                      word['korean_word'] ?? '',
                       style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                     ),
                     subtitle: Text(
-                      word['translated'] ?? '',
+                      word['translated_word'] ?? '',
                       style: TextStyle(fontSize: 14),
                     ),
                   ),

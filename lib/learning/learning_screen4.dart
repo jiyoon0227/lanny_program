@@ -143,7 +143,7 @@ class _LearnScreen4State extends State<LearnScreen4> {
                           ),
                           SizedBox(height: 8),
                           Text(
-                            '(${randomWord1['romanized']})',
+                            '(${randomWord1['romanized_word']})',
                             style: TextStyle(
                               color: _button1Color == Colors.transparent ? Colors.grey : Colors.white,
                               fontSize: 14,
@@ -174,7 +174,7 @@ class _LearnScreen4State extends State<LearnScreen4> {
                       child: Column(
                         children: [
                           Text(
-                            randomWord2['translated']!,
+                            randomWord2['translated_word']!,
                             style: TextStyle(
                               color: _button2Color == Colors.transparent ? Colors.black : Colors.white,
                               fontSize: 18,
@@ -182,7 +182,7 @@ class _LearnScreen4State extends State<LearnScreen4> {
                           ),
                           SizedBox(height: 8),
                           Text(
-                            '(${randomWord2['romanized']})',
+                            '(${randomWord2['romanized_word']})',
                             style: TextStyle(
                               color: _button2Color == Colors.transparent ? Colors.grey : Colors.white,
                               fontSize: 14,

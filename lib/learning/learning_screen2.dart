@@ -107,12 +107,12 @@ class _LearnScreen2State extends State<LearnScreen2> {
                 Column(
                   children: [
                     Text(
-                      currentWord['translated']!,
+                      currentWord['translated_word']!,
                       style: TextStyle(fontSize: 36, fontWeight: FontWeight.bold),
                     ),
                     SizedBox(height: 8),
                     Text(
-                      '(${currentWord['romanized']})',
+                      '(${currentWord['romanized_word']})',
                       style: TextStyle(color: Colors.grey[400], fontSize: 16),
                     ),
                   ],
