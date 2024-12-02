@@ -4,6 +4,7 @@ import '../data/chapter_table.dart';
 import '../data/chapter_model.dart';
 import '../data/user_table.dart';
 import '../data/user_model.dart';
+import '../services/translation_service.dart'; // 번역 서비스 임포트
 import 'chapter_cover.dart'; // chapter_cover.dart 임포트
 import '../data/word_table.dart'; // 단어 테이블 임포트
 
@@ -209,20 +210,34 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ],
         ),
-        const SizedBox(width: 16),
         Expanded(
           child: GestureDetector(
-            onTap: () {
-              // 각 챕터 클릭 시 chapter_cover.dart로 데이터 전달
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => ChapterCoverPage(
-                    chapterIndex: index,
-                    chapter: chapter,
+            onTap: () async {
+              try {
+                final translationService = TranslationService();
+                await translationService.translateWordsForSingleChapter(
+                  chapter.chapterId,
+                  selectedLanguage,
+                );
+
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ChapterCoverPage(
+                      chapterIndex: index,
+                      chapter: chapter,
+                    ),
                   ),
-                ),
-              );
+                );
+              } catch (e) {
+                print("Error during translation or navigation: $e");
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text('챕터 이동 중 오류가 발생했습니다. 다시 시도해주세요.'),
+                    duration: Duration(seconds: 3),
+                  ),
+                );
+              }
             },
             child: _buildChapterTile(
               "챕터 ${index + 1} - ${chapter.chapterName}",

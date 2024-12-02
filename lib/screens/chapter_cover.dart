@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../data/chapter_model.dart';
-import '../data/chapter_table.dart';
+import '../data/word_table.dart';
 import 'package:lanny_program/learning/chapter_screen1.dart';
 
 class ChapterCoverPage extends StatefulWidget {
@@ -14,45 +14,73 @@ class ChapterCoverPage extends StatefulWidget {
 }
 
 class _ChapterCoverPageState extends State<ChapterCoverPage> {
-  final ChapterTable chapterTable = ChapterTable(); // ChapterTable 인스턴스 생성
-  List<Map<String, String>> wordList = [];
-  bool isLoading = true;
+  final WordTable wordTable = WordTable(); // 단어 테이블 인스턴스 생성
+  List<Map<String, dynamic>> wordList = []; // 단어 데이터를 저장하는 리스트
+  bool isLoading = true; // 로딩 상태를 나타내는 플래그
 
   @override
   void initState() {
     super.initState();
-    _loadWords();
+    _loadWords(); // 단어 데이터를 로드하는 함수 호출
   }
 
-  // 단어 데이터를 메모리에서 가져오기
   Future<void> _loadWords() async {
+    print("Loading words for chapterId: ${widget.chapter.chapterId}");
+
     try {
-      final words = await chapterTable.getWordsForChapter(widget.chapter.chapterId);
+      final words = await wordTable.getWordsForChapter(widget.chapter.chapterId);
+      print("Loaded words: $words");
+
       setState(() {
-        wordList = words.take(5).toList(); // 상위 5개 단어 가져오기
-        isLoading = false;
+        wordList = words; // 로드된 단어 데이터를 상태에 저장
+        isLoading = false; // 로딩 완료
       });
     } catch (e) {
-      print('단어 데이터를 불러오는 중 오류 발생: $e');
+      print('Error loading words for chapter: ${widget.chapter.chapterId}, $e');
       setState(() {
-        isLoading = false;
+        isLoading = false; // 로딩 중단
       });
     }
   }
 
-  // 각 챕터에 맞는 학습 화면 반환
+  Widget _buildWordCard(Map<String, dynamic> word) {
+    // 단어 데이터를 카드 형태로 표시
+    return Card(
+      margin: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      child: ListTile(
+        leading: word['image'] != null
+            ? Image.asset(
+          word['image'],
+          width: 50,
+          height: 50,
+          fit: BoxFit.cover,
+        )
+            : Icon(Icons.image, size: 50), // 이미지가 없는 경우 기본 아이콘 표시
+        title: Text(
+          word['translated_word'] ?? '', // 번역된 단어 표시
+          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+        ),
+        subtitle: Text(
+          word['romanized_word'] ?? '', // 로마자 표기 표시
+          style: TextStyle(fontSize: 14),
+        ),
+      ),
+    );
+  }
+
   Widget _getChapterScreen() {
-        return ChapterScreen1(chapterId: widget.chapter.chapterId); // chapterId 전달
+    // 학습 화면으로 이동
+    return ChapterScreen1(chapterId: widget.chapter.chapterId);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.chapter.chapterName),
+        title: Text(widget.chapter.chapterName), // 선택된 챕터 이름을 제목으로 표시
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
-          onPressed: () => Navigator.of(context).pop(),
+          onPressed: () => Navigator.of(context).pop(), // 뒤로 가기 버튼
         ),
       ),
       body: Column(
@@ -64,44 +92,23 @@ class _ChapterCoverPageState extends State<ChapterCoverPage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  widget.chapter.chapterName,
+                  widget.chapter.chapterName, // 챕터 이름
                   style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                 ),
                 SizedBox(height: 10),
-                Text(widget.chapter.chapterDescription),
+                Text(widget.chapter.chapterDescription), // 챕터 설명
               ],
             ),
           ),
           Expanded(
             child: isLoading
-                ? Center(child: CircularProgressIndicator()) // 로딩 중
+                ? Center(child: CircularProgressIndicator()) // 로딩 중 표시
                 : wordList.isEmpty
-                ? Center(child: Text("단어 데이터가 없습니다.")) // 데이터가 없을 경우
+                ? Center(child: Text("단어 데이터가 없습니다.")) // 단어 데이터가 없을 경우 메시지 표시
                 : ListView.builder(
               itemCount: wordList.length,
               itemBuilder: (context, index) {
-                final word = wordList[index];
-                return Card(
-                  margin: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                  child: ListTile(
-                    leading: word['image'] != null
-                        ? Image.asset(
-                      word['image']!,
-                      width: 50,
-                      height: 50,
-                      fit: BoxFit.cover,
-                    )
-                        : Icon(Icons.image, size: 50),
-                    title: Text(
-                      word['korean_word'] ?? '',
-                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                    ),
-                    subtitle: Text(
-                      word['translated_word'] ?? '',
-                      style: TextStyle(fontSize: 14),
-                    ),
-                  ),
-                );
+                return _buildWordCard(wordList[index]); // 단어 카드 빌드
               },
             ),
           ),
@@ -113,6 +120,7 @@ class _ChapterCoverPageState extends State<ChapterCoverPage> {
                 minimumSize: Size(double.infinity, 50),
               ),
               onPressed: () {
+                // 학습 시작 버튼 클릭 시 학습 화면으로 이동
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => _getChapterScreen()),

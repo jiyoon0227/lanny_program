@@ -227,12 +227,7 @@ void showLanguageSettingPopup(BuildContext context,String userId) {
 
       // 선택된 언어를 데이터베이스에 저장
       _saveLanguageToDatabase(userId, selectedLanguage);
-      _translateWordsForSelectedLanguage(selectedLanguage).then((_) {
-        print("Translation completed. Navigating to HomeScreen.");
-        Navigator.pushReplacementNamed(context, '/main');
-      }).catchError((error) {
-        print("Translation failed: $error");
-      });
+      Navigator.pushReplacementNamed(context, '/main');
     }
   });
 }
@@ -245,12 +240,4 @@ Future<void> _saveLanguageToDatabase(String userId, String language) async {
   } catch (e) {
     print("Error updating language: $e");
   }
-}
-
-// 선택된 언어로 번역 작업을 수행하는 함수
-Future<void> _translateWordsForSelectedLanguage(String language) async {
-  TranslationService translationService = TranslationService();
-  // 여기서는 예시로 모든 챕터에 대해 번역을 수행한다고 가정
-  List<int> chapterIds = [1, 2, 3, 4, 5 ,6 ,7]; // 각 챕터의 ID 목록
-  await translationService.translateAndUpdateWordsByChapter(chapterIds, language);
 }
