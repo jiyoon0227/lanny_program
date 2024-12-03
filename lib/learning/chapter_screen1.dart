@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import '../data/data_initializer.dart'; // DataInitializer 임포트
+import '../data/chapter_table.dart'; // ChapterTable 임포트
+import '../data/word_table.dart'; // 단어 테이블 임포트
 import '../screens/home_screen.dart';
 import 'learning_screen1.dart';
 import 'learning_screen2.dart';
@@ -16,6 +17,8 @@ class ChapterScreen1 extends StatefulWidget {
 }
 
 class _ChapterScreen1State extends State<ChapterScreen1> {
+  final ChapterTable chapterTable = ChapterTable(); // ChapterTable 인스턴스 생성
+  final WordTable wordTable = WordTable(); // WordTable 인스턴스 추가
   List<Map<String, String>> chapterWords = [];
   bool isLoading = true;
 
@@ -40,12 +43,29 @@ class _ChapterScreen1State extends State<ChapterScreen1> {
 
   // 단어 데이터를 비동기로 로드
   Future<void> _loadWords() async {
-    final words = await DataInitializer.getWordsForChapter(widget.chapterId);
-    setState(() {
-      chapterWords = words.take(5).toList(); // 필요한 단어만 가져오기
-      isLoading = false;
-    });
+    try {
+      final words = await chapterTable.getWordsForChapter(widget.chapterId);
+
+      // null 값을 기본값으로 변환
+      setState(() {
+        chapterWords = words
+            .map((word) => {
+          'korean_word': word['korean_word'] ?? '', // null일 경우 빈 문자열
+          'translated_word': word['translated_word'] ?? '',
+          'romanized_word': word['romanized_word'] ?? '',
+          'word_img': word['word_img'] ?? 'assets/images/default.png', // 기본 이미지 설정
+        })
+            .toList();
+        isLoading = false;
+      });
+    } catch (e) {
+      print('단어 데이터를 불러오는 중 오류 발생: $e');
+      setState(() {
+        isLoading = false;
+      });
+    }
   }
+
 
   @override
   Widget build(BuildContext context) {

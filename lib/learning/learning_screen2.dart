@@ -96,9 +96,9 @@ class _LearnScreen2State extends State<LearnScreen2> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    _buildImageTile(0, currentWord['image']!),
+                    _buildImageTile(0, currentWord['word_img']!),
                     SizedBox(width: 20),
-                    _buildImageTile(1, otherWord1['image']!),
+                    _buildImageTile(1, otherWord1['word_img']!),
                   ],
                 ),
                 SizedBox(height: 40),
@@ -107,12 +107,12 @@ class _LearnScreen2State extends State<LearnScreen2> {
                 Column(
                   children: [
                     Text(
-                      currentWord['translated']!,
+                      currentWord['translated_word']!,
                       style: TextStyle(fontSize: 36, fontWeight: FontWeight.bold),
                     ),
                     SizedBox(height: 8),
                     Text(
-                      '(${currentWord['romanized']})',
+                      '(${currentWord['romanized_word']})',
                       style: TextStyle(color: Colors.grey[400], fontSize: 16),
                     ),
                   ],
@@ -123,9 +123,9 @@ class _LearnScreen2State extends State<LearnScreen2> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    _buildImageTile(2, otherWord2['image']!),
+                    _buildImageTile(2, otherWord2['word_img']!),
                     SizedBox(width: 20),
-                    _buildImageTile(3, otherWord3['image']!),
+                    _buildImageTile(3, otherWord3['word_img']!),
                   ],
                 ),
                 SizedBox(height: 40),

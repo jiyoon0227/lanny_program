@@ -1,4 +1,4 @@
-// 사용자 콘텐츠 표현 데이터 모델
+//사용자 콘텐츠 표현 데이터 모델
 class UserModel {
   final String userId;
   final String userEmail;

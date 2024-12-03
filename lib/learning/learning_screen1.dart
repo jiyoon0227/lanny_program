@@ -73,12 +73,12 @@ class LearnScreen1 extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Image.asset(
-                            currentWord['image']!,
+                            currentWord['word_img']!,
                             height: 300,
                           ),
                           SizedBox(height: 16),
                           Text(
-                            currentWord['original']!,
+                            currentWord['korean_word']!,
                             style: TextStyle(
                               fontSize: 36,
                               fontWeight: FontWeight.bold,
@@ -86,7 +86,7 @@ class LearnScreen1 extends StatelessWidget {
                           ),
                           SizedBox(height: 8),
                           Text(
-                            '(${currentWord['romanized']})',
+                            '(${currentWord['translated_word']})',
                             style: TextStyle(
                               color: Colors.grey[400],
                               fontSize: 16,
@@ -94,7 +94,7 @@ class LearnScreen1 extends StatelessWidget {
                           ),
                           SizedBox(height: 16),
                           Text(
-                            currentWord['translated']!,
+                            currentWord['translated_word']!,
                             style: TextStyle(
                               fontSize: 24,
                               color: Colors.blue,
