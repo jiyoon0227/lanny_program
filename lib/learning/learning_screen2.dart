@@ -2,6 +2,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import '../widgets/stop_popup.dart';
 import 'package:lanny_program/widgets/correct_answer_popup.dart';
+import 'package:lanny_program/widgets/fail_answer_popup.dart';
 
 class LearnScreen2 extends StatefulWidget {
   final List<Map<String, String>> chapterWords;
@@ -137,10 +138,44 @@ class _LearnScreen2State extends State<LearnScreen2> {
                     width: 200, // Set a fixed width to match other screens
                     child: ElevatedButton(
                       onPressed: () {
-                        showDialog(
-                          context: context,
-                          builder: (context) => CorrectAnswerPopup(),
-                        );
+                        if (selectedIndex != null) {
+                          String selectedImage = '';
+                          switch (selectedIndex) {
+                            case 0:
+                              selectedImage = currentWord['image']!;
+                              break;
+                            case 1:
+                              selectedImage = otherWord1['image']!;
+                              break;
+                            case 2:
+                              selectedImage = otherWord2['image']!;
+                              break;
+                            case 3:
+                              selectedImage = otherWord3['image']!;
+                              break;
+                          }
+
+                          // 정답/오답 확인
+                          if (selectedImage == currentWord['image']!) {
+                            showDialog(
+                              context: context,
+                              builder: (context) => CorrectAnswerPopup(
+                                imagePath: currentWord['image']!,
+                                originalText: currentWord['original']!,
+                                translatedText: currentWord['translated']!,
+                              ),
+                            );
+                          } else {
+                            showDialog(
+                              context: context,
+                              builder: (context) => FailAnswerPopup(
+                                imagePath: currentWord['image']!,
+                                originalText: currentWord['original']!,
+                                translatedText: currentWord['translated']!,
+                              ),
+                            );
+                          }
+                        }
                       },
                       style: ElevatedButton.styleFrom(
                         padding: EdgeInsets.symmetric(vertical: 12.0),
@@ -160,7 +195,7 @@ class _LearnScreen2State extends State<LearnScreen2> {
           // 일시정지 버튼을 화면 좌측 상단에 고정
           Positioned(
             left: 16,
-            top: 50,  // 상단 진행 상태 바 바로 아래에 배치
+            top: 50, // 상단 진행 상태 바 바로 아래에 배치
             child: IconButton(
               icon: Icon(Icons.pause, color: Colors.grey),
               onPressed: () {
