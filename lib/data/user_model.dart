@@ -10,8 +10,10 @@ class UserModel {
   final int userLongestStreakCount;
   final int userTotalAttendanceCount;
   final int userMasteredWordsCount;
+  final int continuous;
 
   UserModel({
+    required this.continuous,
     required this.userId,
     required this.userEmail,
     required this.userName,
@@ -51,6 +53,45 @@ class UserModel {
       userLongestStreakCount: map['user_longest_streak_count'] ?? 0,
       userTotalAttendanceCount: map['user_total_attendance_count'] ?? 0,
       userMasteredWordsCount: map['user_mastered_words_count'] ?? 0,
+      continuous: map['continuous'] ?? 0,
     );
+  }
+}
+
+
+class UserData {
+  final String id;
+  final String password;
+  final String uid;
+  final String continuous;
+  final String email;
+
+  UserData({
+    required this.id,
+    required this.password,
+    required this.uid,
+    required this.continuous,
+    required this.email,
+  });
+
+  // Firestore 데이터에서 객체 생성
+  factory UserData.fromFirestore(Map<String, dynamic> data, String documentId) {
+    return UserData(
+      id: data['ID'] ?? '',
+      password: data['PassWord'] ?? '',
+      uid: documentId, // Firestore document ID (UID)로 설정
+      continuous: data['continuous'] ?? '',
+      email: data['email'] ?? '',
+    );
+  }
+
+  // 객체를 Map으로 변환 (Firestore 저장용)
+  Map<String, dynamic> toFirestore() {
+    return {
+      'ID': id,
+      'PassWord': password,
+      'continuous': continuous,
+      'email': email,
+    };
   }
 }
