@@ -1,6 +1,17 @@
 import 'package:flutter/material.dart';
 
 class CorrectAnswerPopup extends StatelessWidget {
+  final String imagePath; // 이미지 경로
+  final String originalText; // 원본 텍스트
+  final String translatedText; // 번역 텍스트
+
+  // 데이터를 생성자에서 받아옵니다.
+  CorrectAnswerPopup({
+    required this.imagePath,
+    required this.originalText,
+    required this.translatedText,
+  });
+
   @override
   Widget build(BuildContext context) {
     return Dialog(
@@ -27,8 +38,9 @@ class CorrectAnswerPopup extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
+                // 전달받은 이미지 경로를 사용합니다.
                 Image.asset(
-                  'assets/images/tshirt.png', // 티셔츠 이미지 경로를 맞춰주세요.
+                  imagePath,
                   width: 69,
                   height: 61,
                 ),
@@ -36,16 +48,18 @@ class CorrectAnswerPopup extends StatelessWidget {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    // 전달받은 원본 텍스트를 사용합니다.
                     Text(
-                      'はんそで',
+                      originalText,
                       style: TextStyle(
                         color: Color(0xFF232323),
                         fontSize: 20,
                         fontWeight: FontWeight.w500,
                       ),
                     ),
+                    // 전달받은 번역 텍스트를 사용합니다.
                     Text(
-                      '티셔츠',
+                      translatedText,
                       style: TextStyle(
                         color: Color(0xFFBDBDBD),
                         fontSize: 13,

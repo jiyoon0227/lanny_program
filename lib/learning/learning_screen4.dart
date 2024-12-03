@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import '../widgets/stop_popup.dart';
+import '../widgets/correct_answer_popup.dart'; // CorrectAnswerPopup 파일 import
+import '../widgets/fail_answer_popup.dart'; // FailAnswerPopup 파일 import
 
 class LearnScreen4 extends StatefulWidget {
   final List<Map<String, String>> chapterWords;
@@ -25,6 +27,8 @@ class _LearnScreen4State extends State<LearnScreen4> {
   late int _randomIndex1;
   late int _randomIndex2;
 
+  String? _selectedWord;
+
   @override
   void initState() {
     super.initState();
@@ -45,6 +49,29 @@ class _LearnScreen4State extends State<LearnScreen4> {
     _randomIndex2 = availableIndexes.isNotEmpty ? availableIndexes.removeLast() : currentIndex;
   }
 
+  void _submitAnswer() {
+    final currentWord = widget.chapterWords[widget.currentWordIndex];
+    if (_selectedWord == currentWord['translated']) {
+      showDialog(
+        context: context,
+        builder: (context) => CorrectAnswerPopup(
+          imagePath: currentWord['image']!,
+          originalText: currentWord['original']!,
+          translatedText: currentWord['translated']!,
+        ),
+      );
+    } else {
+      showDialog(
+        context: context,
+        builder: (context) => FailAnswerPopup(
+          imagePath: currentWord['image']!,
+          originalText: currentWord['original']!,
+          translatedText: currentWord['translated']!,
+        ),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final currentWord = widget.chapterWords[widget.currentWordIndex];
@@ -56,7 +83,7 @@ class _LearnScreen4State extends State<LearnScreen4> {
     return Scaffold(
       body: Stack(
         children: [
-          SingleChildScrollView( // 내용이 길어질 경우 스크롤 가능
+          SingleChildScrollView(
             padding: const EdgeInsets.all(16.0),
             child: DefaultTextStyle(
               style: TextStyle(
@@ -66,7 +93,6 @@ class _LearnScreen4State extends State<LearnScreen4> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  // 진행 상태와 버튼
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -94,7 +120,6 @@ class _LearnScreen4State extends State<LearnScreen4> {
                     ],
                   ),
                   SizedBox(height: 16),
-                  // 이미지 표시
                   Center(
                     child: Image.asset(
                       currentWord['image']!,
@@ -103,7 +128,6 @@ class _LearnScreen4State extends State<LearnScreen4> {
                     ),
                   ),
                   SizedBox(height: 16),
-                  // 단어 원본 텍스트
                   Text(
                     currentWord['original']!,
                     style: TextStyle(
@@ -113,14 +137,15 @@ class _LearnScreen4State extends State<LearnScreen4> {
                     ),
                     textAlign: TextAlign.center,
                   ),
-                  SizedBox(height: 30), // 간격 축소
+                  SizedBox(height: 30),
 
                   // 첫 번째 선택지 버튼
                   GestureDetector(
                     onTap: () {
                       setState(() {
+                        _selectedWord = randomWord1['translated'];
                         _button1Color = Colors.green.withOpacity(0.5);
-                        _button2Color = Colors.transparent; // 다른 버튼 초기화
+                        _button2Color = Colors.transparent;
                       });
                     },
                     child: Container(
@@ -158,8 +183,9 @@ class _LearnScreen4State extends State<LearnScreen4> {
                   GestureDetector(
                     onTap: () {
                       setState(() {
+                        _selectedWord = randomWord2['translated'];
                         _button2Color = Colors.green.withOpacity(0.5);
-                        _button1Color = Colors.transparent; // 다른 버튼 초기화
+                        _button1Color = Colors.transparent;
                       });
                     },
                     child: Container(
@@ -193,16 +219,12 @@ class _LearnScreen4State extends State<LearnScreen4> {
                     ),
                   ),
                   SizedBox(height: 50),
-
-                  // 답안 제출 버튼
                   Align(
                     alignment: Alignment.center,
                     child: SizedBox(
                       width: 200,
                       child: ElevatedButton(
-                        onPressed: () {
-                          print('Answer submitted');
-                        },
+                        onPressed: _submitAnswer,
                         style: ElevatedButton.styleFrom(
                           padding: EdgeInsets.symmetric(vertical: 12.0),
                           backgroundColor: Colors.green,
@@ -219,10 +241,9 @@ class _LearnScreen4State extends State<LearnScreen4> {
             ),
           ),
 
-          // 일시정지 버튼을 화면 좌측 상단에 고정
           Positioned(
             left: 16,
-            top: 50,  // 상단 진행 상태 바 바로 아래에 배치
+            top: 50,
             child: IconButton(
               icon: Icon(Icons.pause, color: Colors.grey),
               onPressed: () {

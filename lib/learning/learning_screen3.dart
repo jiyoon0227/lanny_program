@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../widgets/stop_popup.dart';
 import 'package:lanny_program/widgets/fail_answer_popup.dart'; // FailAnswerPopup 파일을 import하세요.
+import 'package:lanny_program/widgets/correct_answer_popup.dart'; // CorrectAnswerPopup 파일도 추가
 
 class LearnScreen3 extends StatefulWidget {
   final List<Map<String, String>> chapterWords;
@@ -24,6 +25,8 @@ class _LearnScreen3State extends State<LearnScreen3> {
   Color _bottomTextBackgroundColor = Colors.transparent;
   late List<int> _availableIndexes;
   late int _randomIndex;
+
+  String? selectedWord; // 선택된 단어를 저장
 
   @override
   void initState() {
@@ -100,6 +103,7 @@ class _LearnScreen3State extends State<LearnScreen3> {
                   GestureDetector(
                     onTap: () {
                       setState(() {
+                        selectedWord = currentWord['translated']; // 선택된 단어를 저장
                         _topTextBackgroundColor = Colors.green.withOpacity(0.5);
                         _bottomTextBackgroundColor = Colors.transparent; // 다른 단어 배경 초기화
                       });
@@ -147,6 +151,7 @@ class _LearnScreen3State extends State<LearnScreen3> {
                   GestureDetector(
                     onTap: () {
                       setState(() {
+                        selectedWord = randomWord['translated']; // 선택된 단어를 저장
                         _bottomTextBackgroundColor = Colors.green.withOpacity(0.5);
                         _topTextBackgroundColor = Colors.transparent; // 다른 단어 배경 초기화
                       });
@@ -186,10 +191,25 @@ class _LearnScreen3State extends State<LearnScreen3> {
                       width: 200,
                       child: ElevatedButton(
                         onPressed: () {
-                          showDialog(
-                            context: context,
-                            builder: (context) => FailAnswerPopup(),
-                          );
+                          if (selectedWord == currentWord['translated']) {
+                            showDialog(
+                              context: context,
+                              builder: (context) => CorrectAnswerPopup(
+                                imagePath: currentWord['image']!,
+                                originalText: currentWord['original']!,
+                                translatedText: currentWord['translated']!,
+                              ),
+                            );
+                          } else {
+                            showDialog(
+                              context: context,
+                              builder: (context) => FailAnswerPopup(
+                                imagePath: currentWord['image']!,
+                                originalText: currentWord['original']!,
+                                translatedText: currentWord['translated']!,
+                              ),
+                            );
+                          }
                         },
                         style: ElevatedButton.styleFrom(
                           padding: EdgeInsets.symmetric(vertical: 12.0),
@@ -210,7 +230,7 @@ class _LearnScreen3State extends State<LearnScreen3> {
           // 일시정지 버튼을 화면 좌측 상단에 고정
           Positioned(
             left: 16,
-            top: 50,  // 상단 진행 상태 바 바로 아래에 배치
+            top: 50, // 상단 진행 상태 바 바로 아래에 배치
             child: IconButton(
               icon: Icon(Icons.pause, color: Colors.grey),
               onPressed: () {
