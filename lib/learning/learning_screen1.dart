@@ -86,7 +86,7 @@ class LearnScreen1 extends StatelessWidget {
                           ),
                           SizedBox(height: 8),
                           Text(
-                            '(${currentWord['translated_word']})',
+                            '(${currentWord['romanized_word']})',
                             style: TextStyle(
                               color: Colors.grey[400],
                               fontSize: 16,
