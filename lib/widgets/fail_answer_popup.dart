@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 
 class FailAnswerPopup extends StatelessWidget {
-  final String imagePath; // 이미지 경로
-  final String originalText; // 원본 텍스트
-  final String translatedText; // 번역 텍스트
+  final String wordImgPath; // 이미지 경로
+  final String koreanWord; // 원본 텍스트
+  final String translatedWord; // 번역 텍스트
 
   // 데이터를 생성자에서 받아옵니다.
   FailAnswerPopup({
-    required this.imagePath,
-    required this.originalText,
-    required this.translatedText,
+    required this.wordImgPath,
+    required this.koreanWord,
+    required this.translatedWord,
   });
 
   @override
@@ -40,7 +40,7 @@ class FailAnswerPopup extends StatelessWidget {
               children: [
                 // 전달받은 이미지 경로를 사용합니다.
                 Image.asset(
-                  imagePath,
+                  wordImgPath,
                   width: 69,
                   height: 61,
                 ),
@@ -50,7 +50,7 @@ class FailAnswerPopup extends StatelessWidget {
                   children: [
                     // 전달받은 원본 텍스트를 사용합니다.
                     Text(
-                      originalText,
+                      koreanWord,
                       style: TextStyle(
                         color: Color(0xFF232323),
                         fontSize: 20,
@@ -59,7 +59,7 @@ class FailAnswerPopup extends StatelessWidget {
                     ),
                     // 전달받은 번역 텍스트를 사용합니다.
                     Text(
-                      translatedText,
+                      translatedWord,
                       style: TextStyle(
                         color: Color(0xFFBDBDBD),
                         fontSize: 13,

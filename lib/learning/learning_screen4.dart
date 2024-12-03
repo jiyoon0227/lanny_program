@@ -51,22 +51,22 @@ class _LearnScreen4State extends State<LearnScreen4> {
 
   void _submitAnswer() {
     final currentWord = widget.chapterWords[widget.currentWordIndex];
-    if (_selectedWord == currentWord['translated']) {
+    if (_selectedWord == currentWord['translated_word']) {
       showDialog(
         context: context,
         builder: (context) => CorrectAnswerPopup(
-          imagePath: currentWord['image']!,
-          originalText: currentWord['original']!,
-          translatedText: currentWord['translated']!,
+          wordImgPath: currentWord['word_img']!,
+          koreanWord: currentWord['korean_word']!,
+          translatedWord: currentWord['translated_word']!,
         ),
       );
     } else {
       showDialog(
         context: context,
         builder: (context) => FailAnswerPopup(
-          imagePath: currentWord['image']!,
-          originalText: currentWord['original']!,
-          translatedText: currentWord['translated']!,
+          wordImgPath: currentWord['word_img']!,
+          koreanWord: currentWord['korean_word']!,
+          translatedWord: currentWord['translated_word']!,
         ),
       );
     }
@@ -143,7 +143,7 @@ class _LearnScreen4State extends State<LearnScreen4> {
                   GestureDetector(
                     onTap: () {
                       setState(() {
-                        _selectedWord = randomWord1['translated'];
+                        _selectedWord = randomWord1['translated_word'];
                         _button1Color = Colors.green.withOpacity(0.5);
                         _button2Color = Colors.transparent;
                       });
@@ -183,7 +183,7 @@ class _LearnScreen4State extends State<LearnScreen4> {
                   GestureDetector(
                     onTap: () {
                       setState(() {
-                        _selectedWord = randomWord2['translated'];
+                        _selectedWord = randomWord2['translated_word'];
                         _button2Color = Colors.green.withOpacity(0.5);
                         _button1Color = Colors.transparent;
                       });
