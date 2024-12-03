@@ -142,36 +142,36 @@ class _LearnScreen2State extends State<LearnScreen2> {
                           String selectedImage = '';
                           switch (selectedIndex) {
                             case 0:
-                              selectedImage = currentWord['image']!;
+                              selectedImage = currentWord['word_img']!;
                               break;
                             case 1:
-                              selectedImage = otherWord1['image']!;
+                              selectedImage = otherWord1['word_img']!;
                               break;
                             case 2:
-                              selectedImage = otherWord2['image']!;
+                              selectedImage = otherWord2['word_img']!;
                               break;
                             case 3:
-                              selectedImage = otherWord3['image']!;
+                              selectedImage = otherWord3['word_img']!;
                               break;
                           }
 
                           // 정답/오답 확인
-                          if (selectedImage == currentWord['image']!) {
+                          if (selectedImage == currentWord['word_img']!) {
                             showDialog(
                               context: context,
                               builder: (context) => CorrectAnswerPopup(
-                                imagePath: currentWord['image']!,
-                                originalText: currentWord['original']!,
-                                translatedText: currentWord['translated']!,
+                                wordImgPath: currentWord['word_img']!,
+                                koreanWord: currentWord['korean_word']!,
+                                translatedWord: currentWord['translated_word']!,
                               ),
                             );
                           } else {
                             showDialog(
                               context: context,
                               builder: (context) => FailAnswerPopup(
-                                imagePath: currentWord['image']!,
-                                originalText: currentWord['original']!,
-                                translatedText: currentWord['translated']!,
+                                wordImgPath: currentWord['word_img']!,
+                                koreanWord: currentWord['korean_word']!,
+                                translatedWord: currentWord['translated_word']!,
                               ),
                             );
                           }

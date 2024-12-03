@@ -103,7 +103,7 @@ class _LearnScreen3State extends State<LearnScreen3> {
                   GestureDetector(
                     onTap: () {
                       setState(() {
-                        selectedWord = currentWord['translated']; // 선택된 단어를 저장
+                        selectedWord = currentWord['translated_word']; // 선택된 단어를 저장
                         _topTextBackgroundColor = Colors.green.withOpacity(0.5);
                         _bottomTextBackgroundColor = Colors.transparent; // 다른 단어 배경 초기화
                       });
@@ -151,7 +151,7 @@ class _LearnScreen3State extends State<LearnScreen3> {
                   GestureDetector(
                     onTap: () {
                       setState(() {
-                        selectedWord = randomWord['translated']; // 선택된 단어를 저장
+                        selectedWord = randomWord['translated_word']; // 선택된 단어를 저장
                         _bottomTextBackgroundColor = Colors.green.withOpacity(0.5);
                         _topTextBackgroundColor = Colors.transparent; // 다른 단어 배경 초기화
                       });
@@ -191,22 +191,22 @@ class _LearnScreen3State extends State<LearnScreen3> {
                       width: 200,
                       child: ElevatedButton(
                         onPressed: () {
-                          if (selectedWord == currentWord['translated']) {
+                          if (selectedWord == currentWord['translated_word']) {
                             showDialog(
                               context: context,
                               builder: (context) => CorrectAnswerPopup(
-                                imagePath: currentWord['image']!,
-                                originalText: currentWord['original']!,
-                                translatedText: currentWord['translated']!,
+                                wordImgPath: currentWord['word_img']!,
+                                koreanWord: currentWord['korean_word']!,
+                                translatedWord: currentWord['translated_word']!,
                               ),
                             );
                           } else {
                             showDialog(
                               context: context,
                               builder: (context) => FailAnswerPopup(
-                                imagePath: currentWord['image']!,
-                                originalText: currentWord['original']!,
-                                translatedText: currentWord['translated']!,
+                                wordImgPath: currentWord['word_img']!,
+                                koreanWord: currentWord['korean_word']!,
+                                translatedWord: currentWord['translated_word']!,
                               ),
                             );
                           }
