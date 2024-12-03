@@ -17,6 +17,9 @@ class _MyPageScreenState extends State<MyPageScreen> {
   String userName = '';
   String userEmail = '';
   String learningLanguage = '';
+  String continuous = '';
+  String visitCounts = '';
+
   final AuthService _authService = AuthService();
 
 
@@ -49,11 +52,17 @@ class _MyPageScreenState extends State<MyPageScreen> {
 
         if (userDoc.exists) {
           setState(() {
-            userName = userDoc['name'] ?? '사용자';
+            userName = '사용자';
             userEmail = userDoc['email'] ?? '이메일 없음';
-            learningLanguage = userDoc['language'] ?? '언어 미지정';
+            learningLanguage ='언어 미지정'; //userDoc['language'] ?? '언어 미지정';
+            visitCounts = userDoc['visitCounts'] ?? '0';
+            continuous = userDoc['continuous'] ?? '0';
+
           });
         }
+      }
+      else{
+        print("current user isn't exist");
       }
     } catch (e) {
       print('Error loading user info: $e');
@@ -122,9 +131,9 @@ class _MyPageScreenState extends State<MyPageScreen> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              _buildStatItem('총 방문 횟수', '6회'),
+              _buildStatItem('총 방문 횟수', visitCounts),
               _buildStatItem('총 출석', '12일'),
-              _buildStatItem('총 학습 시간', '110분'),
+              _buildStatItem('연속 방문 횟수', continuous),
             ],
           ),
           SizedBox(height: 40), // 도전 과제 위젯 위에 추가 간격

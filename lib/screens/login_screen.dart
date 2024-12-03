@@ -37,6 +37,10 @@ class _LoginScreenState extends State<login_screen> {
           print("Fetched User ID (email): $userId");
 
 
+        // visitCounts 'continuous' 업데이트
+        await _authService.updateContinuousIfYesterday(email);
+
+
           // 'continuous' 업데이트
           await _authService.updateContinuousIfYesterday(email);
 
