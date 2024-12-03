@@ -4,10 +4,10 @@ import '../data/database.dart';
 import '../data/user_table.dart';
 import '../services/translation_service.dart';
 
-void showLanguageSettingPopup(BuildContext context,String userId) {
+Future<void> showLanguageSettingPopup(BuildContext context, String userId) async {
   String? selectedLanguage; // 선택된 언어를 저장하는 변수
 
-  showDialog(
+  selectedLanguage = await showDialog<String?>(
     context: context,
     builder: (BuildContext context) {
       return StatefulBuilder( // StatefulBuilder를 사용해 상태 관리
@@ -220,17 +220,19 @@ void showLanguageSettingPopup(BuildContext context,String userId) {
         },
       );
     },
-  ).then((selectedLanguage) {
-    if (selectedLanguage != null) {
-      // 선택된 언어를 사용
-      print("선택된 언어: $selectedLanguage");
+  );
 
-      // 선택된 언어를 데이터베이스에 저장
-      _saveLanguageToDatabase(userId, selectedLanguage);
-      Navigator.pushReplacementNamed(context, '/main');
-    }
-  });
+  if (selectedLanguage != null) {
+    print("선택된 언어: $selectedLanguage");
+
+    // 선택된 언어를 데이터베이스에 저장
+    await _saveLanguageToDatabase(userId, selectedLanguage!);
+
+    // 메인 화면으로 이동
+    Navigator.pushReplacementNamed(context, '/main');
+  }
 }
+
 // 선택된 언어를 데이터베이스에 저장하는 함수
 Future<void> _saveLanguageToDatabase(String userId, String language) async {
   UserTable userTable = UserTable();

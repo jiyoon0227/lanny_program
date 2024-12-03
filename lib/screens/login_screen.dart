@@ -50,7 +50,7 @@ class _LoginScreenState extends State<login_screen> {
           );
 
           // 언어 설정 팝업 호출
-          showLanguageSettingPopup(context, userId);
+          await showLanguageSettingPopup(context, userId);
 
           // 로그인 성공 시 메인 화면으로 이동
           Navigator.pushNamed(context, '/main');
