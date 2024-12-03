@@ -36,7 +36,7 @@ class _login_screenState extends State<login_screen> {
         // Firestore에서 사용자 추가 데이터 가져오기
         fetchUserData(email);
 
-        // 'continuous' 업데이트
+        // visitCounts 'continuous' 업데이트
         await _authService.updateContinuousIfYesterday(email);
 
         // 로그인 성공 메시지

@@ -8,64 +8,47 @@ class AuthService {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
 
-  /// 'continuous' 필드 업데이트 함수
+  ///'visitCounts' 'continuous' 필드 업데이트 함수
   Future<void> updateContinuousIfYesterday(String email) async {
     try {
-      // 현재 날짜와 어제 날짜 계산
-      DateTime now = DateTime.now();
-      DateTime yesterday = now.subtract(Duration(days: 1));
-      String yesterdayFormatted = DateFormat('yyyy-MM-dd').format(yesterday);
+      // Firestore에서 이메일로 사용자 문서 검색
+      QuerySnapshot snapshot = await _firestore
+          .collection('user')
+          .where('email', isEqualTo: email)
+          .get();
 
-      // Firebase Authentication에서 이메일로 사용자 검색
-      User? user = (await FirebaseAuth.instance.fetchSignInMethodsForEmail(email))
-          .isNotEmpty
-          ? FirebaseAuth.instance.currentUser
-          : null;
+      if (snapshot.docs.isNotEmpty) {
+        var doc = snapshot.docs.first;
+        String docId = doc.id;
+        Map<String, dynamic> userData = doc.data() as Map<String, dynamic>;
 
-      if (user != null) {
-        // Authentication의 '마지막 로그인 날짜' 확인
-        DateTime? lastLoginTime = user.metadata.lastSignInTime;
+        // 'visitCounts' 값 증가
+        int currentVisitCounts = int.parse(userData['visitCounts'] ?? '0');
+        int updatedVisitCounts = currentVisitCounts + 1;
 
-        if (lastLoginTime != null) {
-          String lastLoginFormatted = DateFormat('yyyy-MM-dd').format(lastLoginTime);
+        // Firestore에 업데이트
+        await _firestore.collection('user').doc(docId).update({
+          'visitCounts': updatedVisitCounts.toString(),
+        });
 
-          // 어제 로그인했는지 확인
-          if (lastLoginFormatted == yesterdayFormatted) {
-            // Firestore에서 이메일로 사용자 문서 검색
-            QuerySnapshot snapshot = await _firestore
-                .collection('user')
-                .where('email', isEqualTo: email)
-                .get();
+        print("Visit counts updated to: $updatedVisitCounts");
 
-            if (snapshot.docs.isNotEmpty) {
-              var doc = snapshot.docs.first;
-              String docId = doc.id;
-              Map<String, dynamic> userData = doc.data() as Map<String, dynamic>;
+        // 'continuous' 값 증가 로직 유지
+        if (userData.containsKey('continuous')) {
+          int currentContinuous = int.parse(userData['continuous']);
+          int updatedContinuous = currentContinuous + 1;
 
-              // 'continuous' 값 증가
-              int currentContinuous = int.parse(userData['continuous']);
-              int updatedContinuous = currentContinuous + 1;
+          await _firestore.collection('user').doc(docId).update({
+            'continuous': updatedContinuous.toString(),
+          });
 
-              // Firestore에 업데이트
-              await _firestore.collection('user').doc(docId).update({
-                'continuous': updatedContinuous.toString(),
-              });
-
-              print("Continuous streak updated to: $updatedContinuous");
-            } else {
-              print("No user found with email: $email");
-            }
-          } else {
-            print("User did not log in yesterday. No changes made.");
-          }
-        } else {
-          print("Last sign-in time not available for the user.");
+          print("Continuous streak updated to: $updatedContinuous");
         }
       } else {
-        print("No user found in Authentication with email: $email");
+        print("No user found with email: $email");
       }
     } catch (e) {
-      print("Error updating continuous field: $e");
+      print("Error updating visitCounts and continuous fields: $e");
     }
   }
 
