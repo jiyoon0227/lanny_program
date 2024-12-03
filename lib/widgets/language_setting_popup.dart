@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+import 'package:cloud_firestore/cloud_firestore.dart'; // Firebase Firestore 임포트
 import '../data/database.dart';
 import '../data/user_table.dart';
 import '../services/translation_service.dart';
@@ -235,8 +235,14 @@ void showLanguageSettingPopup(BuildContext context,String userId) {
 Future<void> _saveLanguageToDatabase(String userId, String language) async {
   UserTable userTable = UserTable();
   try {
+    //Firestore에 업데이트
+    final userDoc = FirebaseFirestore.instance.collection('users').doc(userId);
+    await userDoc.update({'user_selected_language': language});
+    print("Firestore: Language updated for user: $userId");
+    //SQLite 업데이트
     await userTable.updateUserLanguage(userId, language);
-    print("Language updated for user: $userId");
+    print("SQLite: Language updated for user: $userId");
+
   } catch (e) {
     print("Error updating language: $e");
   }

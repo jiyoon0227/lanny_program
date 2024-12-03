@@ -13,15 +13,12 @@ class login_screen extends StatefulWidget {
 class _LoginScreenState extends State<login_screen> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _idController = TextEditingController();
-  final TextEditingController _continuousController = TextEditingController();
 
   final FirebaseAuth _auth = FirebaseAuth.instance;
-ontent: Text('로그인 실패: ${e.toString()}')),
 
   final AuthService _authService = AuthService();
 
-  Future<void> _login()  async {
+  Future<void> _login() async {
     String email = _emailController.text.trim();
     String password = _passwordController.text.trim();
 
@@ -34,21 +31,32 @@ ontent: Text('로그인 실패: ${e.toString()}')),
         print("Login successful!");
 
         // Firestore에서 사용자 추가 데이터 가져오기
-        fetchUserData(email);
+        UserData? userData = await _authService.getUserDataByEmail(email);
+        if (userData != null) {
+          String userId = userData.id; // UserData 클래스의 id 필드 사용
+          print("Fetched User ID (email): $userId");
 
-        // 'continuous' 업데이트
-        await _authService.updateContinuousIfYesterday(email);
 
-        // 로그인 성공 메시지
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text("Login successful!")),
-        );
+          // 'continuous' 업데이트
+          await _authService.updateContinuousIfYesterday(email);
 
-        // 로그인 성공 시 회원가입 화면으로 이동
-        showLanguageSettingPopup(context, userId);
-        Navigator.pushNamed(context, '/main');
+          // 로그인 성공 메시지
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text("Login successful!")),
+          );
+
+          // 언어 설정 팝업 호출
+          showLanguageSettingPopup(context, userId);
+
+          // 로그인 성공 시 메인 화면으로 이동
+          Navigator.pushNamed(context, '/main');
+        } else {
+          print("User data not found in Firestore.");
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text("User data not found.")),
+          );
+        }
       } else {
-        // 로그인 실패 메시지
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text("Login failed. Check your credentials.")),
         );
