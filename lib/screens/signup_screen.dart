@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+
 import 'package:lanny_program/FireStore/AuthService.dart';
+
+import 'package:firebase_auth/firebase_auth.dart';
+
 
 class signup_screen extends StatefulWidget {
   @override
@@ -33,6 +37,8 @@ class _signup_screenState extends State<signup_screen> {
           SnackBar(content: Text('Please enter email and password')),
         );
       }
+
+
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Signup failed: ${e.toString()}')),

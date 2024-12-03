@@ -63,6 +63,7 @@ class DatabaseHelper {
       romanized_word TEXT NOT NULL,
       word_order INTEGER NOT NULL,
       is_learned INTEGER NOT NULL,
+      word_img TEXT,
       FOREIGN KEY(chapter_id) REFERENCES chapter_table(chapter_id)
     )
   ''');

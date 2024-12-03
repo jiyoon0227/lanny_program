@@ -4,10 +4,10 @@ import '../data/chapter_table.dart';
 import '../data/chapter_model.dart';
 import '../data/user_table.dart';
 import '../data/user_model.dart';
+import '../services/translation_service.dart'; // 번역 서비스 임포트
 import 'chapter_cover.dart'; // chapter_cover.dart 임포트
-//*****
 import '../data/word_table.dart'; // 단어 테이블 임포트
-//*****
+
 class HomeScreen extends StatefulWidget {
   @override
   _HomeScreenState createState() => _HomeScreenState();
@@ -15,11 +15,9 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final ChapterTable chapterTable = ChapterTable();
-  //*****
   final WordTable wordTable = WordTable(); // WordTable 인스턴스 추가
-  //*****
+  final UserTable userTable = UserTable(); // UserTable 인스턴스 추가
   List<ChapterModel> chapters = [];
-
   String selectedLanguage = "한국어"; // 기본값으로 설정
 
   @override
@@ -27,46 +25,51 @@ class _HomeScreenState extends State<HomeScreen> {
     super.initState();
     _loadUserLanguage(); // 사용자 언어 설정 불러오기
     _loadChapters();
-    //*****
     _printWordTableContents(); // 단어 테이블 내용을 프린트로 확인하기 위한 함수 호출
   }
-  //*****
+
   void _printWordTableContents() async {
     // 단어 테이블의 모든 데이터를 가져와 콘솔에 출력하는 함수
     List<Map<String, dynamic>> wordData = await wordTable.getAllWords();
     for (var word in wordData) {
-      print('Word: ${word['korean_word']}, Translated: ${word['translated_word']}, Romanized: ${word['romanized_word']}');
+      print(
+          'Word: ${word['korean_word']}, Translated: ${word['translated_word']}, Romanized: ${word['romanized_word']}');
     }
-  }
-  //*****
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    // 화면이 표시될 때마다 언어 설정 확인
-    _loadUserLanguage();
   }
 
   void _loadUserLanguage() async {
-    UserTable userTable = UserTable();
-    Map<String, dynamic>? userMap = await userTable.getUser("default_user");
-
-    if (userMap != null) {
-      UserModel user = UserModel.fromMap(userMap);
-      if (user.userSelectedLanguage != null) {
-        setState(() {
-          selectedLanguage = user.userSelectedLanguage!; // 사용자 언어 정보 반영
-        });
+    try {
+      /// Firestore 호출 제거
+      Map<String, dynamic>? userMap = await userTable.getUser("default_user"); // SQLite에서 사용자 정보 가져오기
+      if (userMap != null) {
+        UserModel user = UserModel.fromMap(userMap);
+        print("Loaded user language in HomeScreen: ${user.userSelectedLanguage}");
+        if (user.userSelectedLanguage != null) {
+          setState(() {
+            selectedLanguage = user.userSelectedLanguage!;
+          });
+        }
+      } else {
+        print("User data not found in HomeScreen.");
       }
+    } catch (e) {
+      print("Error loading user language: $e");
     }
   }
 
-  // 데이터베이스에서 챕터 데이터 가져오기
   Future<void> _loadChapters() async {
-    List<Map<String, dynamic>> chapterData = await chapterTable.getAllChapters();
-    setState(() {
-      chapters = chapterData.map((data) => ChapterModel.fromMap(data)).toList();
-    });
+    try {
+      print("Loading chapters...");
+      List<Map<String, dynamic>> chapterData = await chapterTable.getAllChapters();
+      print("Chapter data loaded: $chapterData");
+      setState(() {
+        chapters = chapterData.map((data) => ChapterModel.fromMap(data)).toList();
+      });
+    } catch (e) {
+      print("Error loading chapters: $e");
+    }
   }
+
   String _getLanguageIconPath(String language) {
     switch (language) {
       case '영어':
@@ -85,6 +88,7 @@ class _HomeScreenState extends State<HomeScreen> {
         return 'assets/images/lang_english_circle.png';
     }
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -206,20 +210,34 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ],
         ),
-        const SizedBox(width: 16),
         Expanded(
           child: GestureDetector(
-            onTap: () {
-              // 각 챕터 클릭 시 chapter_cover.dart로 데이터 전달
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => ChapterCoverPage(
-                    chapterIndex: index,
-                    chapter: chapter,
+            onTap: () async {
+              try {
+                final translationService = TranslationService();
+                await translationService.translateWordsForSingleChapter(
+                  chapter.chapterId,
+                  selectedLanguage,
+                );
+
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ChapterCoverPage(
+                      chapterIndex: index,
+                      chapter: chapter,
+                    ),
                   ),
-                ),
-              );
+                );
+              } catch (e) {
+                print("Error during translation or navigation: $e");
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text('챕터 이동 중 오류가 발생했습니다. 다시 시도해주세요.'),
+                    duration: Duration(seconds: 3),
+                  ),
+                );
+              }
             },
             child: _buildChapterTile(
               "챕터 ${index + 1} - ${chapter.chapterName}",

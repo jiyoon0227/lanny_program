@@ -46,7 +46,8 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   final dataInitializer = DataInitializer();
-  await dataInitializer.initializeData(); // 데이터베이스 초기화 수행
+  await dataInitializer.initializeData(); // 데이터 초기화 수행
+  await dataInitializer.printDebugData(); // 초기화 후 데이터 확인
   runApp(LannyProgram());
 }
 

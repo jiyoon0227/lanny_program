@@ -6,7 +6,7 @@ class WordTable {
 
   // 단어 삽입
   Future<void> insertWord(
-      int chapterId, String koreanWord, String translatedWord, String romanizedWord, int wordOrder) async {
+      int chapterId, String koreanWord, String translatedWord, String romanizedWord, int wordOrder, String wordImg) async {
     final db = await dbHelper.database;
 
     await db.insert(
@@ -16,6 +16,7 @@ class WordTable {
         'korean_word': koreanWord,
         'translated_word': translatedWord,
         'romanized_word': romanizedWord,
+        'word_img': wordImg, // 이미지 경로 삽입
         'word_order': wordOrder,
         'is_learned': 0, // 기본값: 학습되지 않음
       },
@@ -32,22 +33,35 @@ class WordTable {
         final words = chaptersWithWords[chapterId]!;
         for (int i = 0; i < words.length; i++) {
           final word = words[i];
-          await txn.insert(
+
+          // 중복 확인
+          List<Map<String, dynamic>> existing = await txn.query(
             'word_table',
-            {
-              'chapter_id': chapterId,
-              'korean_word': word['original'],
-              'translated_word': word['translated'],
-              'romanized_word': word['romanized'],
-              'word_order': i + 1,
-              'is_learned': 0,
-            },
-            conflictAlgorithm: ConflictAlgorithm.replace,
+            where: 'chapter_id = ? AND korean_word = ?',
+            whereArgs: [chapterId, word['korean_word']],
           );
+
+          // 중복이 없는 경우에만 삽입
+          if (existing.isEmpty) {
+            await txn.insert(
+              'word_table',
+              {
+                'chapter_id': chapterId,
+                'korean_word': word['korean_word'],
+                'translated_word': word['translated_word'],
+                'romanized_word': word['romanized_word'],
+                'word_img': word['word_img'], // 이미지 경로 삽입
+                'word_order': i + 1,
+                'is_learned': 0,
+              },
+              conflictAlgorithm: ConflictAlgorithm.ignore,
+            );
+          }
         }
       }
     });
   }
+
 
   // 특정 챕터의 모든 단어 조회
   Future<List<Map<String, dynamic>>> getWordsForChapter(int chapterId) async {
