@@ -18,6 +18,7 @@ class _MyPageScreenState extends State<MyPageScreen> {
   String learningLanguage = '';
   String continuous = '';
   String visitCounts = '';
+  String selectedLanguage = '';
   List<Widget> dynamicChallengeItems = [];
 
   final AuthService _authService = AuthService();
@@ -41,7 +42,7 @@ class _MyPageScreenState extends State<MyPageScreen> {
           setState(() {
             userName = '사용자';
             userEmail = userDoc['email'] ?? '이메일 없음';
-            learningLanguage = '언어 미지정'; //userDoc['language'] ?? '언어 미지정';
+            learningLanguage = userDoc['selectedLanguage'] ?? '언어 미지정';
             visitCounts = userDoc['visitCounts'] ?? '0';
             continuous = userDoc['continuous'] ?? '0';
 

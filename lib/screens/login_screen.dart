@@ -62,7 +62,7 @@ class _LoginScreenState extends State<login_screen> {
         }
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text("Login failed. Check your credentials.")),
+          SnackBar(content: Text("Login failed. Cxheck your credentials.")),
         );
       }
     } else {

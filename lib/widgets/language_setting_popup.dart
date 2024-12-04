@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart'; // Firebase Firestore 임포트
 import '../data/database.dart';
+import '../data/user_model.dart';
 import '../data/user_table.dart';
 import '../services/translation_service.dart';
+import 'package:lanny_program/FireStore/AuthService.dart';
 
 Future<void> showLanguageSettingPopup(BuildContext context, String userId) async {
   String? selectedLanguage; // 선택된 언어를 저장하는 변수
@@ -228,6 +230,7 @@ Future<void> showLanguageSettingPopup(BuildContext context, String userId) async
     // 선택된 언어를 데이터베이스에 저장
     await _saveLanguageToDatabase(userId, selectedLanguage!);
 
+
     // 메인 화면으로 이동
     Navigator.pushReplacementNamed(context, '/main');
   }
@@ -236,16 +239,18 @@ Future<void> showLanguageSettingPopup(BuildContext context, String userId) async
 // 선택된 언어를 데이터베이스에 저장하는 함수
 Future<void> _saveLanguageToDatabase(String userId, String language) async {
   UserTable userTable = UserTable();
+  AuthService authService = AuthService();
+
   try {
     //Firestore에 업데이트
-    final userDoc = FirebaseFirestore.instance.collection('users').doc(userId);
-    await userDoc.update({'user_selected_language': language});
-    print("Firestore: Language updated for user: $userId");
+    authService.updateFieldByID(userId, 'selectedLanguage', language);
+    print("Firestore: selectedLanguage updated for user: $userId");
     //SQLite 업데이트
     await userTable.updateUserLanguage(userId, language);
-    print("SQLite: Language updated for user: $userId");
+    print("SQLite: selectedLanguage updated for user: $userId");
 
   } catch (e) {
     print("Error updating language: $e");
   }
 }
+

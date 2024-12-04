@@ -67,6 +67,7 @@ class UserData {
   final String email;
   final String visitCounts;
   final String lastContinuousUpdate;
+  final String selectedLanguage;
 
 
   UserData({
@@ -76,7 +77,8 @@ class UserData {
     required this.continuous,
     required this.email,
     required this.visitCounts,
-    required this.lastContinuousUpdate
+    required this.lastContinuousUpdate,
+    required this.selectedLanguage
   });
 
   // Firestore 데이터에서 객체 생성
@@ -89,6 +91,7 @@ class UserData {
       email: data['email'] ?? '',
       visitCounts: data['visitCounts'] ?? '',
       lastContinuousUpdate: data['lastContinuousUpdate'] ?? '',
+      selectedLanguage: data['selectedLanguage'] ?? '',
     );
   }
 
@@ -101,6 +104,7 @@ class UserData {
       'email': email,
       'visitCounts': visitCounts,
       'lastContinuousUpdate' : lastContinuousUpdate,
+      'selectedLanguage' : selectedLanguage
     };
   }
 }

@@ -99,7 +99,9 @@ class AuthService {
         'UID': uid,
         'continuous': continuous,
         'email': email,
-        'visitContinuousflag' : "true",
+        'lastContinuousUpdate' : DateFormat('yyyy-MM-dd').format(DateTime.now()),
+        'selectedLanguage' : '영어',
+        'visitCounts' : '0'
       });
 
       print("User registered and added to Firestore successfully.");
@@ -173,6 +175,59 @@ class AuthService {
     } catch (e) {
       print("Error fetching user by email: $e");
       return null;
+    }
+  }
+  Future<UserData?> fetchUserDataByID(String id) async {
+    try {
+      // Firestore에서 ID 필드로 문서 검색
+      QuerySnapshot snapshot = await FirebaseFirestore.instance
+          .collection('user') // 'user' 컬렉션에서
+          .where('ID', isEqualTo: id) // ID 필드와 일치하는 문서 검색
+          .get();
+
+      if (snapshot.docs.isNotEmpty) {
+        // 문서가 존재하면 데이터를 가져와 UserData 객체 생성
+        var doc = snapshot.docs.first;
+        return UserData.fromFirestore(doc.data() as Map<String, dynamic>, doc.id);
+      } else {
+        print('No document found with ID: $id');
+        return null;
+      }
+    } catch (e) {
+      print('Error fetching document by ID: $e');
+      return null;
+    }
+  }
+
+  Future<bool> updateFieldByID(String id,String updateField , String updateContent) async {
+    try {
+      // Firestore에서 ID 필드로 문서 검색
+      QuerySnapshot snapshot = await FirebaseFirestore.instance
+          .collection('user')
+          .where('ID', isEqualTo: id)
+          .get();
+
+      if (snapshot.docs.isNotEmpty) {
+        // 첫 번째 문서 가져오기
+        var doc = snapshot.docs.first;
+        String docId = doc.id;
+        print('document ID $docId');
+
+        // Firestore 문서 업데이트
+        await FirebaseFirestore.instance
+            .collection('user')
+            .doc(docId)
+            .update({'$updateField': '$updateContent'});
+
+        print('Updated $updateField to $updateContent for document with ID: $id');
+        return true; // 성공적으로 업데이트된 경우
+      } else {
+        print('No document found with ID: $id');
+        return false; // 문서를 찾지 못한 경우
+      }
+    } catch (e) {
+      print('Error updating $updateField: $e');
+      return false; // 에러가 발생한 경우
     }
   }
 
