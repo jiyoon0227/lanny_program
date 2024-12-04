@@ -230,9 +230,22 @@ Future<void> showLanguageSettingPopup(BuildContext context, String userId) async
     // 선택된 언어를 데이터베이스에 저장
     await _saveLanguageToDatabase(userId, selectedLanguage!);
 
+    // Firestore의 learningLanguage 필드도 업데이트
+    await _updateLearningLanguage(userId, selectedLanguage!);
 
     // 메인 화면으로 이동
     Navigator.pushReplacementNamed(context, '/main');
+  }
+}
+
+// 선택된 언어를 Firestore의 learningLanguage에 저장하는 함수
+Future<void> _updateLearningLanguage(String userId, String language) async {
+  try {
+    final userDoc = FirebaseFirestore.instance.collection('user').doc(userId);
+    await userDoc.update({'learningLanguage': language});
+    print("Firestore: learningLanguage updated to $language for user: $userId");
+  } catch (e) {
+    print("Error updating learningLanguage: $e");
   }
 }
 
@@ -242,15 +255,15 @@ Future<void> _saveLanguageToDatabase(String userId, String language) async {
   AuthService authService = AuthService();
 
   try {
-    //Firestore에 업데이트
-    authService.updateFieldByID(userId, 'selectedLanguage', language);
+    // Firestore에 업데이트
+    await authService.updateFieldByID(userId, 'selectedLanguage', language);
     print("Firestore: selectedLanguage updated for user: $userId");
-    //SQLite 업데이트
+
+    // SQLite 업데이트
     await userTable.updateUserLanguage(userId, language);
     print("SQLite: selectedLanguage updated for user: $userId");
 
   } catch (e) {
-    print("Error updating language: $e");
+    print("Error updating selectedLanguage: $e");
   }
 }
-

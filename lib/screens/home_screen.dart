@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart'; // Firestore 임포트
+import 'package:firebase_auth/firebase_auth.dart'; // Firebase Auth 임포트
 import 'package:lanny_program/widgets/daily_learning_goal_popup.dart'; // 팝업 파일을 임포트
 import '../data/chapter_table.dart';
 import '../data/chapter_model.dart';
-import '../data/user_table.dart';
-import '../data/user_model.dart';
 import '../services/translation_service.dart'; // 번역 서비스 임포트
 import 'chapter_cover.dart'; // chapter_cover.dart 임포트
-import '../data/word_table.dart'; // 단어 테이블 임포트
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -15,42 +14,36 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final ChapterTable chapterTable = ChapterTable();
-  final WordTable wordTable = WordTable(); // WordTable 인스턴스 추가
-  final UserTable userTable = UserTable(); // UserTable 인스턴스 추가
   List<ChapterModel> chapters = [];
-  String selectedLanguage = "한국어"; // 기본값으로 설정
+  String selectedLanguage = ""; // 기본값 제거
 
   @override
   void initState() {
     super.initState();
     _loadUserLanguage(); // 사용자 언어 설정 불러오기
-    _loadChapters();
-    _printWordTableContents(); // 단어 테이블 내용을 프린트로 확인하기 위한 함수 호출
+    _loadChapters(); // 챕터 정보 불러오기
   }
 
-  void _printWordTableContents() async {
-    // 단어 테이블의 모든 데이터를 가져와 콘솔에 출력하는 함수
-    List<Map<String, dynamic>> wordData = await wordTable.getAllWords();
-    for (var word in wordData) {
-      print(
-          'Word: ${word['korean_word']}, Translated: ${word['translated_word']}, Romanized: ${word['romanized_word']}');
-    }
-  }
-
-  void _loadUserLanguage() async {
+  Future<void> _loadUserLanguage() async {
     try {
-      /// Firestore 호출 제거
-      Map<String, dynamic>? userMap = await userTable.getUser("default_user"); // SQLite에서 사용자 정보 가져오기
-      if (userMap != null) {
-        UserModel user = UserModel.fromMap(userMap);
-        print("Loaded user language in HomeScreen: ${user.userSelectedLanguage}");
-        if (user.userSelectedLanguage != null) {
+      User? currentUser = FirebaseAuth.instance.currentUser;
+      if (currentUser != null) {
+        // Firestore에서 사용자 데이터 가져오기
+        final userDoc = await FirebaseFirestore.instance
+            .collection('user')
+            .doc(currentUser.uid)
+            .get();
+
+        if (userDoc.exists) {
           setState(() {
-            selectedLanguage = user.userSelectedLanguage!;
+            selectedLanguage = userDoc['selectedLanguage'] ?? "언어 미지정";
           });
+          print("Loaded user language: $selectedLanguage");
+        } else {
+          print("User document does not exist in Firestore.");
         }
       } else {
-        print("User data not found in HomeScreen.");
+        print("No current user found.");
       }
     } catch (e) {
       print("Error loading user language: $e");
@@ -104,7 +97,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
                     image: DecorationImage(
-                      image: AssetImage(_getLanguageIconPath(selectedLanguage)), // 선택된 언어에 따른 이미지 경로
+                      image: AssetImage(_getLanguageIconPath(selectedLanguage)), // Firestore에서 불러온 언어로 설정
                       fit: BoxFit.cover, // 이미지를 원형에 맞게 채움
                     ),
                     border: Border.all(
