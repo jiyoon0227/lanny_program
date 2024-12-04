@@ -12,33 +12,20 @@ class MyPageScreen extends StatefulWidget {
   @override
   _MyPageScreenState createState() => _MyPageScreenState();
 }
-
 class _MyPageScreenState extends State<MyPageScreen> {
   String userName = '';
   String userEmail = '';
   String learningLanguage = '';
   String continuous = '';
   String visitCounts = '';
+  List<Widget> dynamicChallengeItems = [];
 
   final AuthService _authService = AuthService();
-
 
   @override
   void initState() {
     super.initState();
     _loadUserInfo();
-  }
-
-  void fetchUserData(String email) async {
-    UserData? userData = await _authService.getUserDataByEmail(email);
-
-    if (userData != null) {
-      print("User ID: ${userData.id}");
-      print("Email: ${userData.email}");
-      print("Continuous: ${userData.continuous}");
-    } else {
-      print("No user found for the given email.");
-    }
   }
 
   Future<void> _loadUserInfo() async {
@@ -54,15 +41,23 @@ class _MyPageScreenState extends State<MyPageScreen> {
           setState(() {
             userName = '사용자';
             userEmail = userDoc['email'] ?? '이메일 없음';
-            learningLanguage ='언어 미지정'; //userDoc['language'] ?? '언어 미지정';
+            learningLanguage = '언어 미지정'; //userDoc['language'] ?? '언어 미지정';
             visitCounts = userDoc['visitCounts'] ?? '0';
             continuous = userDoc['continuous'] ?? '0';
 
+            int continuousValue = int.tryParse(continuous) ?? 0;
+            int visitCountsValue = int.tryParse(visitCounts) ?? 0;
+
+            dynamicChallengeItems = [
+              _buildChallengeItem('연속 출석 5일', continuousValue == 5 ? 1 : continuousValue),
+              _buildChallengeItem('연속출석 갱신 3일', continuousValue == 3 ? 1 : continuousValue),
+              _buildChallengeItem('연속출석 갱신 1일', continuousValue == 1 ? 1 : continuousValue),
+              _buildChallengeItem('총 방문횟수 3일 이상', visitCountsValue >= 3 ? 3 : visitCountsValue),
+            ];
           });
         }
-      }
-      else{
-        print("current user isn't exist");
+      } else {
+        print("Current user doesn't exist");
       }
     } catch (e) {
       print('Error loading user info: $e');
@@ -82,7 +77,7 @@ class _MyPageScreenState extends State<MyPageScreen> {
             Text("마이페이지", style: TextStyle(color: Colors.black)),
             GestureDetector(
               onTap: () {
-                showLogoutDialog(context); // 로그아웃 팝업 띄우기
+                showLogoutDialog(context);
               },
               child: Text("로그아웃", style: TextStyle(color: Color(0xFF71727A), fontSize: 12)),
             ),
@@ -93,11 +88,13 @@ class _MyPageScreenState extends State<MyPageScreen> {
       body: ListView(
         padding: EdgeInsets.all(24.0),
         children: [
+          // 사용자 정보 섹션
           Row(
             children: [
               CircleAvatar(
                 radius: 35,
                 backgroundColor: Color(0xFFD9D9D9),
+                backgroundImage: AssetImage('assets/images/Icon1.png'), // 이미지 경로
               ),
               SizedBox(width: 16),
               Column(
@@ -127,6 +124,7 @@ class _MyPageScreenState extends State<MyPageScreen> {
             ],
           ),
           SizedBox(height: 24),
+
           // 통계 정보 섹션
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -137,6 +135,7 @@ class _MyPageScreenState extends State<MyPageScreen> {
             ],
           ),
           SizedBox(height: 40), // 도전 과제 위젯 위에 추가 간격
+
           // 도전 과제 섹션
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -169,6 +168,7 @@ class _MyPageScreenState extends State<MyPageScreen> {
             ],
           ),
           SizedBox(height: 16),
+
           // 도전 과제 리스트
           Container(
             padding: EdgeInsets.all(12),
@@ -178,26 +178,22 @@ class _MyPageScreenState extends State<MyPageScreen> {
             ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                _buildChallengeItem('누적 출석 5일'),
-                _buildChallengeItem('연속출석 갱신 3일'),
-                _buildChallengeItem('연속출석 갱신 1일'),
-                _buildChallengeItem('누적 출석 3일'),
-              ],
+              children: dynamicChallengeItems,
             ),
           ),
+
           SizedBox(height: 300),
           // 저작권 정보 위젯 추가
           Center(
             child: Column(
               children: [
-                Icon(Icons.pets, color: Color(0xFFB2B99E), size: 40), // 강아지 이미지
+                Icon(Icons.pets, color: Color(0xFFB2B99E), size: 40),
                 SizedBox(height: 8),
                 Text(
                   'Advanced Mobile Programming(8)\nCopyright 2024. 조아영, 김지윤, 양희수, 윤자원 All rights reserved.',
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                    color:CupertinoColors.inactiveGray,
+                    color: CupertinoColors.inactiveGray,
                     fontSize: 10,
                     fontFamily: 'Inter',
                     fontWeight: FontWeight.w400,
@@ -208,11 +204,12 @@ class _MyPageScreenState extends State<MyPageScreen> {
               ],
             ),
           ),
-          SizedBox(height: 120), // 하단에 추가 공간을 넣어 더 아래로 내립니다.
+          SizedBox(height: 120), // 하단 추가 간격
         ],
       ),
     );
   }
+
 
   // 통계 아이템 생성 함수
   Widget _buildStatItem(String label, String value) {
@@ -239,18 +236,21 @@ class _MyPageScreenState extends State<MyPageScreen> {
   }
 
   // 도전 과제 아이템 생성 함수
-  Widget _buildChallengeItem(String label) {
+  Widget _buildChallengeItem(String label, [int count = 1]) {
+    Color baseColor = Color(0xFFB2B99E);
+    double opacity = (count * 0.2).clamp(0.0, 1.0); // 0.0 ~ 1.0 사이 값으로 조정
+    Color newColor = baseColor.withOpacity(opacity);
     return Column(
       children: [
         CircleAvatar(
           radius: 28,
-          backgroundColor: Color(0xFFD9D9D9),
+          backgroundColor: newColor,
         ),
         SizedBox(height: 4),
         Text(
           label,
           style: TextStyle(
-            color: Color(0xFFB2B99E),
+            color: newColor,
             fontSize: 10,
           ),
         ),

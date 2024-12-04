@@ -26,23 +26,44 @@ class AuthService {
         int currentVisitCounts = int.parse(userData['visitCounts'] ?? '0');
         int updatedVisitCounts = currentVisitCounts + 1;
 
-        // Firestore에 업데이트
+        // Firestore에 'visitCounts' 업데이트
         await _firestore.collection('user').doc(docId).update({
           'visitCounts': updatedVisitCounts.toString(),
         });
 
         print("Visit counts updated to: $updatedVisitCounts");
 
-        // 'continuous' 값 증가 로직 유지
-        if (userData.containsKey('continuous')) {
+        // 'continuous' 증가 로직 (하루에 한 번만)
+        if (userData.containsKey('lastContinuousUpdate')) {
+          // 마지막 업데이트 날짜 확인
+          String lastUpdate = userData['lastContinuousUpdate'] ?? '';
+          String today = DateFormat('yyyy-MM-dd').format(DateTime.now());
+
+          if (lastUpdate != today) {
+            // 날짜가 다르면 'continuous' 값 증가
+            int currentContinuous = int.parse(userData['continuous']);
+            int updatedContinuous = currentContinuous + 1;
+
+            await _firestore.collection('user').doc(docId).update({
+              'continuous': updatedContinuous.toString(),
+              'lastContinuousUpdate': today, // 오늘 날짜로 갱신
+            });
+
+            print("Continuous streak updated to: $updatedContinuous");
+          } else {
+            print("Continuous streak already updated today. No changes made.");
+          }
+        } else {
+          // 'lastContinuousUpdate'가 없으면 초기화
           int currentContinuous = int.parse(userData['continuous']);
           int updatedContinuous = currentContinuous + 1;
 
           await _firestore.collection('user').doc(docId).update({
             'continuous': updatedContinuous.toString(),
+            'lastContinuousUpdate': DateFormat('yyyy-MM-dd').format(DateTime.now()),
           });
 
-          print("Continuous streak updated to: $updatedContinuous");
+          print("Continuous streak initialized and updated to: $updatedContinuous");
         }
       } else {
         print("No user found with email: $email");
@@ -51,6 +72,7 @@ class AuthService {
       print("Error updating visitCounts and continuous fields: $e");
     }
   }
+
 
 
   /// 회원가입 함수
@@ -77,6 +99,7 @@ class AuthService {
         'UID': uid,
         'continuous': continuous,
         'email': email,
+        'visitContinuousflag' : "true",
       });
 
       print("User registered and added to Firestore successfully.");
