@@ -1,7 +1,26 @@
 import 'package:flutter/material.dart';
 import '../screens/home_screen.dart';
+import '../data/chapter_table.dart'; // ChapterTable 추가
 
 class PausePopup extends StatelessWidget {
+  final int chapterId; // 챕터 ID 추가
+  final int progressCount; // 진행도 추가
+
+  PausePopup({required this.chapterId, required this.progressCount});
+
+  Future<void> _saveProgress(BuildContext context) async {
+    try {
+      double progress = progressCount / 15.0; // 0.0 ~ 1.0 값으로 변환
+      final chapterTable = ChapterTable();
+      await chapterTable.updateChapterProgress(chapterId, progress);
+      print("저장되는 진행도: $progress, chapterId: $chapterId");
+    } catch (e) {
+      print("진행도 저장 중 오류 발생: $e");
+    } finally {
+      Navigator.pushReplacementNamed(context, '/main'); // 홈 화면으로 이동
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
@@ -29,7 +48,7 @@ class PausePopup extends StatelessWidget {
             Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                SizedBox(height: 10), // 텍스트와 아이콘을 조금 위로 이동
+                SizedBox(height: 10),
                 Text(
                   '일시정지',
                   style: TextStyle(
@@ -37,13 +56,13 @@ class PausePopup extends StatelessWidget {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                SizedBox(height: 5), // 간격 조정
+                SizedBox(height: 5),
                 Icon(
                   Icons.pause,
                   color: Colors.grey,
                   size: 30,
                 ),
-                SizedBox(height: 5), // 간격 조정
+                SizedBox(height: 5),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
@@ -52,17 +71,13 @@ class PausePopup extends StatelessWidget {
                       children: [
                         Container(
                           decoration: BoxDecoration(
-                            color: Color(0xFFD8E3C0), // 베이지빛도는 연두색 배경
+                            color: Color(0xFFD8E3C0),
                             shape: BoxShape.circle,
                           ),
                           child: IconButton(
                             iconSize: 30,
-                            icon: Icon(Icons.stop, color: Colors.grey), // 회색 아이콘
-                            onPressed: () {
-                              // 중지 기능 - 홈 화면으로 이동
-                              Navigator.of(context).pop();  // 팝업 닫기
-                              Navigator.pushReplacementNamed(context, '/main'); // 홈 화면으로 이동
-                            },
+                            icon: Icon(Icons.stop, color: Colors.grey),
+                            onPressed: () => _saveProgress(context),
                           ),
                         ),
                         SizedBox(height: 4),
@@ -74,12 +89,12 @@ class PausePopup extends StatelessWidget {
                       children: [
                         Container(
                           decoration: BoxDecoration(
-                            color: Colors.green, // 초록색 배경
+                            color: Colors.green,
                             shape: BoxShape.circle,
                           ),
                           child: IconButton(
                             iconSize: 30,
-                            icon: Icon(Icons.play_arrow, color: Colors.white), // 하얀색 아이콘
+                            icon: Icon(Icons.play_arrow, color: Colors.white),
                             onPressed: () {
                               // 이어하기 기능
                               Navigator.of(context).pop(); // 팝업 닫기

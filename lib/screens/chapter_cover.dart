@@ -123,7 +123,9 @@ class _ChapterCoverPageState extends State<ChapterCoverPage> {
                 // 학습 시작 버튼 클릭 시 학습 화면으로 이동
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => _getChapterScreen()),
+                  MaterialPageRoute(
+                    builder: (context) => ChapterScreen1(chapterId: widget.chapter.chapterId), // 올바른 chapterId 전달
+                  ),
                 );
               },
               child: Text(

@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart'; // Import Cupertino for CupertinoColors
 import 'package:lanny_program/widgets/daily_learning_goal_popup.dart'; // Import the popup
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import '../widgets/language_setting_popup.dart';
 
 class ReviewScreen extends StatefulWidget {
   @override
@@ -9,14 +12,80 @@ class ReviewScreen extends StatefulWidget {
 
 class _ReviewScreenState extends State<ReviewScreen> {
   final List<Map<String, dynamic>> items = [
-    {'chapter': '챕터1', 'japanese': 'はんそで', 'korean': '티셔츠', 'progress': 5},
-    {'chapter': '챕터2', 'japanese': 'ズボン', 'korean': '바지', 'progress': 10},
-    {'chapter': '챕터3', 'japanese': 'くつ', 'korean': '신발', 'progress': 3},
-    {'chapter': '챕터4', 'japanese': 'ズボン', 'korean': '바지', 'progress': 1},
-    {'chapter': '챕터5', 'japanese': 'ズボン', 'korean': '바지', 'progress': 7},
+    {'chapter': '챕터1', 'japanese': 'パン', 'korean': '빵', 'progress': 3},
+    {'chapter': '챕터2', 'japanese': 'ズボン', 'korean': '바지', 'progress': 7},
   ]; // 확인용 예시
 
   String searchQuery = '';
+  String selectedLanguage = "";
+  String continuous = "0";
+  int dailyGoal = 15;
+  int currentProgress = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadUserLanguage();
+    _listenToUserProgress();
+  }
+
+  Future<void> _loadUserLanguage() async {
+    try {
+      User? currentUser = FirebaseAuth.instance.currentUser;
+      if (currentUser != null) {
+        final userDoc = await FirebaseFirestore.instance
+            .collection('user')
+            .doc(currentUser.uid)
+            .get();
+
+        if (userDoc.exists) {
+          setState(() {
+            selectedLanguage = userDoc['selectedLanguage'] ?? "언어 미지정";
+          });
+        }
+      }
+    } catch (e) {
+      print("Error loading user language: $e");
+    }
+  }
+
+  void _listenToUserProgress() {
+    User? currentUser = FirebaseAuth.instance.currentUser;
+    if (currentUser != null) {
+      FirebaseFirestore.instance
+          .collection('user')
+          .doc(currentUser.uid)
+          .snapshots()
+          .listen((snapshot) {
+        if (snapshot.exists) {
+          setState(() {
+            dailyGoal = snapshot.data()?['dailyGoal'] ?? 15;
+            currentProgress = snapshot.data()?['currentProgress'] ?? 0;
+            continuous = snapshot.data()?['continuous'] ?? "0";
+          });
+        }
+      });
+    }
+  }
+
+  String _getLanguageIconPath(String language) {
+    switch (language) {
+      case '영어':
+        return 'assets/images/lang_english_circle.png';
+      case '중국어':
+        return 'assets/images/lang_chinese_circle.png';
+      case '프랑스어':
+        return 'assets/images/lang_french_circle.png';
+      case '독일어':
+        return 'assets/images/lang_germany_circle.png';
+      case '일본어':
+        return 'assets/images/lang_japanese_circle.png';
+      case '스페인어':
+        return 'assets/images/lang_spain_circle.png';
+      default:
+        return 'assets/images/lang_english_circle.png';
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -27,19 +96,39 @@ class _ReviewScreenState extends State<ReviewScreen> {
           children: [
             Row(
               children: [
-                Container(
-                  width: 24,
-                  height: 24,
-                  decoration: BoxDecoration(
-                    color: Colors.grey,
-                    shape: BoxShape.circle,
+                GestureDetector(
+                  onTap: () async {
+                    User? currentUser = FirebaseAuth.instance.currentUser;
+                    if (currentUser != null) {
+                      await showLanguageSettingPopup(context, currentUser.uid);
+                      await _loadUserLanguage(); // 언어 변경 후 갱신
+                    }
+                  },
+                  child: Container(
+                    width: 30,
+                    height: 30,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      image: DecorationImage(
+                        image: AssetImage(_getLanguageIconPath(selectedLanguage)),
+                        fit: BoxFit.cover,
+                      ),
+                      border: Border.all(
+                        color: Colors.grey,
+                        width: 2,
+                      ),
+                    ),
                   ),
                 ),
                 const SizedBox(width: 8),
-                Icon(Icons.favorite, color: Colors.green),
+                Image.asset(
+                  'assets/images/home_fire.png',
+                  width: 30,
+                  height: 30,
+                ),
                 const SizedBox(width: 8),
                 Text(
-                  '2',
+                  continuous,
                   style: TextStyle(
                     color: Colors.green,
                     fontSize: 20,
@@ -51,18 +140,36 @@ class _ReviewScreenState extends State<ReviewScreen> {
             Row(
               children: [
                 IconButton(
-                  icon: Icon(Icons.access_time, color: Colors.black),
-                  onPressed: () {
-                    dailyLearningGoalPopup(context); // Execute the imported function when clicked
+                  icon: Image.asset(
+                    'assets/images/home_timer.png',
+                    width: 30,
+                    height: 30,
+                  ),
+                  onPressed: () async {
+                    int? updatedDailyGoal = await dailyLearningGoalPopup(context);
+                    if (updatedDailyGoal != null) {
+                      User? currentUser = FirebaseAuth.instance.currentUser;
+                      if (currentUser != null) {
+                        await FirebaseFirestore.instance
+                            .collection('user')
+                            .doc(currentUser.uid)
+                            .update({'dailyGoal': updatedDailyGoal});
+                      }
+                    }
                   },
                 ),
                 const SizedBox(width: 8),
-                Text(
-                  '0 / 15',
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
+                GestureDetector(
+                  onTap: () async {
+                    await dailyLearningGoalPopup(context);
+                  },
+                  child: Text(
+                    '$currentProgress / $dailyGoal',
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
               ],
@@ -87,12 +194,11 @@ class _ReviewScreenState extends State<ReviewScreen> {
               ),
             ),
           ),
-          // Footer with copyright information slightly above the bottom
           Padding(
-            padding: const EdgeInsets.only(bottom: 80.0), // Adjust this value to move it slightly up
+            padding: const EdgeInsets.only(bottom: 80.0),
             child: Column(
               children: [
-                Icon(Icons.pets, color: Color(0xFFB2B99E), size: 40), // Pet icon
+                Icon(Icons.pets, color: Color(0xFFB2B99E), size: 40),
                 SizedBox(height: 8),
                 Text(
                   'Advanced Mobile Programming(8)\nCopyright 2024. 조아영, 김지윤, 양희수, 윤자원 All rights reserved.',
@@ -167,10 +273,10 @@ class _ReviewScreenState extends State<ReviewScreen> {
             style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: Color(0xFFB3BA9F)),
           ),
         ),
-        Divider(color: Colors.grey.shade300, thickness: 0.5), // Divider between the header and results
+        Divider(color: Colors.grey.shade300, thickness: 0.5),
         ListView.separated(
           shrinkWrap: true,
-          physics: NeverScrollableScrollPhysics(), // Disable scrolling for inner list
+          physics: NeverScrollableScrollPhysics(),
           itemCount: filteredItems.length,
           separatorBuilder: (context, index) => Divider(color: Colors.grey.shade300, thickness: 0.5),
           itemBuilder: (context, index) {
@@ -236,10 +342,4 @@ class _ReviewScreenState extends State<ReviewScreen> {
       ),
     );
   }
-}
-
-void main() {
-  runApp(MaterialApp(
-    home: ReviewScreen(),
-  ));
 }

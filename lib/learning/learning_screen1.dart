@@ -6,12 +6,13 @@ class LearnScreen1 extends StatelessWidget {
   final int currentWordIndex;
   final Function(int) onProgressUpdated;
   final int progressCount; // 추가
-
+  final int chapterId;
   LearnScreen1({
     required this.chapterWords,
     required this.currentWordIndex,
     required this.onProgressUpdated,
     required this.progressCount, // 추가
+    required this.chapterId,
   });
 
   @override
@@ -119,7 +120,10 @@ class LearnScreen1 extends StatelessWidget {
               onPressed: () {
                 showDialog(
                   context: context,
-                  builder: (context) => PausePopup(),
+                  builder: (context) => PausePopup(
+                    chapterId: chapterId,
+                    progressCount: progressCount, // 진행도 전달
+                  ),
                 );
               },
             ),

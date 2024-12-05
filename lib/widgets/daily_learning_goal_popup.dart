@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
-void dailyLearningGoalPopup(BuildContext context) {
+Future<int?> dailyLearningGoalPopup(BuildContext context) async {
   int dailyGoal = 5; // 기본 학습 목표량 (단위: 개)
   bool isAlartOn = true; // 알림 상태 관리
 
@@ -36,7 +38,7 @@ void dailyLearningGoalPopup(BuildContext context) {
                         alignment: Alignment.topRight,
                         icon: Icon(Icons.close),
                         onPressed: () {
-                          Navigator.of(context).pop();
+                          Navigator.of(context).pop(dailyGoal);
                         },
                       ),
                     ],
@@ -84,8 +86,15 @@ void dailyLearningGoalPopup(BuildContext context) {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       ElevatedButton(
-                        onPressed: () {
+                        onPressed: () async {
                           Navigator.of(context).pop(dailyGoal); // 선택된 목표량 반환
+                          User? currentUser = FirebaseAuth.instance.currentUser;
+                          if (currentUser != null) {
+                            await FirebaseFirestore.instance.collection('user').doc(currentUser.uid).update({
+                              'dailyGoal': dailyGoal, // dailyGoal 업데이트
+                            });
+                            print('Updated dailyGoal in Firebase: $dailyGoal');
+                          }
                         },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Color(0xFF4FA55B),
