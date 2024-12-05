@@ -16,12 +16,38 @@ class _HomeScreenState extends State<HomeScreen> {
   final ChapterTable chapterTable = ChapterTable();
   List<ChapterModel> chapters = [];
   String selectedLanguage = ""; // 기본값 제거
+  String continuous = "0"; // Firestore에서 로드할 continuous 값
 
   @override
   void initState() {
     super.initState();
     _loadUserLanguage(); // 사용자 언어 설정 불러오기
     _loadChapters(); // 챕터 정보 불러오기
+    _loadContinuousValue(); // 추가: continuous 값 로드
+  }
+  Future<void> _loadContinuousValue() async {
+    try {
+      User? currentUser = FirebaseAuth.instance.currentUser;
+      if (currentUser != null) {
+        final userDoc = await FirebaseFirestore.instance
+            .collection('user')
+            .doc(currentUser.uid)
+            .get();
+
+        if (userDoc.exists) {
+          setState(() {
+            continuous = userDoc['continuous'] ?? "0"; // Firestore에서 continuous 값 가져오기
+          });
+          print("Loaded continuous value: $continuous");
+        } else {
+          print("User document does not exist in Firestore.");
+        }
+      } else {
+        print("No current user found.");
+      }
+    } catch (e) {
+      print("Error loading continuous value: $e");
+    }
   }
 
   Future<void> _loadUserLanguage() async {
@@ -114,7 +140,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
                 const SizedBox(width: 8),
                 Text(
-                  '2',
+                  continuous, // 수정: Firestore에서 가져온 continuous 값 표시
                   style: TextStyle(
                     color: Colors.green,
                     fontSize: 20,
