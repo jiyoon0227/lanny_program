@@ -5,9 +5,14 @@ import 'package:lanny_program/widgets/daily_learning_goal_popup.dart'; // 팝업
 import '../data/chapter_table.dart';
 import '../data/chapter_model.dart';
 import '../services/translation_service.dart'; // 번역 서비스 임포트
+import '../widgets/language_setting_popup.dart';
 import 'chapter_cover.dart'; // chapter_cover.dart 임포트
 
 class HomeScreen extends StatefulWidget {
+  final int incrementedValue; // 추가된 필드
+
+  HomeScreen({this.incrementedValue = 0}); // 기본값 설정
+
   @override
   _HomeScreenState createState() => _HomeScreenState();
 }
@@ -16,12 +21,55 @@ class _HomeScreenState extends State<HomeScreen> {
   final ChapterTable chapterTable = ChapterTable();
   List<ChapterModel> chapters = [];
   String selectedLanguage = ""; // 기본값 제거
+  String continuous = "0"; // Firestore에서 로드할 continuous 값
+  int highlightedChapterIndex = -1;
+  int dailyGoal = 5;
+  int currentProgress = 0;
 
   @override
   void initState() {
     super.initState();
     _loadUserLanguage(); // 사용자 언어 설정 불러오기
     _loadChapters(); // 챕터 정보 불러오기
+    _loadContinuousValue(); // continuous 값 로드
+
+    FirebaseFirestore.instance
+        .collection('user')
+        .doc(FirebaseAuth.instance.currentUser?.uid)
+        .snapshots()
+        .listen((snapshot) {
+      if (snapshot.exists) {
+        setState(() {
+          dailyGoal = snapshot.data()?['dailyGoal'] ?? 5;
+          currentProgress = snapshot.data()?['currentProgress'] ?? 0;
+        });
+      }
+    });
+  }
+
+  Future<void> _loadContinuousValue() async {
+    try {
+      User? currentUser = FirebaseAuth.instance.currentUser;
+      if (currentUser != null) {
+        final userDoc = await FirebaseFirestore.instance
+            .collection('user')
+            .doc(currentUser.uid)
+            .get();
+
+        if (userDoc.exists) {
+          setState(() {
+            continuous = userDoc['continuous'] ?? "0"; // Firestore에서 continuous 값 가져오기
+          });
+          print("Loaded continuous value: $continuous");
+        } else {
+          print("User document does not exist in Firestore.");
+        }
+      } else {
+        print("No current user found.");
+      }
+    } catch (e) {
+      print("Error loading continuous value: $e");
+    }
   }
 
   Future<void> _loadUserLanguage() async {
@@ -55,8 +103,26 @@ class _HomeScreenState extends State<HomeScreen> {
       print("Loading chapters...");
       List<Map<String, dynamic>> chapterData = await chapterTable.getAllChapters();
       print("Chapter data loaded: $chapterData");
+      int highlightedIndex = -1;
+      for (int i = 0; i < chapterData.length; i++) { // [수정 시작] 챕터의 진행도를 검사
+        double progress = chapterData[i]['progress'];
+        if (progress > 0.0 && progress < 1.0) { // 학습 중인 챕터 (0.0~1.0 사이)
+          highlightedIndex = i;
+          break;
+        }
+      }
+
+      if (highlightedIndex == -1) { // 모든 챕터가 완료(1.0) 또는 미학습(0.0)
+        for (int i = 0; i < chapterData.length; i++) {
+          if (chapterData[i]['progress'] == 0.0) { // 진행도가 0.0인 챕터 중 가장 낮은 번호
+            highlightedIndex = i;
+            break;
+          }
+        }
+      }
       setState(() {
         chapters = chapterData.map((data) => ChapterModel.fromMap(data)).toList();
+        highlightedChapterIndex = highlightedIndex;
       });
     } catch (e) {
       print("Error loading chapters: $e");
@@ -87,42 +153,51 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Row(
-              children: [
-                Container(
-                  width: 30,
-                  height: 30,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    image: DecorationImage(
-                      image: AssetImage(_getLanguageIconPath(selectedLanguage)), // Firestore에서 불러온 언어로 설정
-                      fit: BoxFit.cover, // 이미지를 원형에 맞게 채움
-                    ),
-                    border: Border.all(
-                      color: Colors.grey, // 테두리 색상
-                      width: 2, // 테두리 두께
-                    ),
-                  ),
-                ),
-                const SizedBox(width: 8),
-                Image.asset(
-                  'assets/images/home_fire.png', // 사용할 PNG 파일 경로로 수정
-                  width: 30, // 기존 아이콘의 크기와 맞춰 조정
-                  height: 30,
-                ),
-                const SizedBox(width: 8),
-                Text(
-                  '2',
-                  style: TextStyle(
-                    color: Colors.green,
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ],
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+        Row(
+        children: [
+        GestureDetector(
+        onTap: () async {
+          User? currentUser = FirebaseAuth.instance.currentUser;
+          if (currentUser != null) {
+            await showLanguageSettingPopup(context, currentUser.uid);
+            await _loadUserLanguage(); // 언어 변경 후 갱신
+          }
+        },
+          child: Container(
+            width: 30,
+            height: 30,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              image: DecorationImage(
+                image: AssetImage(_getLanguageIconPath(selectedLanguage)),
+                fit: BoxFit.cover,
+              ),
+              border: Border.all(
+                color: Colors.grey,
+                width: 2,
+              ),
             ),
+          ),
+        ),
+          const SizedBox(width: 8),
+          Image.asset(
+            'assets/images/home_fire.png',
+            width: 30,
+            height: 30,
+          ),
+          const SizedBox(width: 8),
+          Text(
+            continuous,
+            style: TextStyle(
+              color: Colors.green,
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ],
+        ),
             Row(
               children: [
                 IconButton(
@@ -131,17 +206,37 @@ class _HomeScreenState extends State<HomeScreen> {
                     width: 30, // 아이콘과 비슷한 크기
                     height: 30,
                   ),
-                  onPressed: () {
-                    dailyLearningGoalPopup(context); // 버튼 클릭 시 팝업 창 띄우기
+                  // dailyLearningGoalPopup 호출 이후
+                  onPressed: () async {
+                    int? updatedDailyGoal = await dailyLearningGoalPopup(context);
+                    if (updatedDailyGoal != null) {
+                      try {
+                        User? currentUser = FirebaseAuth.instance.currentUser;
+                        if (currentUser != null) {
+                          // Firebase에 dailyGoal 업데이트
+                          await FirebaseFirestore.instance
+                              .collection('user')
+                              .doc(currentUser.uid)
+                              .update({'dailyGoal': updatedDailyGoal});
+                          print('Firebase에 dailyGoal 업데이트 완료: $updatedDailyGoal');
+                        }
+                      } catch (e) {
+                        print('dailyGoal 업데이트 중 오류 발생: $e');
+                      }
+                    }
                   },
                 ),
                 const SizedBox(width: 8),
                 GestureDetector(
-                  onTap: () {
-                    dailyLearningGoalPopup(context); // 버튼 클릭 시 팝업 창 띄우기
+                  onTap: () async {
+                    String? updatedLanguage = (await dailyLearningGoalPopup(context)) as String?;
+                    if (updatedLanguage != null) {
+                      print("언어 설정이 변경되었습니다: $updatedLanguage");
+                      await _loadUserLanguage(); // 변경된 언어 데이터 다시 로드
+                    }
                   },
                   child: Text(
-                    '0 / 5',
+                    '$currentProgress / $dailyGoal',
                     style: TextStyle(
                       color: Colors.black,
                       fontSize: 16,
@@ -163,16 +258,22 @@ class _HomeScreenState extends State<HomeScreen> {
           itemBuilder: (context, index) {
             final chapter = chapters[index];
             double progressValue = chapter.progress; // 진행도 수치 (0 ~ 1)
-            double progressWidth = (15 * progressValue) * 220; // 진행도에 따른 길이
+            double progressWidth = (progressValue) * 220; // 진행도에 따른 길이
 
-            return _buildChapterSection(context, index, chapter, progressWidth);
+            return _buildChapterSection(
+              context,
+              index,
+              chapter,
+              progressWidth,
+              index == highlightedChapterIndex,
+            );
           },
         ),
       ),
     );
   }
 
-  Widget _buildChapterSection(BuildContext context, int index, ChapterModel chapter, double progressWidth) {
+  Widget _buildChapterSection(BuildContext context, int index, ChapterModel chapter, double progressWidth, bool isHighlighted) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -189,7 +290,7 @@ class _HomeScreenState extends State<HomeScreen> {
               height: 16,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: Colors.green,
+                color: isHighlighted ? Colors.green : Colors.grey,
                 border: Border.all(
                   color: Colors.grey,
                   width: 2,
@@ -237,6 +338,7 @@ class _HomeScreenState extends State<HomeScreen> {
               chapter.chapterDescription,
               chapter.progress,
               progressWidth,
+              isHighlighted,
             ),
           ),
         ),
@@ -245,13 +347,13 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget _buildChapterTile(String title, String description, double progressValue, double progressWidth) {
+  Widget _buildChapterTile(String title, String description, double progressValue, double progressWidth, bool isHighlighted) {
     return Container(
       padding: const EdgeInsets.all(16.0),
       margin: const EdgeInsets.only(bottom: 16.0),
       width: double.infinity,
       decoration: BoxDecoration(
-        color: Colors.transparent,
+        color: isHighlighted ? Colors.green : Colors.transparent,
         borderRadius: BorderRadius.circular(40),
       ),
       child: Column(
@@ -260,7 +362,7 @@ class _HomeScreenState extends State<HomeScreen> {
           Text(
             title,
             style: TextStyle(
-              color: Color(0xFFB3BA9F), // 텍스트 색상 설정
+              color: isHighlighted ? Colors.white : Color(0xFFB3BA9F),
               fontSize: 20,
               fontWeight: FontWeight.bold,
             ),
@@ -269,7 +371,7 @@ class _HomeScreenState extends State<HomeScreen> {
           Text(
             description,
             style: TextStyle(
-              color: Color(0xFFB3BA9F), // 텍스트 색상 설정
+              color: isHighlighted ? Colors.white : Color(0xFFB3BA9F),
               fontSize: 14,
             ),
           ),
@@ -281,7 +383,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 height: 8,
                 width: progressWidth,
                 decoration: BoxDecoration(
-                  color: Color(0xFFB3BA9F), // 게이지 색상 설정
+                  color: isHighlighted ? Colors.white : Color(0xFFB3BA9F), // 게이지 색상 설정
                   borderRadius: BorderRadius.circular(4),
                 ),
               ),

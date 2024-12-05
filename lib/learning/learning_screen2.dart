@@ -9,12 +9,13 @@ class LearnScreen2 extends StatefulWidget {
   final int currentWordIndex;
   final Function(int) onProgressUpdated;
   final int progressCount;
-
+  final int chapterId;
   LearnScreen2({
     required this.chapterWords,
     required this.currentWordIndex,
     required this.onProgressUpdated,
     required this.progressCount,
+    required this.chapterId,
   });
 
   @override
@@ -201,7 +202,10 @@ class _LearnScreen2State extends State<LearnScreen2> {
               onPressed: () {
                 showDialog(
                   context: context,
-                  builder: (context) => PausePopup(),
+                  builder: (context) => PausePopup(
+                    chapterId: widget.chapterId,
+                    progressCount: widget.progressCount,
+                  ),
                 );
               },
             ),

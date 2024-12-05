@@ -8,12 +8,13 @@ class LearnScreen3 extends StatefulWidget {
   final int currentWordIndex;
   final Function(int) onProgressUpdated;
   final int progressCount;
-
+  final int chapterId;
   LearnScreen3({
     required this.chapterWords,
     required this.currentWordIndex,
     required this.onProgressUpdated,
     required this.progressCount,
+    required this.chapterId,
   });
 
   @override
@@ -145,7 +146,7 @@ class _LearnScreen3State extends State<LearnScreen3> {
                       height: 100,
                     ),
                   ),
-                  SizedBox(height: 50),
+                  SizedBox(height: 30),
 
                   // 랜덤 단어 영역
                   GestureDetector(
@@ -184,7 +185,7 @@ class _LearnScreen3State extends State<LearnScreen3> {
                     ),
                   ),
 
-                  SizedBox(height: 50),
+                  SizedBox(height: 30),
                   Align(
                     alignment: Alignment.center,
                     child: SizedBox(
@@ -236,7 +237,10 @@ class _LearnScreen3State extends State<LearnScreen3> {
               onPressed: () {
                 showDialog(
                   context: context,
-                  builder: (context) => PausePopup(),
+                  builder: (context) => PausePopup(
+                    chapterId: widget.chapterId,
+                    progressCount: widget.progressCount,
+                  ),
                 );
               },
             ),
